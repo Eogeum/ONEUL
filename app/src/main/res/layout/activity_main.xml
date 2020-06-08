@@ -21,4 +21,5 @@
             app:itemTextColor="#FFFFFF"
             app:menu="@menu/bot_menu" />
     </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

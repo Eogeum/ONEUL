@@ -1,28 +1,29 @@
 package com.oneul;
 
-import android.os.Bundle;
-import android.view.MenuItem;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.oneul.fragment.HomeFragment;
+import com.oneul.fragment.SettingFragment;
+import com.oneul.fragment.WriteFragment;
 
 public class MainActivity extends AppCompatActivity {
-
+    //      변수 선언
     BottomNavigationView bot_menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        타이틀 바 제거
-        try
-        {
+        try {
             this.getSupportActionBar().hide();
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
         }
 
         setContentView(R.layout.activity_main);
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         bot_menu.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         openFragment(HomeFragment.newInstance("", ""));
     }
+
 //        화면 전환 메서드
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
