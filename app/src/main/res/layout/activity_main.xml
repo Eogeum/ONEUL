@@ -16,10 +16,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/colorPrimary"
-            app:itemIconTint="#FFFFFF"
-            app:itemTextColor="#FFFFFF"
+            android:background="@color/white"
+            app:itemIconTint="@color/gray"
+            app:itemTextColor="@color/gray"
             app:menu="@menu/bot_menu" />
+        <!--        todo 위에 친구 누르면고 선택되면 메인컬러로 변경되도록 해야 함-->
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
