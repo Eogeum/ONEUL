@@ -20,12 +20,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        타이틀 바 제거
-        try {
-            this.getSupportActionBar().hide();
-        } catch (NullPointerException e) {
-        }
-
         setContentView(R.layout.activity_main);
 
 //        하단 메뉴 연결 및 선언
