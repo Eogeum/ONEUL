@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/white"
+        android:background="@drawable/write_sh"
         android:gravity="right|center">
 
         <Button
@@ -17,16 +17,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:fontFamily="@font/nanum_square_b"
+            android:fontFamily="@font/nanum_square_eb"
             android:text="OK"
             android:textColor="@color/mainColor"
             android:textSize="18dp" />
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@drawable/write_sh" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -43,7 +38,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:fontFamily="@font/nanum_square_b"
                 android:text="TIME"
                 android:textColor="@color/mainColor"
                 android:textSize="20dp" />
@@ -64,7 +58,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/nanum_square_b"
                         android:text="START" />
 
                 </LinearLayout>
@@ -78,11 +71,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/nanum_square_b"
                         android:text="END" />
 
                 </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
@@ -95,7 +86,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:fontFamily="@font/nanum_square_b"
                     android:text="TITLE"
                     android:textColor="@color/mainColor"
                     android:textSize="20dp" />
@@ -105,7 +95,6 @@
                     android:layout_height="50dp"
                     android:layout_marginHorizontal="20dp"
                     android:background="@drawable/write_et"
-                    android:fontFamily="@font/nanum_square_r"
                     android:gravity="left|top"
                     android:hint="제목을 입력하세요"
                     android:padding="10dp"
@@ -123,7 +112,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:fontFamily="@font/nanum_square_b"
                     android:text="MEMO"
                     android:textColor="@color/mainColor"
                     android:textSize="20dp" />
@@ -133,7 +121,6 @@
                     android:layout_height="120dp"
                     android:layout_marginHorizontal="20dp"
                     android:background="@drawable/write_et"
-                    android:fontFamily="@font/nanum_square_r"
                     android:gravity="left|top"
                     android:hint="메모를 입력하세요"
                     android:padding="10dp"
@@ -152,7 +139,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:fontFamily="@font/nanum_square_b"
                     android:text="IMAGE"
                     android:textColor="@color/mainColor"
                     android:textSize="20dp" />
@@ -166,7 +152,5 @@
             </LinearLayout>
 
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>

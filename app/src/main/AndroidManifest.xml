@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan">
+            <!--            위에 코드는 키보드 입력 화면에서 메뉴 숨기기-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

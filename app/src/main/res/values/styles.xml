@@ -7,6 +7,8 @@
         <!--        타이틀 바 제거-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+        <!--        폰트 설정-->
         <item name="android:fontFamily">@font/nanum_square_b</item>
     </style>
 
