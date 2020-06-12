@@ -3,63 +3,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.WriteFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".fragment.WriteFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:gravity="right|center"
         android:background="@color/white"
-        >
+        android:gravity="right|center">
+
         <Button
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:fontFamily="@font/nanum_square_b"
             android:text="OK"
             android:textColor="@color/mainColor"
-            android:textSize="18dp"
-            android:fontFamily="@font/nanum_square_b"
-            />
+            android:textSize="18dp" />
     </LinearLayout>
-    
+
     <View
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:background="@drawable/write_sh"
-        />
+        android:background="@drawable/write_sh" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:background="@color/white"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:fontFamily="@font/nanum_square_b"
                 android:text="TIME"
                 android:textColor="@color/mainColor"
-                android:textSize="20dp"
-                android:fontFamily="@font/nanum_square_b"
-                />
+                android:textSize="20dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:layout_weight="1"
                 android:layout_marginHorizontal="20dp"
-                android:orientation="horizontal"
-                >
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -70,9 +64,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="START"
                         android:fontFamily="@font/nanum_square_b"
-                        />
+                        android:text="START" />
 
                 </LinearLayout>
 
@@ -80,15 +73,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="END"
                         android:fontFamily="@font/nanum_square_b"
-                        />
+                        android:text="END" />
 
                 </LinearLayout>
 
@@ -97,89 +88,80 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="20dp"
-                >
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:fontFamily="@font/nanum_square_b"
                     android:text="TITLE"
                     android:textColor="@color/mainColor"
-                    android:textSize="20dp"
-                    android:fontFamily="@font/nanum_square_b"
-                    />
+                    android:textSize="20dp" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginHorizontal="20dp"
-                    android:hint="제목을 입력하세요"
-                    android:gravity="left|top"
-                    android:padding="10dp"
-                    android:textSize="14dp"
-                    android:fontFamily="@font/nanum_square_r"
                     android:background="@drawable/write_et"
-                    />
+                    android:fontFamily="@font/nanum_square_r"
+                    android:gravity="left|top"
+                    android:hint="제목을 입력하세요"
+                    android:padding="10dp"
+                    android:textSize="14dp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="20dp"
-                >
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:fontFamily="@font/nanum_square_b"
                     android:text="MEMO"
                     android:textColor="@color/mainColor"
-                    android:textSize="20dp"
-                    android:fontFamily="@font/nanum_square_b"
-                    />
+                    android:textSize="20dp" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:layout_marginHorizontal="20dp"
-                    android:hint="메모를 입력하세요"
-                    android:gravity="left|top"
-                    android:padding="10dp"
-                    android:textSize="14dp"
-                    android:fontFamily="@font/nanum_square_r"
                     android:background="@drawable/write_et"
-                    />
+                    android:fontFamily="@font/nanum_square_r"
+                    android:gravity="left|top"
+                    android:hint="메모를 입력하세요"
+                    android:padding="10dp"
+                    android:textSize="14dp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="120dp"
-                >
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:fontFamily="@font/nanum_square_b"
                     android:text="IMAGE"
                     android:textColor="@color/mainColor"
-                    android:textSize="20dp"
-                    android:fontFamily="@font/nanum_square_b"
-                    />
+                    android:textSize="20dp" />
 
                 <Button
                     android:layout_width="250dp"
                     android:layout_height="250dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/write_et"
-                    />
+                    android:background="@drawable/write_et" />
 
             </LinearLayout>
 
