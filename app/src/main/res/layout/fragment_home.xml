@@ -23,17 +23,19 @@
             android:padding="10dp">
 
             <EditText
+                android:id="@+id/et_todayBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/home_et"
-                android:hint="새로운 일과를 입력하세요."
+                android:hint="새로운 일과 제목을 입력하세요."
                 android:padding="8dp"
                 android:textSize="13sp" />
 
             <Button
+                android:id="@+id/btn_todayBox"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
@@ -53,6 +55,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/t_oTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -69,6 +72,7 @@
                 android:padding="12dp">
 
                 <TextView
+                    android:id="@+id/t_oTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
