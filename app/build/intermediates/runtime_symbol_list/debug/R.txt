@@ -1394,11 +1394,7 @@ int font font 0x7f080000
 int font nanum_square_b 0x7f080001
 int font nanum_square_eb 0x7f080002
 int font nanum_square_l 0x7f080003
-int font nanum_square_otf_acb 0x7f080004
-int font nanum_square_otf_aceb 0x7f080005
-int font nanum_square_otf_acl 0x7f080006
-int font nanum_square_otf_acr 0x7f080007
-int font nanum_square_r 0x7f080008
+int font nanum_square_r 0x7f080004
 int id ALT 0x7f090000
 int id BOTTOM_END 0x7f090001
 int id BOTTOM_START 0x7f090002

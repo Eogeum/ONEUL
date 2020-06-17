@@ -24,24 +24,22 @@ import java.util.Date;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class HomeFragment extends Fragment {
 
-    //    나중에 점검 해야할 코드들 ####################################
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
     //    XML 관련
     TextView t_oTitle, t_oTime;
     Button btn_todayBox;
     EditText et_todayBox;
     LinearLayout ll_todayBox;
+
     //    디비 관련
     dbHelper dbHelper;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+//        인플레이터 관련
         final View homeView = inflater.inflate(R.layout.fragment_home, container, false);
 
 //        뷰 관련
@@ -59,7 +57,6 @@ public class HomeFragment extends Fragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");
         String showDay = dateFormat.format(now);
         String today = showDay;
-
 
 //        오늘 날짜가 아닌 경우
         if (showDay != today) {
@@ -94,6 +91,7 @@ public class HomeFragment extends Fragment {
                     t_oTime.setText(result[1] + " ~ " + result[2]);
                 }
 
+
             }
         });
 
@@ -101,15 +99,13 @@ public class HomeFragment extends Fragment {
         return homeView;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
+
+    //    나중에 점검 해야할 코드들 ####################################
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
@@ -128,6 +124,7 @@ public class HomeFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment HomeFragment.
      */
+
     // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
@@ -138,5 +135,12 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
 }

@@ -17,15 +17,15 @@ import com.oneul.R;
  * Use the {@link WriteFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class WriteFragment extends Fragment {
 
     int h = 0, mi = 0;
     Button timeStart, timeEnd;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         final View writeView = inflater.inflate(R.layout.fragment_write, container, false);
 
         timeStart = writeView.findViewById(R.id.timeStart);
@@ -66,22 +66,20 @@ public class WriteFragment extends Fragment {
             }
         });
 
+
+        // Inflate the layout for this fragment
         return writeView;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+
+
+    //    나중에 점검 해야할 코드들 ####################################
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -108,4 +106,12 @@ public class WriteFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
 }

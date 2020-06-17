@@ -1395,10 +1395,6 @@ font font
 font nanum_square_b
 font nanum_square_eb
 font nanum_square_l
-font nanum_square_otf_acb
-font nanum_square_otf_aceb
-font nanum_square_otf_acl
-font nanum_square_otf_acr
 font nanum_square_r
 id ALT
 id BOTTOM_END

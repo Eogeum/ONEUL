@@ -9,6 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class dbHelper extends SQLiteOpenHelper {
 
+    //    디비 정보
+    private static final String DATABASE_NAME = "OneulDB";
+    private static final int DATABASE_VERSION = 1;
+
     //    테이블 정보
     public static final String TABLE_NAME = "Oneul";
     public static final String COLUMN_ONO = "oNo";
@@ -16,19 +20,15 @@ public class dbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_OSTART = "oStart";
     public static final String COLUMN_OEND = "oEnd";
 
-    //    디비 정보
-    private static final String DATABASE_NAME = "OneulDB";
-    private static final int DATABASE_VERSION = 1;
+    //    디비 생성자
+    public dbHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
 
     //     테이블 생성
     private static final String TABLE_CREATE = "CREATE TABLE "
             + TABLE_NAME + "(" + COLUMN_ONO + " integer PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_OTITLE + " text, " + COLUMN_OSTART + " text, " + COLUMN_OEND + " text);";
-
-    //    디비 생성자
-    public dbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
 
     //    일과 추가
     public void addOneul(String oTitle, String oStart, String oEnd) {
@@ -46,8 +46,8 @@ public class dbHelper extends SQLiteOpenHelper {
     //    일과 불러오기
     public String[] getOneul(int oNo) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, null, "oNo = ?", new String[]{Integer.toString(oNo)},
-                null, null, null);
+        Cursor cursor = db.query(TABLE_NAME, null, "oNo = ?",
+                new String[]{Integer.toString(oNo)}, null, null, null);
         String[] oneul = null;
 
         while (cursor.moveToNext()) {
@@ -81,6 +81,7 @@ public class dbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         this.onCreate(db);
+
 
         // 테이블 행 추가
 //        if (oldVersion < 2) {

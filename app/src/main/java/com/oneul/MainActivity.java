@@ -59,9 +59,7 @@ public class MainActivity extends AppCompatActivity {
         bot_menu.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         openFragment(HomeFragment.newInstance("", ""));
 
-//        네비게이션 바 숨기기
-//        View decorView = getWindow().getDecorView();
-//        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
     }
 
     //    하단 메뉴 화면전환 메서드
