@@ -11,9 +11,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toTopOf="parent"
-        tools:layout_editor_absoluteX="-89dp" />
+        android:layout_weight="1" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bot_menu"
@@ -23,7 +21,33 @@
         android:background="@color/white"
         app:itemIconTint="@color/bot_menu"
         app:itemTextColor="@color/bot_menu"
-        app:layout_constraintBottom_toBottomOf="@+id/container"
         app:menu="@menu/bot_menu" />
+
+    <SlidingDrawer
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="50dp"
+        android:content="@+id/calendar"
+        android:handle="@+id/btnCal">
+
+        <Button
+            android:id="@+id/btnCal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="캘린더" />
+
+        <LinearLayout
+            android:id="@+id/calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <CalendarView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="20dp" />
+
+        </LinearLayout>
+    </SlidingDrawer>
 
 </LinearLayout>

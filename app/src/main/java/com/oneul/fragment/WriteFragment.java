@@ -6,11 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TimePicker;
 
 import androidx.fragment.app.Fragment;
 
 import com.oneul.R;
+import com.oneul.dbHelper;
+
+import java.text.SimpleDateFormat;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,49 +24,71 @@ import com.oneul.R;
 
 public class WriteFragment extends Fragment {
 
+//    XML 위젯
     int h = 0, mi = 0;
-    Button timeStart, timeEnd;
+    Button btnOk, timeStart, timeEnd;
+    String tStart, tEnd;
+    EditText editTitle, editMemo;
+
+    dbHelper dbHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View writeView = inflater.inflate(R.layout.fragment_write, container, false);
 
+//        시작 시간 입력
         timeStart = writeView.findViewById(R.id.timeStart);
         timeStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         h = hourOfDay;
                         mi = minute;
 
-                        timeStart.setText(hourOfDay + " : " + minute);
+                        tStart= hourOfDay + " : " + minute;
+                        timeStart.setText(tStart);
                     }
                 }, 21, 12, true);
 
                 timePickerDialog.setMessage("일과 시작");
                 timePickerDialog.show();
+
             }
         });
 
+//        종료 시간 입력
         timeEnd = writeView.findViewById(R.id.timeEnd);
         timeEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         h = hourOfDay;
                         mi = minute;
 
-                        timeEnd.setText(hourOfDay + " : " + minute);
+                        tEnd = hourOfDay + " : " + minute;
+                        timeEnd.setText(tEnd);
                     }
                 }, 21, 12, true);
 
                 timePickerDialog.setMessage("일과 종료");
                 timePickerDialog.show();
+
+            }
+        });
+
+//        일과 저장
+        btnOk = writeView.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dbHelper.addOneul(editTitle.getText().toString(), tStart, tEnd);
             }
         });
 
