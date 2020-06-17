@@ -1,9 +1,12 @@
 package com.oneul.fragment;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TimePicker;
 
 import androidx.fragment.app.Fragment;
 
@@ -15,6 +18,66 @@ import com.oneul.R;
  * create an instance of this fragment.
  */
 public class WriteFragment extends Fragment {
+
+    int h = 0, mi = 0;
+    Button timeStart, timeEnd;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        final View writeView = inflater.inflate(R.layout.fragment_write, container, false);
+
+        timeStart = writeView.findViewById(R.id.timeStart);
+        timeStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        h = hourOfDay;
+                        mi = minute;
+
+                        timeStart.setText(hourOfDay + " : " + minute);
+                    }
+                }, 21, 12, true);
+
+                timePickerDialog.setMessage("일과 시작");
+                timePickerDialog.show();
+            }
+        });
+
+        timeEnd = writeView.findViewById(R.id.timeEnd);
+        timeEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        h = hourOfDay;
+                        mi = minute;
+
+                        timeEnd.setText(hourOfDay + " : " + minute);
+                    }
+                }, 21, 12, true);
+
+                timePickerDialog.setMessage("일과 종료");
+                timePickerDialog.show();
+            }
+        });
+
+        return writeView;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -45,19 +108,4 @@ public class WriteFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_write, container, false);
-    }
 }

@@ -10,4 +10,9 @@
         android:fontStyle="normal"
         android:fontWeight="400" />
 
+    <font
+        android:font="@font/nanum_square_eb"
+        android:fontStyle="normal"
+        android:fontWeight="400" />
+
 </font-family>
