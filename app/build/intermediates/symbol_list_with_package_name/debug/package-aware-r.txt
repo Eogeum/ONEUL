@@ -1345,9 +1345,9 @@ drawable design_ic_visibility
 drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
-drawable home_et
-drawable home_ll
-drawable home_ll2
+drawable home_et_today_box
+drawable home_ll_today_box
+drawable home_oneul_list
 drawable ic_calendar_black_24dp
 drawable ic_clear_black_24dp
 drawable ic_edit_black_24dp
@@ -1544,6 +1544,7 @@ id info
 id invisible
 id italic
 id item_touch_helper_previous_elevation
+id l_oneul
 id labeled
 id largeLabel
 id left
@@ -1782,6 +1783,8 @@ layout design_text_input_start_icon
 layout fragment_home
 layout fragment_setting
 layout fragment_write
+layout home_oneul_list
+layout home_oneul_todaybox
 layout mtrl_alert_dialog
 layout mtrl_alert_dialog_actions
 layout mtrl_alert_dialog_title

@@ -8,13 +8,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.oneul.R;
 import com.oneul.dbHelper;
+import com.oneul.oneul.OneulAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,11 +28,11 @@ import java.util.Date;
 
 public class HomeFragment extends Fragment {
 
-    //    XML 관련
-    TextView t_oTitle, t_oTime;
+    //    뷰 관련
     Button btn_todayBox;
     EditText et_todayBox;
     LinearLayout ll_todayBox;
+    ListView l_oneul;
 
     //    디비 관련
     dbHelper dbHelper;
@@ -41,29 +42,39 @@ public class HomeFragment extends Fragment {
 
 //        인플레이터 관련
         final View homeView = inflater.inflate(R.layout.fragment_home, container, false);
+        final View todayBox = getLayoutInflater().inflate(R.layout.home_oneul_todaybox, null, false);
+
+//        어댑터 관련
+        final OneulAdapter adapter = new OneulAdapter(this);
 
 //        뷰 관련
-        t_oTitle = homeView.findViewById(R.id.t_oTitle);
-        t_oTime = homeView.findViewById(R.id.t_oTime);
-        btn_todayBox = homeView.findViewById(R.id.btn_todayBox);
-        et_todayBox = homeView.findViewById(R.id.et_todayBox);
-        ll_todayBox = homeView.findViewById(R.id.ll_todayBox);
+        btn_todayBox = todayBox.findViewById(R.id.btn_todayBox);
+        et_todayBox = todayBox.findViewById(R.id.et_todayBox);
+        ll_todayBox = todayBox.findViewById(R.id.ll_todayBox);
+        l_oneul = homeView.findViewById(R.id.l_oneul);
+        l_oneul.addHeaderView(todayBox);
+        l_oneul.setAdapter(null);
 
-        //        디비 관련
+//        디비 관련
         dbHelper = new dbHelper(getActivity());
 
 //        날짜 관련
         Date now = new Date(System.currentTimeMillis());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");
-        String showDay = dateFormat.format(now);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
+        final String showDay = dateFormat.format(now);
         String today = showDay;
 
-//        오늘 날짜가 아닌 경우
+
+//        todo : 캘린더 뷰에서 오늘 날짜 값 받아오는 걸로 수정 지금 today = showDay 임
+//        시작 시 일과 불러오기
+        dbHelper.getOneul(showDay, l_oneul, adapter);
+
+//        오늘이 아닐 시 투데이박스 숨김
         if (showDay != today) {
             ll_todayBox.setVisibility(View.GONE);
         }
 
-        //        todayBox 입력 시
+//        투데이박스 입력 시
         btn_todayBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,24 +92,19 @@ public class HomeFragment extends Fragment {
                     SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
                     String startTime = timeFormat.format(now);
 
-//                    일과 값 디비 저장
-                    dbHelper.addOneul(et_todayBox.getText().toString(), startTime, startTime);
+//                    todo : 엔드 버튼이 생기면 엔드타임도 설정해서 넣어줘야 함 지금 endTime = startTime 임
+//                    입력한 일과 디비에 저장
+                    dbHelper.addOneul(showDay, startTime, startTime, et_todayBox.getText().toString());
 
-//                    일과 값 텍스트 뷰에 설정
-                    String[] result = dbHelper.getOneul(1);
-//
-                    t_oTitle.setText(result[0]);
-                    t_oTime.setText(result[1] + " ~ " + result[2]);
+//                    일과 불러오기
+                    dbHelper.getOneul(showDay, l_oneul, adapter);
                 }
-
-
             }
         });
 
-        // Inflate the layout for this fragment
+
         return homeView;
     }
-
 
 
     //    나중에 점검 해야할 코드들 ####################################

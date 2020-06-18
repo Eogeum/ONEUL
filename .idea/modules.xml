@@ -5,10 +5,12 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidStudioProjects-ONEUL.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidStudioProjects-ONEUL.iml" group="ONEUL" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/AndroidStudioProjects-ONEUL-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/AndroidStudioProjects-ONEUL-app.iml" group="ONEUL/app" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Eogeum-AndroidStudioProjects-ONEUL.iml" filepath="$PROJECT_DIR$/.idea/modules/Eogeum-AndroidStudioProjects-ONEUL.iml" group="ONEUL" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Eogeum-AndroidStudioProjects-ONEUL-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Eogeum-AndroidStudioProjects-ONEUL-app.iml" group="ONEUL/app" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ONEUL.iml" filepath="$PROJECT_DIR$/.idea/modules/ONEUL.iml" group="ONEUL" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ONEUL-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ONEUL-app.iml" group="ONEUL/app" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/User-AndroidStudioProjects-ONEUL.iml" filepath="$PROJECT_DIR$/.idea/modules/User-AndroidStudioProjects-ONEUL.iml" group="ONEUL" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/User-AndroidStudioProjects-ONEUL-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/User-AndroidStudioProjects-ONEUL-app.iml" group="ONEUL/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Users-Eogeum-AndroidStudioProjects-ONEUL.iml" filepath="$PROJECT_DIR$/.idea/modules/Users-Eogeum-AndroidStudioProjects-ONEUL.iml" group="ONEUL" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="ONEUL/app" />
     </modules>
   </component>
