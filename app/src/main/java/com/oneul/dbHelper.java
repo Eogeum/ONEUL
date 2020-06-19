@@ -67,6 +67,8 @@ public class dbHelper extends SQLiteOpenHelper {
             adapter.addItem(oneul);
             l_oneul.setAdapter(adapter);
         }
+
+        db.close();
     }
 
     //     테이블 행 추가

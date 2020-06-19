@@ -25,7 +25,8 @@
             android:hint="새로운 일과 제목을 입력하세요."
             android:padding="8dp"
             android:singleLine="true"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:imeOptions="actionDone"/>
 
         <Button
             android:id="@+id/btn_todayBox"
