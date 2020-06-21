@@ -1,17 +1,26 @@
 package com.oneul.oneul;
 
 public class Oneul {
-    String oDate, oStart, oEnd, oTitle;
+    int oNo;
+    String oDate, oStart, oEnd, oTitle, oMemo;
 
-    public Oneul(String oDate, String oStart, String oEnd, String oTitle) {
+    public Oneul(int oNo, String oStart, String oTitle) {
+        this.oNo = oNo;
+        this.oStart = oStart;
+        this.oTitle = oTitle;
+    }
+
+    public Oneul(String oDate, String oStart, String oEnd, String oTitle, String oMemo) {
         this.oDate = oDate;
         this.oStart = oStart;
         this.oEnd = oEnd;
         this.oTitle = oTitle;
+        this.oMemo = oMemo;
     }
 
-    public String getoDate() {
-        return oDate;
+
+    public int getoNo() {
+        return oNo;
     }
 
     public String getoStart() {
@@ -24,6 +33,10 @@ public class Oneul {
 
     public String getoTitle() {
         return oTitle;
+    }
+
+    public String getoMemo() {
+        return oMemo;
     }
 
     public void setoDate(String oDate) {
@@ -42,7 +55,9 @@ public class Oneul {
         this.oTitle = oTitle;
     }
 
-    public Oneul() {
+    public void setoMemo(String oMemo) {
+        this.oMemo = oMemo;
     }
 
+    public Oneul() { }
 }

@@ -41,9 +41,10 @@ public class OneulAdapter extends BaseAdapter {
         OneulView view = new OneulView(homeFragment.getActivity());
         Oneul oneul = this.oneul.get(position);
 
-        view.setoTitle(oneul.getoTitle());
         view.setoStart(oneul.getoStart());
         view.setoEnd(oneul.getoEnd());
+        view.setoTitle(oneul.getoTitle());
+        view.setoMemo(oneul.getoMemo());
 
         return view;
     }

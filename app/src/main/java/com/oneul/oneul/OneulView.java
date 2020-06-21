@@ -25,7 +25,7 @@ public class OneulView extends LinearLayout {
 
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.home_oneul_list, this, true);
+        inflater.inflate(R.layout.home_list, this, true);
         oTime = findViewById(R.id.t_oTime);
         oTitle = findViewById(R.id.t_oTitle);
     }
@@ -41,5 +41,8 @@ public class OneulView extends LinearLayout {
 
     public void setoTitle(String oTitle) {
         this.oTitle.setText(oTitle);
+    }
+
+    public void setoMemo(String oMemo) {
     }
 }

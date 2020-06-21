@@ -6,7 +6,9 @@ import android.os.PersistableBundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,12 +23,14 @@ import com.oneul.fragment.WriteFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-//    뒤로가기 종료
+    //    뒤로가기 종료
     boolean doubleBackToExitPressedOnce = false;
 
 //    하단 메뉴
     BottomNavigationView bot_menu;
-    Integer selectedItem = R.id.bot_menu_home;
+
+//    데이터 저장
+    int selectedItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,25 +38,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        하단 메뉴
-        bot_menu = findViewById(R.id.bot_menu);
+        bot_menu = (BottomNavigationView) findViewById(R.id.bot_menu);
         bot_menu.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
-
 //        데이터 불러오기
+        selectedItem = R.id.bot_menu_home;
+
         if (savedInstanceState != null) {
             selectedItem = savedInstanceState.getInt("selectedItem");
-
-            switch (selectedItem) {
-                case R.id.bot_menu_write:
-                    openFragment(WriteFragment.newInstance("", ""));
-                    break;
-                case R.id.bot_menu_setting:
-                    openFragment(SettingFragment.newInstance("", ""));
-                    break;
-            }
-        } else {
-            openFragment(HomeFragment.newInstance("", ""));
         }
+
+        changeFrag(selectedItem);
 
 
     }
@@ -61,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             this.finishAffinity();
-            return;
         }
 
         this.doubleBackToExitPressedOnce = true;
@@ -80,38 +75,43 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("selectedItem", selectedItem);
+
+//        todo : 투데이박스 스타트박스 입력값, 메모박스 가시성, 키보드 상태 추가
     }
 
-//    todo : 나중에 봐야할 코드
-//    화면전환
+//    바텀 메뉴 클릭 시
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     selectedItem = item.getItemId();
 
-                    switch (item.getItemId()) {
-                        case R.id.bot_menu_home:
-                            openFragment(HomeFragment.newInstance("", ""));
-                            return true;
-                        case R.id.bot_menu_write:
-                            openFragment(WriteFragment.newInstance("", ""));
-                            return true;
-                        case R.id.bot_menu_setting:
-                            openFragment(SettingFragment.newInstance("", ""));
-                            return true;
-                    }
-
-                    return false;
+                    return changeFrag(item.getItemId());
                 }
             };
 
-//    하단 전환
+//    화면 전환 메서드
+    private boolean changeFrag(int selectedItem) {
+        switch (selectedItem) {
+            case R.id.bot_menu_home:
+                openFragment(HomeFragment.newInstance("", ""));
+                return true;
+
+            case R.id.bot_menu_write:
+                openFragment(WriteFragment.newInstance("", ""));
+                return true;
+
+            case R.id.bot_menu_setting:
+                openFragment(SettingFragment.newInstance("", ""));
+                return true;
+        }
+
+        return false;
+    }
+
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
-
 }
