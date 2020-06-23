@@ -12,7 +12,6 @@ import com.oneul.oneul.OneulAdapter;
 
 
 public class dbHelper extends SQLiteOpenHelper {
-
     //    디비 정보
     private static final String DATABASE_NAME = "OneulDB";
     private static final int DATABASE_VERSION = 1;
@@ -57,7 +56,7 @@ public class dbHelper extends SQLiteOpenHelper {
         return oneul;
     }
 
-    //    //    일과 기록 종료, 로우 수정
+    //    일과 기록 종료, 로우 수정
     public void endOneul(int oNo, String oEnd, String oMemo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

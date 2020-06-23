@@ -18,7 +18,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.oneul.Animation;
-import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.dbHelper;
 import com.oneul.oneul.Oneul;
@@ -30,7 +29,7 @@ import java.util.Date;
 public class HomeFragment extends Fragment {
     //    뷰
     Button btn_ok, btn_stop;
-    EditText et_todayBox;
+    public static EditText et_todayBox;
     LinearLayout ll_todayBox;
     ListView l_oneul;
     TextView t_oTitle, t_oTime, t_open, t_oMemo;
@@ -81,6 +80,10 @@ public class HomeFragment extends Fragment {
 
 //        시작 시 일과 불러오기
         dbHelper.getOneul(today(), l_oneul, adapter);
+
+        if (!TextUtils.isEmpty(inputText)) {
+            et_todayBox.setText(inputText);
+        }
 
 //        시작 시 기록중인 일과 확인
         if (dbHelper.getStartOneul() != null) {
@@ -191,18 +194,13 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
     }
 
-    //    todo : 나중에 봐야할 코드 / 변수들 이름 수정
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "inputText";
+    private String inputText;
 
-    private String mParam1;
-    private String mParam2;
-
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance(String param1) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -212,8 +210,7 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            inputText = getArguments().getString(ARG_PARAM1);
         }
     }
 }

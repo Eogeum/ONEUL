@@ -13,7 +13,6 @@
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan">
-
             <!-- 위 코드 - 키보드 모드 bot_menu 숨기기 -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

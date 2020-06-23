@@ -1,14 +1,10 @@
 package com.oneul;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PersistableBundle;
-import android.text.TextUtils;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,15 +18,16 @@ import com.oneul.fragment.SettingFragment;
 import com.oneul.fragment.WriteFragment;
 
 public class MainActivity extends AppCompatActivity {
-
-    //    뒤로가기 종료
+//    뒤로가기 종료
     boolean doubleBackToExitPressedOnce = false;
 
 //    하단 메뉴
     BottomNavigationView bot_menu;
 
 //    데이터 저장
-    int selectedItem;
+    int selectedItem = R.id.bot_menu_home;;
+    String inputText;
+    int keyboardState = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +39,21 @@ public class MainActivity extends AppCompatActivity {
         bot_menu.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
 //        데이터 불러오기
-        selectedItem = R.id.bot_menu_home;
-
         if (savedInstanceState != null) {
             selectedItem = savedInstanceState.getInt("selectedItem");
+            inputText = savedInstanceState.getString("inputText");
+            keyboardState = savedInstanceState.getInt("keyboardState");
+
+            if (keyboardState != 0) {
+                HomeFragment.et_todayBox.requestFocus();
+                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(HomeFragment.et_todayBox, InputMethodManager.SHOW_IMPLICIT);
+            }
+
+//            todo : 키보드 상태 0 1 변경 함수 필요
         }
 
-        changeFrag(selectedItem);
+        changeFrag(selectedItem, inputText);
 
 
     }
@@ -75,8 +80,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("selectedItem", selectedItem);
+        outState.putString("inputText", HomeFragment.et_todayBox.getText().toString());
+        outState.putInt("keyboardState", keyboardState);
 
-//        todo : 투데이박스 스타트박스 입력값, 메모박스 가시성, 키보드 상태 추가
+//        todo : 스타트박스 입력값, 메모박스 가시성, 키보드 상태 추가
     }
 
 //    바텀 메뉴 클릭 시
@@ -86,15 +93,15 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     selectedItem = item.getItemId();
 
-                    return changeFrag(item.getItemId());
+                    return changeFrag(item.getItemId(), "");
                 }
             };
 
 //    화면 전환 메서드
-    private boolean changeFrag(int selectedItem) {
+    private boolean changeFrag(int selectedItem, String inputText) {
         switch (selectedItem) {
             case R.id.bot_menu_home:
-                openFragment(HomeFragment.newInstance("", ""));
+                openFragment(HomeFragment.newInstance(inputText));
                 return true;
 
             case R.id.bot_menu_write:
