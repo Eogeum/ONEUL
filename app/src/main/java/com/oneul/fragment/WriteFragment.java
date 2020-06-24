@@ -2,19 +2,24 @@ package com.oneul.fragment;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.dbHelper;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +32,6 @@ public class WriteFragment extends Fragment {
 //    XML 위젯
     int h = 0, mi = 0;
     Button btnOk, timeStart, timeEnd;
-    String tStart, tEnd;
     EditText editTitle, editMemo;
 
     dbHelper dbHelper;
@@ -37,25 +41,29 @@ public class WriteFragment extends Fragment {
 
         final View writeView = inflater.inflate(R.layout.fragment_write, container, false);
 
+        editTitle = writeView.findViewById(R.id.editTitle);
+        editMemo = writeView.findViewById(R.id.editMemo);
+
 //        시작 시간 입력
         timeStart = writeView.findViewById(R.id.timeStart);
         timeStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                final TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         h = hourOfDay;
                         mi = minute;
 
-                        tStart= hourOfDay + " : " + minute;
-                        timeStart.setText(tStart);
+                        timeStart.setText(hourOfDay + " : " + minute);
                     }
                 }, 21, 12, true);
 
                 timePickerDialog.setMessage("일과 시작");
                 timePickerDialog.show();
+
+                Date nowTime = new Date(String.valueOf(timePickerDialog.getCurrentFocus()));
 
             }
         });
@@ -72,8 +80,7 @@ public class WriteFragment extends Fragment {
                         h = hourOfDay;
                         mi = minute;
 
-                        tEnd = hourOfDay + " : " + minute;
-                        timeEnd.setText(tEnd);
+                        timeEnd.setText(hourOfDay + " : " + minute);
                     }
                 }, 21, 12, true);
 
@@ -83,12 +90,26 @@ public class WriteFragment extends Fragment {
             }
         });
 
+//        날짜
+        Date now = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
+        final String showDay = dateFormat.format(now);
+        String today = showDay;
+
+//        시간
+        final String tStart = h + " : " + mi;
+        final String tEnd = h + " : " + mi;
+
 //        일과 저장
         btnOk = writeView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHelper.addOneul(editTitle.getText().toString(), tStart, tEnd);
+                if (TextUtils.isEmpty(editTitle.getText().toString())) {
+                    Toast.makeText(getActivity(), "제목을 입력하세요", Toast.LENGTH_SHORT).show();
+                } else {
+                    dbHelper.addOneul(showDay, tStart, tEnd, editTitle.getText().toString());
+                }
             }
         });
 
