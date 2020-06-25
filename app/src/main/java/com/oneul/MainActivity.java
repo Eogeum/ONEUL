@@ -1,10 +1,11 @@
 package com.oneul;
 
-import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
+import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,48 +18,74 @@ import com.oneul.fragment.HomeFragment;
 import com.oneul.fragment.SettingFragment;
 import com.oneul.fragment.WriteFragment;
 
+import static com.oneul.fragment.HomeFragment.keyboardShow;
+
 public class MainActivity extends AppCompatActivity {
-//    뒤로가기 종료
-    boolean doubleBackToExitPressedOnce = false;
+//    뷰
+    View root;
 
 //    하단 메뉴
     BottomNavigationView bot_menu;
 
+//    뒤로가기 종료
+    boolean doubleBackToExitPressedOnce = false;
+
 //    데이터 저장
     int selectedItem = R.id.bot_menu_home;;
     String inputText;
-    int keyboardState = 0;
+    boolean keyboardShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        뷰
+        root = this.getWindow().getDecorView().getRootView();
+
 //        하단 메뉴
         bot_menu = (BottomNavigationView) findViewById(R.id.bot_menu);
-        bot_menu.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+        bot_menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                selectedItem = item.getItemId();
+                inputText = HomeFragment.et_todayBox.getText().toString();
+
+                return changeFrag(item.getItemId(), inputText, keyboardShow);
+            }
+        });
 
 //        데이터 불러오기
         if (savedInstanceState != null) {
             selectedItem = savedInstanceState.getInt("selectedItem");
             inputText = savedInstanceState.getString("inputText");
-            keyboardState = savedInstanceState.getInt("keyboardState");
-
-            if (keyboardState != 0) {
-                HomeFragment.et_todayBox.requestFocus();
-                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(HomeFragment.et_todayBox, InputMethodManager.SHOW_IMPLICIT);
-            }
-
-//            todo : 키보드 상태 0 1 변경 함수 필요
+            keyboardShow = savedInstanceState.getBoolean("keyboardShow");
         }
 
-        changeFrag(selectedItem, inputText);
+        changeFrag(selectedItem, inputText, keyboardShow);
+
+//        키보드 리스너
+        root.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        Rect r = new Rect();
+                        root.getWindowVisibleDisplayFrame(r);
+                        int screenHeight = root.getRootView().getHeight();
+                        int keypadHeight = screenHeight - r.bottom;
+
+                        if (keypadHeight > screenHeight * 0.15) {
+                            keyboardShow = true;
+                        } else {
+                            keyboardShow = false;
+                        }
+                    }
+                });
 
 
+        keyboardShow(this, HomeFragment.et_todayBox);
     }
 
-//    뒤로가기 종료 메서드
+//    뒤로가기 종료
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             this.finishAffinity();
@@ -81,27 +108,16 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt("selectedItem", selectedItem);
         outState.putString("inputText", HomeFragment.et_todayBox.getText().toString());
-        outState.putInt("keyboardState", keyboardState);
+        outState.putBoolean("keyBoardShow", keyboardShow);
 
 //        todo : 스타트박스 입력값, 메모박스 가시성, 키보드 상태 추가
     }
 
-//    바텀 메뉴 클릭 시
-    BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    selectedItem = item.getItemId();
-
-                    return changeFrag(item.getItemId(), "");
-                }
-            };
-
-//    화면 전환 메서드
-    private boolean changeFrag(int selectedItem, String inputText) {
+//    화면 전환
+    private boolean changeFrag(int selectedItem, String inputText, boolean keyboardShow) {
         switch (selectedItem) {
             case R.id.bot_menu_home:
-                openFragment(HomeFragment.newInstance(inputText));
+                openFragment(HomeFragment.newInstance(inputText, keyboardShow));
                 return true;
 
             case R.id.bot_menu_write:
@@ -116,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    public void openFragment(Fragment fragment) {
+    private void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.commit();

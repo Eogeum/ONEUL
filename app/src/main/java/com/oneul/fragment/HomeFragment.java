@@ -1,11 +1,15 @@
 package com.oneul.fragment;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +22,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.oneul.Animation;
+import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.dbHelper;
 import com.oneul.oneul.Oneul;
@@ -47,8 +52,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        인플레이터
         final View homeView = inflater.inflate(R.layout.fragment_home, container, false);
-        final View todayBox = getLayoutInflater().inflate(R.layout.home_todaybox, null, false);
-        final View startBox = getLayoutInflater().inflate(R.layout.home_startbox, null, false);
+        final View todayBox = inflater.inflate(R.layout.home_todaybox, null, false);
+        final View startBox = inflater.inflate(R.layout.home_startbox, null, false);
 
 //        뷰
         l_oneul = (ListView) homeView.findViewById(R.id.l_oneul);
@@ -68,7 +73,7 @@ public class HomeFragment extends Fragment {
 //        디비
         dbHelper = new dbHelper(getActivity());
 
-//       리스트
+//        리스트
         TextView padding = new TextView(getActivity());
         padding.setPadding(0, 0, 0, 16);
         l_oneul.addHeaderView(todayBox);
@@ -77,23 +82,19 @@ public class HomeFragment extends Fragment {
 
 //        todo : 캘린더 뷰에서 오늘 날짜 값 받아오는 걸로 수정 지금 today = showDay 임
         final String showday = today();
+        //        오늘이 아닐 시 투데이박스 숨김
+//        if (!showday.equals(today())) {
+//            ll_todayBox.setVisibility(View.GONE);
+//        }
 
-//        시작 시 일과 불러오기
+//        데이터 불러오기
         dbHelper.getOneul(today(), l_oneul, adapter);
+        et_todayBox.setText(inputText);
 
-        if (!TextUtils.isEmpty(inputText)) {
-            et_todayBox.setText(inputText);
-        }
-
-//        시작 시 기록중인 일과 확인
+//        기록중인 일과 확인
         if (dbHelper.getStartOneul() != null) {
 //            기록중인 일과 불러오기
             startOneul(todayBox, startBox);
-        }
-
-//        오늘이 아닐 시 투데이박스 숨김
-        if (!showday.equals(today())) {
-            ll_todayBox.setVisibility(View.GONE);
         }
 
 //        투데이박스 입력 완료 시
@@ -103,11 +104,12 @@ public class HomeFragment extends Fragment {
 //                제목 널값 확인
                 if (TextUtils.isEmpty(et_todayBox.getText().toString().trim())) {
                     Toast.makeText(getActivity(), "일과 제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                    et_todayBox.requestFocus();
+
+//                    투데이박스 포커스, 키보드 올리기
+                    keyboardShow(getActivity(), et_todayBox);
                 } else {
 //                    키보드 내리기
-                    InputMethodManager imm = (InputMethodManager) getActivity()
-                            .getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(homeView.getWindowToken(), 0);
 
 //                    기록중인 일과 디비 저장
@@ -131,17 +133,17 @@ public class HomeFragment extends Fragment {
                     case View.GONE:
                         Animation.expand(ll_memoBox);
                         t_open.setText("∧");
-                    break;
+                        break;
 
                     case View.VISIBLE:
                         Animation.collapse(ll_memoBox);
                         t_open.setText("∨");
-                    break;
+                        break;
                 }
             }
         });
 
-//        스타트 박스 입력 완료 시
+//        스타트 박스 기록 완료 시
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,11 +161,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
         return homeView;
     }
 
-//    오늘 날짜 불러오기
+    //    오늘 날짜 불러오기
     private String today() {
         Date now = new Date(System.currentTimeMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
@@ -171,39 +172,52 @@ public class HomeFragment extends Fragment {
         return dateFormat.format(now);
     }
 
-//    현재 시간 불러오기
+    //    현재 시간 불러오기
     private String nowTime() {
         Date now = new Date(System.currentTimeMillis());
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
         return timeFormat.format(now);
     }
 
-//    기록중인 일과 불러오기
+    //    기록중인 일과 불러오기
     private void startOneul(View todayBox, View startBox) {
-        //            리스트 헤더 스타트박스로 변경
+//        리스트 헤더 스타트박스로 변경
         l_oneul.removeHeaderView(todayBox);
         l_oneul.addHeaderView(startBox);
 
-        //            디비에서 기록중인 일과 불러오기
+//        디비에서 기록중인 일과 불러오기
         Oneul startOneul = dbHelper.getStartOneul();
         oNo = startOneul.getoNo();
         t_oTime.setText(startOneul.getoStart());
         t_oTitle.setText(startOneul.getoTitle());
     }
 
-    public HomeFragment() {
+    //    키보드
+    public static void keyboardShow(Activity activity, View target) {
+//        target.requestFocus();
+
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(target, InputMethodManager.SHOW_IMPLICIT);
     }
 
-    private static final String ARG_PARAM1 = "inputText";
-    private String inputText;
-
-    public static HomeFragment newInstance(String param1) {
+    //    화면 전환
+    public static HomeFragment newInstance(String inputText, boolean keyboardShow) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM1, inputText);
+        args.putBoolean(ARG_PARAM2, keyboardShow);
         fragment.setArguments(args);
         return fragment;
     }
+
+    public HomeFragment() {
+    }
+
+    //    데이터 저장
+    private static final String ARG_PARAM1 = "inputText";
+    private static final String ARG_PARAM2 = "keyboardShow";
+    private String inputText;
+    private boolean keyboardShow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -211,6 +225,10 @@ public class HomeFragment extends Fragment {
 
         if (getArguments() != null) {
             inputText = getArguments().getString(ARG_PARAM1);
+            keyboardShow = getArguments().getBoolean(ARG_PARAM2);
+
+            keyboardShow = true;
+            Log.d("TAG", "onCreate: 프래그먼트 키보드 값" + String.valueOf(keyboardShow));
         }
     }
 }
