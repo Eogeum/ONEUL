@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
     tools:context=".fragment.HomeFragment">
 
     <ListView
@@ -13,7 +12,35 @@
         android:layout_height="match_parent"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:listSelector="@android:color/transparent"
-        android:scrollbarThumbVertical="@color/mainColor" />
+        android:listSelector="@android:color/transparent" />
 
-</LinearLayout>
+    <SlidingDrawer
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_gravity="bottom"
+        android:content="@+id/ll_cal"
+
+        android:handle="@+id/btn_cal">
+
+        <Button
+            android:id="@+id/btn_cal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="캘린더" />
+
+        <LinearLayout
+            android:id="@+id/ll_cal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lightGray">
+
+            <CalendarView
+                android:id="@+id/c_cal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </SlidingDrawer>
+
+</FrameLayout>

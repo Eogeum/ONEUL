@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.oneul.extra.DateTime;
 import com.oneul.fragment.HomeFragment;
 import com.oneul.fragment.SettingFragment;
 import com.oneul.fragment.WriteFragment;
@@ -19,7 +20,8 @@ import com.oneul.fragment.WriteFragment;
 
 public class MainActivity extends AppCompatActivity {
 //     데이터 저장
-    String inputText;
+    public static String inputText;
+    public static String showDay = DateTime.today();
 
 //    하단 메뉴
     BottomNavigationView bot_menu;
@@ -36,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         bot_menu = (BottomNavigationView) findViewById(R.id.bot_menu);
 
 //        시작 시 홈화면 불러오기
-        openFragment(HomeFragment.newInstance(inputText));
+        showDay = DateTime.today();
+        openFragment(HomeFragment.newInstance());
 
 //        하단 메뉴 클릭 시
         bot_menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (item.getItemId()) {
                     case R.id.bot_menu_home:
-                        openFragment(HomeFragment.newInstance(inputText));
+                        openFragment(HomeFragment.newInstance());
                         return true;
 
                     case R.id.bot_menu_write:
