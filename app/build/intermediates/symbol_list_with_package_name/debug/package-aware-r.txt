@@ -1345,8 +1345,8 @@ drawable design_ic_visibility
 drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
-drawable hoem_memobox_ll
 drawable home_list_ll
+drawable home_memobox_ll
 drawable home_todaybox_et
 drawable home_todaybox_ll
 drawable ic_calendar_black_24dp

@@ -60,12 +60,12 @@
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\generated\\res\\pngs\\debug\\drawable-hdpi\\ic_home1.png"
     },
     {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
-    },
-    {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_home.xml.flat",
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\layout\\fragment_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
     },
     {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_ic_home3.png.flat",
@@ -204,10 +204,6 @@
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\layout\\fragment_setting.xml"
     },
     {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_hoem_memobox_ll.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\hoem_memobox_ll.xml"
-    },
-    {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_ic_launcher_background.png.flat",
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\generated\\res\\pngs\\debug\\drawable-mdpi\\ic_launcher_background.png"
     },
@@ -234,6 +230,10 @@
     {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\layout_home_todaybox.xml.flat",
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\layout\\home_todaybox.xml"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_home_memobox_ll.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\home_memobox_ll.xml"
     },
     {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_ic_launcher_foreground.png.flat",

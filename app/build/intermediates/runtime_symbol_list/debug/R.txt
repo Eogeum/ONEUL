@@ -1344,8 +1344,8 @@ int drawable design_ic_visibility 0x7f070069
 int drawable design_ic_visibility_off 0x7f07006a
 int drawable design_password_eye 0x7f07006b
 int drawable design_snackbar_background 0x7f07006c
-int drawable hoem_memobox_ll 0x7f07006d
-int drawable home_list_ll 0x7f07006e
+int drawable home_list_ll 0x7f07006d
+int drawable home_memobox_ll 0x7f07006e
 int drawable home_todaybox_et 0x7f07006f
 int drawable home_todaybox_ll 0x7f070070
 int drawable ic_calendar_black_24dp 0x7f070071

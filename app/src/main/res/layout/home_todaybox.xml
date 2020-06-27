@@ -23,7 +23,7 @@
             android:layout_weight="1"
             android:background="@drawable/home_todaybox_et"
             android:hint="새로운 일과 제목을 입력하세요."
-            android:imeOptions="actionDone"
+            android:imeOptions="actionDone|flagNoExtractUi"
             android:inputType="text"
             android:maxLength="20"
             android:maxLines="1"

@@ -8,14 +8,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 public class Animation {
-
+//    메모 애니메이션
     public static void expand(LinearLayout linearLayout) {
         linearLayout.setVisibility(View.VISIBLE);
         final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         final int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         linearLayout.measure(widthSpec, heightSpec);
         ValueAnimator mAnimator = slideAnimator(linearLayout, 0, linearLayout.getMeasuredHeight());
-        
+
         mAnimator.start();
     }
 
@@ -28,7 +28,7 @@ public class Animation {
                 linearLayout.setVisibility(View.GONE);
             }
         });
-        
+
         mAnimator.start();
     }
 
@@ -44,8 +44,36 @@ public class Animation {
                 linearLayout.setLayoutParams(layoutParams);
             }
         });
-        
+
         return animator;
     }
+
+//    테두리 애니메이션
+//    public static void borderAnimation() {
+//        int beforeColor;
+//        int afterColor;
+//
+//        if(((ColorDrawable)mImageView.getBackground()).getColor() == Color.parseColor("#FF0000"))
+//        {
+//            beforeColor = Color.parseColor("#FF0000");
+//            afterColor = Color.parseColor("#0000ED");
+//        }
+//        else
+//        {
+//            beforeColor = Color.parseColor("#0000ED");
+//            afterColor = Color.parseColor("#FF0000");
+//        }
+//        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), beforeColor, afterColor);
+//        colorAnimation.setDuration(500);
+//        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
+//        {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animator)
+//            {
+//                mImageView.setBackgroundColor((int) animator.getAnimatedValue());
+//            }
+//        });
+//        colorAnimation.start();
+//    }
 }
 

@@ -12,11 +12,11 @@ import com.oneul.oneul.OneulAdapter;
 
 
 public class dbHelper extends SQLiteOpenHelper {
-    //    디비 정보
+//    디비 정보
     private static final String DATABASE_NAME = "OneulDB";
     private static final int DATABASE_VERSION = 1;
 
-    //    테이블 정보
+//    테이블 정보
     public static final String TABLE_NAME = "Oneul";
     public static final String COLUMN_ONO = "oNo";
     public static final String COLUMN_ODATE = "oDate";
@@ -26,18 +26,18 @@ public class dbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_OMEMO = "oMemo";
     public static final String COLUMN_ODONE = "oDone";
 
-    //    디비 생성자
+//    디비 생성자
     public dbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    //     테이블 생성
+//     테이블 생성
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "("
             + COLUMN_ONO + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ODATE + " TEXT NOT NULL, "
             + COLUMN_OSTART + " TEXT, " + COLUMN_OEND + " TEXT, " + COLUMN_OTITLE + " TEXT NOT NULL, "
             + COLUMN_OMEMO + " TEXT, " + COLUMN_ODONE + " INTEGER NOT NULL);";
 
-    //    기록중인 일과 불러오기
+//    기록중인 일과 불러오기
     public Oneul getStartOneul() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, "oDone = 0", null,
@@ -56,7 +56,7 @@ public class dbHelper extends SQLiteOpenHelper {
         return oneul;
     }
 
-    //    일과 기록 종료, 로우 수정
+//    일과 기록 종료, 로우 수정
     public void endOneul(int oNo, String oEnd, String oMemo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -69,7 +69,7 @@ public class dbHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    //    일과 추가
+//    일과 추가
     public void addOneul(String oDate, String oStart, String oEnd, String oTitle, String oMemo, int oDone) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -85,7 +85,7 @@ public class dbHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    //    일과 불러오기
+//    일과 불러오기
     public void getOneul(String oDate, ListView l_oneul, OneulAdapter adapter) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, "oDate = ? AND oDone = 1",
