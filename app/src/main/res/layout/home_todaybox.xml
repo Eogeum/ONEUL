@@ -19,7 +19,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:background="@drawable/home_todaybox_et"
             android:hint="새로운 일과 제목을 입력하세요."

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 public class Animation {
-//    메모 애니메이션
+    //    메모박스 확장
     public static void expand(LinearLayout linearLayout) {
         linearLayout.setVisibility(View.VISIBLE);
         final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
@@ -19,6 +19,7 @@ public class Animation {
         mAnimator.start();
     }
 
+    //    메모박스 축소
     public static void collapse(final LinearLayout linearLayout) {
         int finalHeight = linearLayout.getHeight();
         ValueAnimator mAnimator = slideAnimator(linearLayout, finalHeight, 0);
@@ -47,33 +48,5 @@ public class Animation {
 
         return animator;
     }
-
-//    테두리 애니메이션
-//    public static void borderAnimation() {
-//        int beforeColor;
-//        int afterColor;
-//
-//        if(((ColorDrawable)mImageView.getBackground()).getColor() == Color.parseColor("#FF0000"))
-//        {
-//            beforeColor = Color.parseColor("#FF0000");
-//            afterColor = Color.parseColor("#0000ED");
-//        }
-//        else
-//        {
-//            beforeColor = Color.parseColor("#0000ED");
-//            afterColor = Color.parseColor("#FF0000");
-//        }
-//        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), beforeColor, afterColor);
-//        colorAnimation.setDuration(500);
-//        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-//        {
-//            @Override
-//            public void onAnimationUpdate(ValueAnimator animator)
-//            {
-//                mImageView.setBackgroundColor((int) animator.getAnimatedValue());
-//            }
-//        });
-//        colorAnimation.start();
-//    }
 }
 

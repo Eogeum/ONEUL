@@ -28,10 +28,14 @@ import com.oneul.extra.dbHelper;
 import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class HomeFragment extends Fragment {
+
     //    뷰
-    Button btn_ok, btn_stop;
     public static EditText et_todayBox;
+    Button btn_ok, btn_stop;
     LinearLayout ll_todayBox;
     ListView l_oneul;
     TextView t_oTitle, t_oTime, t_open, t_oMemo;
@@ -46,6 +50,16 @@ public class HomeFragment extends Fragment {
     //    어댑터
     OneulAdapter adapter = new OneulAdapter(this);
 
+    public HomeFragment() {
+    }
+
+    //    화면 전환
+    public static HomeFragment newInstance() {
+        HomeFragment fragment = new HomeFragment();
+
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        인플레이터
@@ -53,7 +67,7 @@ public class HomeFragment extends Fragment {
         final View todayBox = inflater.inflate(R.layout.home_todaybox, null, false);
         final View startBox = inflater.inflate(R.layout.home_startbox, null, false);
 
-        //       뷰
+//       뷰
         l_oneul = homeView.findViewById(R.id.l_oneul);
         c_cal = homeView.findViewById(R.id.c_cal);
 
@@ -78,7 +92,7 @@ public class HomeFragment extends Fragment {
         l_oneul.addFooterView(padding);
         l_oneul.setAdapter(null);
 
-//        시작 시 날짜
+//        시작 시 쇼데이가 오늘이 아닐 시
         boxChange(todayBox, startBox);
 
 //        시작 시 일과 불러오기
@@ -86,6 +100,11 @@ public class HomeFragment extends Fragment {
 
 //        데이터 불러오기
         et_todayBox.setText(MainActivity.inputText);
+        try {
+            c_cal.setDate(new SimpleDateFormat("yy/M/d").parse(MainActivity.showDay).getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 //        캘린더 클릭 시
         c_cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -176,7 +195,7 @@ public class HomeFragment extends Fragment {
         return homeView;
     }
 
-    //    날짜
+    //    쇼데이가 오늘이 아닐 시
     private void boxChange(View todayBox, View startBox) {
         if (!TextUtils.equals(MainActivity.showDay, DateTime.today())) {
             l_oneul.removeHeaderView(todayBox);
@@ -203,18 +222,8 @@ public class HomeFragment extends Fragment {
         t_oTitle.setText(startOneul.getoTitle());
     }
 
-    //    화면 전환
-    public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    public HomeFragment() {
     }
 }

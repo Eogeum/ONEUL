@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import com.oneul.R;
 
 public class OneulView extends LinearLayout {
-    TextView oTitle, oTime;
+    TextView oTitle, oTime, oMemo;
 
     public OneulView(Context context) {
         super(context);
@@ -28,6 +28,7 @@ public class OneulView extends LinearLayout {
         inflater.inflate(R.layout.home_list, this, true);
         oTime = findViewById(R.id.t_oTime);
         oTitle = findViewById(R.id.t_oTitle);
+        oMemo = findViewById(R.id.t_oMemo);
     }
 
 
@@ -44,5 +45,6 @@ public class OneulView extends LinearLayout {
     }
 
     public void setoMemo(String oMemo) {
+        this.oMemo.setText(oMemo);
     }
 }

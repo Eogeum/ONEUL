@@ -19,14 +19,14 @@ import com.oneul.fragment.WriteFragment;
 
 
 public class MainActivity extends AppCompatActivity {
-//     데이터 저장
+    //     데이터 저장
     public static String inputText;
     public static String showDay = DateTime.today();
 
-//    하단 메뉴
-    BottomNavigationView bot_menu;
+    //    하단 메뉴
+    public static BottomNavigationView bot_menu;
 
-//    뒤로가기 종료
+    //    뒤로가기 종료
     boolean doubleBackToExitPressedOnce = false;
 
     @Override
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        하단 메뉴
-        bot_menu = (BottomNavigationView) findViewById(R.id.bot_menu);
+        bot_menu = findViewById(R.id.bot_menu);
 
 //        시작 시 홈화면 불러오기
         showDay = DateTime.today();
@@ -53,11 +53,11 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.bot_menu_write:
-                        openFragment(WriteFragment.newInstance("", ""));
+                        openFragment(WriteFragment.newInstance());
                         return true;
 
                     case R.id.bot_menu_setting:
-                        openFragment(SettingFragment.newInstance("", ""));
+                        openFragment(SettingFragment.newInstance(""));
                         return true;
                 }
 
@@ -67,13 +67,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    화면 전환 등 이벤트 발생 시
+    //    화면 전환 등 이벤트 발생 시
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+
+
     }
 
-//    뒤로가기 종료
+    //    뒤로가기 종료
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             this.finishAffinity();
@@ -90,10 +92,13 @@ public class MainActivity extends AppCompatActivity {
         }, 2000);
     }
 
-//    화면 전환
-    private void openFragment(Fragment fragment) {
+    //    화면 전환
+    public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        ;
         transaction.replace(R.id.container, fragment);
         transaction.commit();
     }
+
 }
+

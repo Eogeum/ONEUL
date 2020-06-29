@@ -19,6 +19,9 @@ public class Oneul {
     }
 
 
+    public Oneul() {
+    }
+
     public int getoNo() {
         return oNo;
     }
@@ -27,37 +30,35 @@ public class Oneul {
         return oStart;
     }
 
-    public String getoEnd() {
-        return oEnd;
-    }
-
-    public String getoTitle() {
-        return oTitle;
-    }
-
-    public String getoMemo() {
-        return oMemo;
-    }
-
-    public void setoDate(String oDate) {
-        this.oDate = oDate;
-    }
-
     public void setoStart(String oStart) {
         this.oStart = oStart;
+    }
+
+    public String getoEnd() {
+        return oEnd;
     }
 
     public void setoEnd(String oEnd) {
         this.oTitle = oEnd;
     }
 
+    public String getoTitle() {
+        return oTitle;
+    }
+
     public void setoTitle(String oTitle) {
         this.oTitle = oTitle;
+    }
+
+    public String getoMemo() {
+        return oMemo;
     }
 
     public void setoMemo(String oMemo) {
         this.oMemo = oMemo;
     }
 
-    public Oneul() { }
+    public void setoDate(String oDate) {
+        this.oDate = oDate;
+    }
 }
