@@ -13,6 +13,7 @@
         android:gravity="right|center">
 
         <Button
+            android:id="@+id/btnOk"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,7 +21,7 @@
             android:fontFamily="@font/nanum_square_eb"
             android:text="OK"
             android:textColor="@color/mainColor"
-            android:textSize="18dp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
     <ScrollView
@@ -30,7 +31,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical">
 
@@ -42,28 +43,29 @@
                 android:layout_marginBottom="10dp"
                 android:text="TIME"
                 android:textColor="@color/mainColor"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_weight="1"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:orientation="vertical"
-                    android:paddingRight="10dp">
+                    android:paddingEnd="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:text="START"
-                        android:textSize="15dp" />
+                        android:textSize="15sp" />
 
                     <Button
                         android:id="@+id/timeStart"
@@ -71,18 +73,18 @@
                         android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:background="@drawable/write_et"
-                        android:paddingRight="10dp"
+                        android:paddingEnd="10dp"
                         android:text="00 : 00"
-                        android:textSize="15dp" />
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:orientation="vertical"
-                    android:paddingLeft="10dp">
+                    android:paddingStart="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -96,9 +98,9 @@
                         android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:background="@drawable/write_et"
-                        android:paddingLeft="10dp"
+                        android:paddingStart="10dp"
                         android:text="00 : 00"
-                        android:textSize="15dp" />
+                        android:textSize="15sp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -116,9 +118,10 @@
                     android:layout_marginBottom="10dp"
                     android:text="TITLE"
                     android:textColor="@color/mainColor"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <EditText
+                    android:id="@+id/editTitle"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginHorizontal="20dp"
@@ -126,7 +129,7 @@
                     android:gravity="left|top"
                     android:hint="제목을 입력하세요"
                     android:padding="10dp"
-                    android:textSize="14dp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -143,9 +146,10 @@
                     android:layout_marginBottom="10dp"
                     android:text="MEMO"
                     android:textColor="@color/mainColor"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <EditText
+                    android:id="@+id/editMemo"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:layout_marginHorizontal="20dp"
@@ -153,7 +157,7 @@
                     android:gravity="left|top"
                     android:hint="메모를 입력하세요"
                     android:padding="10dp"
-                    android:textSize="14dp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -171,7 +175,7 @@
                     android:layout_marginBottom="10dp"
                     android:text="IMAGE"
                     android:textColor="@color/mainColor"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <Button
                     android:layout_width="250dp"
@@ -183,4 +187,5 @@
 
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>
