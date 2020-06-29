@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+
+
     }
 
     //    뒤로가기 종료

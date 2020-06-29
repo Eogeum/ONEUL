@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:gravity="bottom"
     tools:context=".fragment.HomeFragment">
 
     <ListView
@@ -19,7 +20,6 @@
         android:layout_height="400dp"
         android:layout_gravity="bottom"
         android:content="@+id/ll_cal"
-
         android:handle="@+id/btn_cal">
 
         <Button
@@ -31,14 +31,15 @@
         <LinearLayout
             android:id="@+id/ll_cal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/lightGray">
+            android:layout_height="0dp"
+            android:background="@color/lightGray"
+            android:gravity="center">
 
             <CalendarView
                 android:id="@+id/c_cal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom" />
         </LinearLayout>
 
     </SlidingDrawer>
