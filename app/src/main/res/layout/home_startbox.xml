@@ -23,8 +23,7 @@
             android:id="@+id/t_oMemo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLength="100"
-            android:text="소프트웨어 배포 \n최인석 교수님" />
+            android:maxLength="100" />
 
     </LinearLayout>
 

@@ -16,9 +16,13 @@ public class OneulAdapter extends BaseAdapter {
         this.homeFragment = homeFragment;
     }
 
-    public void addItem(Oneul oneul) { this.oneul.add(oneul); }
+    public void addItem(Oneul oneul) {
+        this.oneul.add(oneul);
+    }
 
-    public void clear() { oneul.clear(); }
+    public void clear() {
+        oneul.clear();
+    }
 
     @Override
     public int getCount() {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <string-array name="make">
         <item>1시간 뒤</item>
         <item>2시간 뒤</item>
@@ -8,5 +8,5 @@
         <item>4시간 뒤</item>
         <item>5시간 뒤</item>
     </string-array>
-    
+
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-<!--    그림자-->
+    <!--    그림자-->
     <item>
         <shape>
             <padding
@@ -61,7 +61,7 @@
         </shape>
     </item>
 
-<!--    배경-->
+    <!--    배경-->
     <item>
         <shape>
             <solid android:color="@android:color/white" />

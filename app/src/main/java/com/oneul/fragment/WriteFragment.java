@@ -13,19 +13,27 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.oneul.extra.DateTime;
 import com.oneul.MainActivity;
 import com.oneul.R;
+import com.oneul.extra.DateTime;
 import com.oneul.extra.dbHelper;
 
 public class WriteFragment extends Fragment {
-
     //    뷰
     Button btnOk, timeStart, timeEnd;
     EditText editTitle, editMemo;
 
     //    디비
     dbHelper dbHelper;
+
+    public WriteFragment() {
+    }
+
+    public static WriteFragment newInstance() {
+        WriteFragment fragment = new WriteFragment();
+
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +43,9 @@ public class WriteFragment extends Fragment {
 //        뷰
         editTitle = writeView.findViewById(R.id.editTitle);
         editMemo = writeView.findViewById(R.id.editMemo);
+
+//        디비
+        dbHelper = new dbHelper(getActivity());
 
 //        시작 시간 입력
         timeStart = writeView.findViewById(R.id.timeStart);
@@ -85,19 +96,14 @@ public class WriteFragment extends Fragment {
                 } else {
                     dbHelper.addOneul(MainActivity.showDay, timeStart.getText().toString(), timeEnd.getText().toString(),
                             editTitle.getText().toString(), editMemo.getText().toString(), 1);
-//                    fixme : 널포인트 에러
+
+                    Toast.makeText(getActivity(), "일과가 저장되었습니다.", Toast.LENGTH_SHORT).show();
+                    MainActivity.bot_menu.setSelectedItemId(R.id.bot_menu_home);
                 }
             }
         });
 
-
         return writeView;
-    }
-
-    public static WriteFragment newInstance(String param1, String param2) {
-        WriteFragment fragment = new WriteFragment();
-
-        return fragment;
     }
 
     @Override
@@ -105,6 +111,4 @@ public class WriteFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public WriteFragment() {
-    }
 }

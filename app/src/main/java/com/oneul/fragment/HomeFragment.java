@@ -29,9 +29,10 @@ import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
 
 public class HomeFragment extends Fragment {
+
     //    뷰
-    Button btn_ok, btn_stop;
     public static EditText et_todayBox;
+    Button btn_ok, btn_stop;
     LinearLayout ll_todayBox;
     ListView l_oneul;
     TextView t_oTitle, t_oTime, t_open, t_oMemo;
@@ -46,6 +47,16 @@ public class HomeFragment extends Fragment {
     //    어댑터
     OneulAdapter adapter = new OneulAdapter(this);
 
+    public HomeFragment() {
+    }
+
+    //    화면 전환
+    public static HomeFragment newInstance() {
+        HomeFragment fragment = new HomeFragment();
+
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        인플레이터
@@ -53,7 +64,7 @@ public class HomeFragment extends Fragment {
         final View todayBox = inflater.inflate(R.layout.home_todaybox, null, false);
         final View startBox = inflater.inflate(R.layout.home_startbox, null, false);
 
-        //       뷰
+//       뷰
         l_oneul = homeView.findViewById(R.id.l_oneul);
         c_cal = homeView.findViewById(R.id.c_cal);
 
@@ -203,18 +214,8 @@ public class HomeFragment extends Fragment {
         t_oTitle.setText(startOneul.getoTitle());
     }
 
-    //    화면 전환
-    public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    public HomeFragment() {
     }
 }

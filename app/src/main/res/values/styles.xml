@@ -12,12 +12,12 @@
         <item name="colorPrimary">@color/mainColor</item>
         <item name="colorControlActivated">@color/mainColor</item>
         <item name="android:scrollbarThumbVertical">@color/mainColor</item>
-<!--        &lt;!&ndash; colorPrimaryDark is used for the status bar &ndash;&gt;-->
-<!--        <item name="colorPrimaryDark">@color/my_awesome_darker_color</item>-->
+        <!--        &lt;!&ndash; colorPrimaryDark is used for the status bar &ndash;&gt;-->
+        <!--        <item name="colorPrimaryDark">@color/my_awesome_darker_color</item>-->
 
-<!--        &lt;!&ndash; colorAccent is used as the default value for colorControlActivated,-->
-<!--             which is used to tint widgets &ndash;&gt;-->
-<!--        <item name="colorAccent">@color/accent</item>-->
+        <!--        &lt;!&ndash; colorAccent is used as the default value for colorControlActivated,-->
+        <!--             which is used to tint widgets &ndash;&gt;-->
+        <!--        <item name="colorAccent">@color/accent</item>-->
 
         <!-- You can also set colorControlNormal, colorControlActivated
              colorControlHighlight, and colorSwitchThumbNormal. -->
