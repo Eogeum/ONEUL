@@ -38,7 +38,6 @@ public class Animation {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                //Update Height
                 int value = (int) valueAnimator.getAnimatedValue();
                 ViewGroup.LayoutParams layoutParams = linearLayout.getLayoutParams();
                 layoutParams.height = value;

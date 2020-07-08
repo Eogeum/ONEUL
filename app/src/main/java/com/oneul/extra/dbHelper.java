@@ -48,21 +48,32 @@ public class dbHelper extends SQLiteOpenHelper {
             int oNo = cursor.getInt(cursor.getColumnIndex(COLUMN_ONO));
             String oStart = cursor.getString(cursor.getColumnIndex(COLUMN_OSTART));
             String oTitle = cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE));
+            String oMemo = cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO));
 
-            oneul = new Oneul(oNo, oStart, oTitle);
+            oneul = new Oneul(oNo, oStart, oTitle, oMemo);
         }
         db.close();
 
         return oneul;
     }
 
+    //    일과 메모 수정
+    public void editMemo(int oNo, String oMemo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(dbHelper.COLUMN_OMEMO, oMemo);
+
+        db.update(TABLE_NAME, values, COLUMN_ONO + " = " + oNo, null);
+        db.close();
+    }
+
     //    일과 기록 종료, 로우 수정
-    public void endOneul(int oNo, String oEnd, String oMemo) {
+    public void endOneul(int oNo, String oEnd) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(dbHelper.COLUMN_OEND, oEnd);
-        values.put(dbHelper.COLUMN_OMEMO, oMemo);
         values.put(dbHelper.COLUMN_ODONE, 1);
 
         db.update(TABLE_NAME, values, COLUMN_ONO + " = " + oNo, null);
@@ -105,6 +116,7 @@ public class dbHelper extends SQLiteOpenHelper {
             l_oneul.setAdapter(adapter);
         }
 
+        adapter.notifyDataSetChanged();
         db.close();
     }
 

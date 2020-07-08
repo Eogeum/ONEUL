@@ -13,18 +13,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/home_memobox_ll"
+        android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingTop="74dp"
         android:paddingRight="16dp"
-        android:paddingBottom="16dp"
-        android:visibility="gone">
+        android:paddingBottom="16dp">
 
-        <TextView
+        <EditText
             android:id="@+id/t_oMemo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="추가할 메모를 입력하세요."
+            android:inputType="textMultiLine"
+            android:maxLength="100"
+            android:textColor="@color/darkGray"
+            android:textSize="14sp" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLength="100" />
+            android:layout_gravity="right"
+            android:orientation="horizontal">
 
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:maxLines="1"
+                android:text="사진"
+                android:textSize="10sp" />
+
+            <Button
+                android:id="@+id/btn_saveMemo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:maxLines="1"
+                android:text="저장"
+                android:textSize="10sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -91,7 +117,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </RelativeLayout>

@@ -41,7 +41,6 @@ public class OneulAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         OneulView view = new OneulView(homeFragment.getActivity());
         Oneul oneul = this.oneul.get(position);
 
@@ -52,5 +51,4 @@ public class OneulAdapter extends BaseAdapter {
 
         return view;
     }
-
 }

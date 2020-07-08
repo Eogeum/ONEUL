@@ -32,17 +32,33 @@
             android:layout_marginBottom="6dp"
             android:text="화상강의"
             android:textColor="@color/darkGray"
-            android:textSize="15sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/t_oMemo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:maxLines="2"
             android:text="소프트웨어 배포 \n최인석 교수님"
             android:textColor="@color/gray"
             android:textSize="14sp" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/t_oMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="자세히 보기"
+            android:textColor="@color/mainColor"
+            android:textSize="14sp"
+            android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/t_oNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:visibility="gone" />
+    </LinearLayout>
 </LinearLayout>
