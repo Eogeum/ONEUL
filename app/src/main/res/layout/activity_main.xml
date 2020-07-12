@@ -22,5 +22,4 @@
         app:itemIconTint="@color/bot_menu"
         app:itemTextColor="@color/bot_menu"
         app:menu="@menu/bot_menu" />
-
 </LinearLayout>

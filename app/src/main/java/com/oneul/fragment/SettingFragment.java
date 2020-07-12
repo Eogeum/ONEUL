@@ -42,4 +42,6 @@ public class SettingFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
     }
+
+//    todo: 설정 기능, 설정 저장장
 }

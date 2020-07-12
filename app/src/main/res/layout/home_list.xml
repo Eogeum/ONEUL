@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
-    android:paddingLeft="16dp"
+    android:paddingHorizontal="20dp"
     android:paddingTop="16dp"
-    android:paddingRight="16dp">
+    tools:ignore="HardcodedText">
 
     <TextView
         android:id="@+id/t_oTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:text="16:30 ~ 18:00"
         android:textColor="@color/mainColor"
         android:textSize="14sp" />
@@ -22,43 +22,61 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/home_list_ll"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="12dp">
 
-        <TextView
-            android:id="@+id/t_oTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:text="화상강의"
-            android:textColor="@color/darkGray"
-            android:textSize="16sp" />
+            android:layout_weight=".75"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/t_oMemo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:text="소프트웨어 배포 \n최인석 교수님"
-            android:textColor="@color/gray"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/t_oTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="화상강의"
+                android:textColor="@color/darkGray"
+                android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/t_oMore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="자세히 보기"
-            android:textColor="@color/mainColor"
-            android:textSize="14sp"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/t_oMemo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="소프트웨어 배포 \n최인석 교수님"
+                android:textColor="@color/gray"
+                android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/t_oNo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/t_oMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="자세히 보기"
+                android:textColor="@color/mainColor"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/t_oNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_weight=".25"
+            android:scaleType="centerCrop"
+            android:src="@drawable/a"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 </LinearLayout>

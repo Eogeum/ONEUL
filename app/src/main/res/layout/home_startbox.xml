@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:paddingLeft="16dp"
-    android:paddingTop="16dp"
-    android:paddingRight="16dp">
+    android:paddingHorizontal="12dp"
+    android:paddingTop="12dp"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:id="@+id/ll_memoBox"
@@ -14,29 +15,32 @@
         android:layout_height="wrap_content"
         android:background="@drawable/home_memobox_ll"
         android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingTop="74dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="16dp">
+        android:paddingHorizontal="16dp"
+        android:paddingTop="80dp"
+        android:paddingBottom="16dp"
+        android:visibility="gone">
 
         <EditText
-            android:id="@+id/t_oMemo"
+            android:id="@+id/et_oMemo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:hint="추가할 메모를 입력하세요."
-            android:inputType="textMultiLine"
+            android:background="@drawable/home_startbox_et"
+            android:hint="여기에 메모를 작성하세요."
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine|textNoSuggestions"
             android:maxLength="100"
+            android:padding="8dp"
             android:textColor="@color/darkGray"
             android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_picMemo"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:maxLines="1"
@@ -44,12 +48,22 @@
                 android:textSize="10sp" />
 
             <Button
+                android:id="@+id/btn_cancelMemo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:maxLines="1"
+                android:text="취소"
+                android:textSize="10sp"
+                android:visibility="gone" />
+
+            <Button
                 android:id="@+id/btn_saveMemo"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:maxLines="1"
                 android:text="저장"
-                android:textSize="10sp" />
+                android:textSize="10sp"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 
@@ -57,16 +71,18 @@
         android:id="@+id/cl_startBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/home_todaybox_ll"
-        android:padding="10dp">
+        android:background="@drawable/home_todaybox_cl"
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/t_oTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
+            android:layout_marginStart="4dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             android:padding="6dp"
+            android:singleLine="true"
             android:text="화상강의"
             android:textColor="@color/darkGray"
             android:textSize="16sp"
@@ -95,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:fontFamily="@font/nanum_square_eb"
+            android:fontFamily="@font/nanum_barun_gothic_bold"
             android:text="∨"
             android:textColor="@color/mainColor"
             android:textStyle="bold"
@@ -110,7 +126,7 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:fontFamily="@font/nanum_square_eb"
+            android:fontFamily="@font/nanum_barun_gothic_bold"
             android:text="STOP"
             android:textColor="@color/mainColor"
             android:textSize="16sp"
@@ -118,4 +134,4 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</RelativeLayout>
+</FrameLayout>

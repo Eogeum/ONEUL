@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:gravity="bottom"
-    tools:context=".fragment.HomeFragment">
+    tools:context=".fragment.HomeFragment"
+    tools:ignore="HardcodedText">
 
     <ListView
         android:id="@+id/l_oneul"
@@ -41,7 +42,5 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom" />
         </LinearLayout>
-
     </SlidingDrawer>
-
 </FrameLayout>

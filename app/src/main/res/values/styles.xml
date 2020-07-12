@@ -1,25 +1,16 @@
 <resources>
-    <!-- Base application theme. -->
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!--        타이틀 바 제거-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
-        <!--        폰트 설정-->
-        <item name="android:fontFamily">@font/nanum_square_b</item>
+        <!--        폰트-->
+        <item name="android:fontFamily">@font/nanum_barun_gothic</item>
 
-        <!-- colorPrimary is used for the default action bar background -->
+        <!--        테마 색상 -->
         <item name="colorPrimary">@color/mainColor</item>
         <item name="colorControlActivated">@color/mainColor</item>
         <item name="android:scrollbarThumbVertical">@color/mainColor</item>
-        <!--        &lt;!&ndash; colorPrimaryDark is used for the status bar &ndash;&gt;-->
-        <!--        <item name="colorPrimaryDark">@color/my_awesome_darker_color</item>-->
-
-        <!--        &lt;!&ndash; colorAccent is used as the default value for colorControlActivated,-->
-        <!--             which is used to tint widgets &ndash;&gt;-->
-        <!--        <item name="colorAccent">@color/accent</item>-->
-
-        <!-- You can also set colorControlNormal, colorControlActivated
-             colorControlHighlight, and colorSwitchThumbNormal. -->
     </style>
 </resources>

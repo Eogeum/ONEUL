@@ -1,11 +1,13 @@
 package com.oneul.fragment;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -17,6 +19,8 @@ import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.extra.DateTime;
 import com.oneul.extra.dbHelper;
+
+import java.util.Objects;
 
 public class WriteFragment extends Fragment {
     //    뷰
@@ -30,9 +34,7 @@ public class WriteFragment extends Fragment {
     }
 
     public static WriteFragment newInstance() {
-        WriteFragment fragment = new WriteFragment();
-
-        return fragment;
+        return new WriteFragment();
     }
 
     @Override
@@ -92,7 +94,12 @@ public class WriteFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(editTitle.getText().toString())) {
-                    Toast.makeText(getActivity(), "제목을 입력하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "일과 제목을 입력하세요.", Toast.LENGTH_SHORT).show();
+
+//                    에딧 텍스트 포커스, 키보드 올리기
+                    editTitle.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(editTitle, InputMethodManager.SHOW_IMPLICIT);
                 } else {
                     dbHelper.addOneul(MainActivity.showDay, timeStart.getText().toString(), timeEnd.getText().toString(),
                             editTitle.getText().toString(), editMemo.getText().toString(), 1);
@@ -111,4 +118,6 @@ public class WriteFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+//    todo: 홈화면 추가 버튼으로 이동 버튼 변경
+//    todo: 닫는 버튼이 필요해지고 뒤로가기로 다이얼로그 (작성 취소하겠습니까?)등 표시
 }

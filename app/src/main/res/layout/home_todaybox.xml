@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="16dp"
-    android:paddingTop="16dp"
-    android:paddingRight="16dp">
+    android:paddingHorizontal="12dp"
+    android:paddingTop="12dp"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:id="@+id/ll_todayBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/home_todaybox_ll"
+        android:background="@drawable/home_todaybox_cl"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="12dp"
+        tools:ignore="UselessParent">
 
         <EditText
             android:id="@+id/et_oTitle"
@@ -23,10 +25,12 @@
             android:background="@drawable/home_todaybox_et"
             android:hint="새로운 일과 제목을 입력하세요."
             android:imeOptions="actionDone"
+            android:importantForAutofill="no"
             android:inputType="text"
             android:maxLength="20"
             android:maxLines="1"
-            android:padding="8dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
             android:textSize="14sp" />
 
         <Button
@@ -35,7 +39,7 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:fontFamily="@font/nanum_square_eb"
+            android:fontFamily="@font/nanum_barun_gothic_bold"
             android:text="OK"
             android:textColor="@color/mainColor"
             android:textSize="16sp" />
