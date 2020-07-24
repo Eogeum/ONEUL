@@ -157,7 +157,8 @@
                     android:gravity="top"
                     android:hint="메모를 입력하세요. (선택) "
                     android:importantForAutofill="no"
-                    android:inputType="textImeMultiLine|textNoSuggestions"
+                    android:inputType="textMultiLine|textNoSuggestions"
+                    android:maxLength="100"
                     android:minHeight="90dp"
                     android:padding="10dp"
                     android:textSize="14sp" />
