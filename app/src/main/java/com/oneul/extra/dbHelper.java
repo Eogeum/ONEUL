@@ -5,11 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.ListView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
-
 
 public class dbHelper extends SQLiteOpenHelper {
     //    테이블 정보
@@ -97,7 +97,7 @@ public class dbHelper extends SQLiteOpenHelper {
     }
 
     //    일과 불러오기
-    public void getOneul(String oDate, ListView l_oneul, OneulAdapter adapter) {
+    public void getOneul(String oDate, RecyclerView l_oneul, OneulAdapter adapter) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, "oDate = ? AND oDone = 1",
                 new String[]{oDate}, null, null, "oStart DESC, oNo DESC");

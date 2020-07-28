@@ -1,8 +1,11 @@
 package com.oneul.extra;
 
+import android.annotation.SuppressLint;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@SuppressLint("SimpleDateFormat")
 public class DateTime {
     //    오늘 날짜 불러오기
     public static String today() {

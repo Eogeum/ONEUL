@@ -19,9 +19,6 @@ public class Oneul {
         this.oMemo = oMemo;
     }
 
-    public Oneul() {
-    }
-
     public int getoNo() {
         return oNo;
     }
