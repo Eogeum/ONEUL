@@ -1,6 +1,7 @@
 package com.oneul.oneul;
 
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +25,5 @@ public class OneulHolder extends RecyclerView.ViewHolder {
         t_oTime.append(" ~ " + oneul.getoEnd());
         t_oTitle.setText(oneul.getoTitle());
         t_oMemo.setText(oneul.getoMemo());
-
     }
 }

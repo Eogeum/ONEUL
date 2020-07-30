@@ -70,7 +70,8 @@
                 android:orientation="vertical"
                 android:paddingHorizontal="16dp"
                 android:paddingTop="80dp"
-                android:paddingBottom="16dp">
+                android:paddingBottom="16dp"
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/et_oMemo"
@@ -197,9 +198,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_listHeader"
         android:layout_alignParentBottom="true"
+        android:background="#00000000"
         android:divider="@null"
         android:dividerHeight="0dp"
         android:listSelector="@android:color/transparent"
+        android:overScrollMode="never"
         android:scrollbars="vertical" />
 
     <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
