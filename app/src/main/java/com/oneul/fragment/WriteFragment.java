@@ -3,6 +3,8 @@ package com.oneul.fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.oneul.MainActivity;
@@ -20,12 +23,17 @@ import com.oneul.R;
 import com.oneul.extra.DateTime;
 import com.oneul.extra.dbHelper;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
 import java.util.Objects;
 
 public class WriteFragment extends Fragment {
     //    뷰
-    Button btnOk, timeStart, timeEnd;
+    Button btnOk, timeStart, timeEnd, btnImg;
     EditText editTitle, editMemo;
+    View dlgImage;
 
     //    디비
     dbHelper dbHelper;
@@ -88,6 +96,18 @@ public class WriteFragment extends Fragment {
             }
         });
 
+//        사진 추가
+        btnImg = writeView.findViewById(R.id.btnImg);
+        btnImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "select image"), 1);
+            }
+        });
+
 //        일과 저장
         btnOk = writeView.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +131,15 @@ public class WriteFragment extends Fragment {
         });
 
         return writeView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode==1) {
+
+        }
     }
 
     @Override
