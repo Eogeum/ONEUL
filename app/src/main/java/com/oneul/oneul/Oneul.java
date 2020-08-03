@@ -4,8 +4,9 @@ public class Oneul {
     int oNo;
     String oDate, oStart, oEnd, oTitle, oMemo;
 
-    public Oneul(int oNo, String oStart, String oTitle, String oMemo) {
+    public Oneul(int oNo, String oDate, String oStart, String oTitle, String oMemo) {
         this.oNo = oNo;
+        this.oDate = oDate;
         this.oStart = oStart;
         this.oTitle = oTitle;
         this.oMemo = oMemo;
@@ -22,6 +23,8 @@ public class Oneul {
     public int getoNo() {
         return oNo;
     }
+
+    public String getoDate() { return oDate; }
 
     public String getoStart() {
         return oStart;

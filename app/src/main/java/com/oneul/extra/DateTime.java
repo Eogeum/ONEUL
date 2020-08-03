@@ -10,7 +10,7 @@ public class DateTime {
     //    오늘 날짜 불러오기
     public static String today() {
         Date now = new Date(System.currentTimeMillis());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yy/M/d");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
         return dateFormat.format(now);
     }

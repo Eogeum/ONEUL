@@ -46,11 +46,12 @@ public class dbHelper extends SQLiteOpenHelper {
 
         while (cursor.moveToNext()) {
             int oNo = cursor.getInt(cursor.getColumnIndex(COLUMN_ONO));
+            String oDate = cursor.getString(cursor.getColumnIndex((COLUMN_ODATE)));
             String oStart = cursor.getString(cursor.getColumnIndex(COLUMN_OSTART));
             String oTitle = cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE));
             String oMemo = cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO));
 
-            oneul = new Oneul(oNo, oStart, oTitle, oMemo);
+            oneul = new Oneul(oNo, oDate, oStart, oTitle, oMemo);
         }
         db.close();
 

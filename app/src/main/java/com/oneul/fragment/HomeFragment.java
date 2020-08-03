@@ -2,10 +2,10 @@ package com.oneul.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +21,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.oneul.MainActivity;
 import com.oneul.R;
+import com.oneul.WhiteActivity;
 import com.oneul.extra.Animation;
 import com.oneul.extra.DateTime;
 import com.oneul.extra.dbHelper;
@@ -47,6 +50,7 @@ public class HomeFragment extends Fragment {
     ConstraintLayout cl_startBox;
     LinearLayout ll_memoBox;
     CalendarView c_cal;
+    FloatingActionButton fab_goWhite;
 
     //    키보드
     InputMethodManager imm;
@@ -74,22 +78,25 @@ public class HomeFragment extends Fragment {
 //       뷰
         r_oneul = homeView.findViewById(R.id.r_oneul);
         c_cal = homeView.findViewById(R.id.c_cal);
-
+        fab_goWhite = homeView.findViewById(R.id.fab_goWrite);
+//        투데이박스
         ll_todayBox = homeView.findViewById(R.id.ll_todayBox);
         btn_ok = homeView.findViewById(R.id.btn_ok);
         et_todayBox = homeView.findViewById(R.id.et_oTitle);
-
+//        스타트박스
         fl_startBox = homeView.findViewById(R.id.fl_startBox);
         cl_startBox = homeView.findViewById(R.id.cl_startBox);
         btn_stop = homeView.findViewById(R.id.btn_stop);
         t_open = homeView.findViewById(R.id.t_open);
+        t_oTitle = homeView.findViewById(R.id.t_oTitle);
+        t_oTime = homeView.findViewById(R.id.t_oTime);
+//        스타트박스 메모
         ll_memoBox = homeView.findViewById(R.id.ll_memoBox);
         btn_picMemo = homeView.findViewById(R.id.btn_picMemo);
         btn_cancelMemo = homeView.findViewById(R.id.btn_cancelMemo);
         btn_saveMemo = homeView.findViewById(R.id.btn_saveMemo);
-        t_oTitle = homeView.findViewById(R.id.t_oTitle);
-        t_oTime = homeView.findViewById(R.id.t_oTime);
         et_oMemo = homeView.findViewById(R.id.et_oMemo);
+
 //        키보드
         imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -106,7 +113,7 @@ public class HomeFragment extends Fragment {
         dateChange();
 
         try {
-            c_cal.setDate(Objects.requireNonNull(new SimpleDateFormat("yy/M/d").parse(MainActivity.showDay)).getTime(), false, true);
+            c_cal.setDate(Objects.requireNonNull(new SimpleDateFormat("yyyy/MM/dd").parse(MainActivity.showDay)).getTime(), false, true);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -118,9 +125,21 @@ public class HomeFragment extends Fragment {
         c_cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                String pickYear = Integer.toString(year).substring(2);
-                String pickMonth = Integer.toString(month + 1);
-                String pickDay = Integer.toString(dayOfMonth);
+                String pickYear = Integer.toString(year);
+                String pickMonth;
+                String pickDay;
+
+                if (month + 1 <= 9) {
+                    pickMonth = "0" + Integer.toString(month + 1);
+                } else {
+                    pickMonth = Integer.toString(month + 1);
+                }
+
+                if (dayOfMonth <= 9) {
+                    pickDay = "0" + Integer.toString(dayOfMonth);
+                } else {
+                    pickDay = Integer.toString(dayOfMonth);
+                }
 
                 MainActivity.showDay = pickYear + "/" + pickMonth + "/" + pickDay;
                 dateChange();
@@ -227,13 +246,26 @@ public class HomeFragment extends Fragment {
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                쇼데이 변경
+                MainActivity.showDay = dbHelper.getStartOneul().getoDate();
+
 //                기록 종료 및 새로고침
                 dbHelper.endOneul(dbHelper.getStartOneul().getoNo(), DateTime.nowTime());
+                Toast.makeText(getActivity(), MainActivity.showDay + "\n일과를 저장했습니다.", Toast.LENGTH_LONG).show();
                 dateChange();
 
 //                메모박스 축소
                 t_open.setText("∨");
                 Animation.collapse(ll_memoBox);
+            }
+        });
+
+//        fab 클릭 시
+        fab_goWhite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), WhiteActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -271,9 +303,4 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
-//    todo: 화면 전환, 날짜 변경 시 투데이박스 값, 스타트박스 메모 값 등 유지 계쏙 할건지
-//    todo: 캘린더 클릭 시 뉴인스턴스로 해결가능
-//    todo: 슬라이딩 드로우 다른 걸로 교체
-//    todo: 화면 전환 시 새로운 프래그먼트로 불러오지 말고 기존 프래그먼트로 불러오게
 }
