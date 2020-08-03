@@ -8,9 +8,23 @@
         <!--        폰트-->
         <item name="android:fontFamily">@font/nanum_barun_gothic</item>
 
-        <!--        테마 색상 -->
+        <!--        테마 색상-->
         <item name="colorPrimary">@color/mainColor</item>
         <item name="colorControlActivated">@color/mainColor</item>
         <item name="android:scrollbarThumbVertical">@color/mainColor</item>
+    </style>
+
+<!--    다이얼로그-->
+    <style name="DialogTheme" parent="Widget.AppCompat.ButtonBar.AlertDialog">
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/mainColor</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/gray</item>
     </style>
 </resources>

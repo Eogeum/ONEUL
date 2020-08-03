@@ -1,6 +1,5 @@
 package com.oneul;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -15,14 +14,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.oneul.extra.DateTime;
 import com.oneul.fragment.HomeFragment;
 import com.oneul.fragment.SettingFragment;
-import com.oneul.fragment.WriteFragment;
+import com.oneul.fragment.StatFragment;
 
 public class MainActivity extends AppCompatActivity {
     //    데이터 저장
@@ -81,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.bot_menu_write:
-                        openFragment(WriteFragment.newInstance());
+                        openFragment(StatFragment.newInstance());
                         return true;
 
                     case R.id.bot_menu_setting:
@@ -95,9 +93,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //    뒤로가기 종료
+    @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            finishAffinity();
+            finish();
         }
 
         doubleBackToExitPressedOnce = true;
@@ -118,4 +117,3 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 }
-

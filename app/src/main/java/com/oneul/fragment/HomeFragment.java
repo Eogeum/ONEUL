@@ -258,14 +258,12 @@ public class HomeFragment extends Fragment {
 
     //    날짜 확인 및 헤더 변경
     private void dateChange() {
-        ll_todayBox.setVisibility(View.GONE);
-        fl_startBox.setVisibility(View.GONE);
-
 //        오늘이면
         if (TextUtils.equals(MainActivity.showDay, DateTime.today())) {
 //            기록중인 일과 있으면
             if (dbHelper.getStartOneul() != null) {
 //                스타트박스 보이기
+                ll_todayBox.setVisibility(View.GONE);
                 fl_startBox.setVisibility(View.VISIBLE);
 
 //                디비에서 기록중인 일과 불러오기
@@ -276,6 +274,7 @@ public class HomeFragment extends Fragment {
             } else {
 //                리스트 헤더 투데이박스로 변경
                 ll_todayBox.setVisibility(View.VISIBLE);
+                fl_startBox.setVisibility(View.GONE);
             }
         }
 
