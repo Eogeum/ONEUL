@@ -40,6 +40,7 @@ public class dbHelper extends SQLiteOpenHelper {
     //    기록중인 일과 불러오기
     public Oneul getStartOneul() {
         SQLiteDatabase db = this.getReadableDatabase();
+
         Cursor cursor = db.query(TABLE_NAME, null, "oDone = 0", null,
                 null, null, null);
         Oneul oneul = null;
@@ -53,6 +54,8 @@ public class dbHelper extends SQLiteOpenHelper {
 
             oneul = new Oneul(oNo, oDate, oStart, oTitle, oMemo);
         }
+
+        cursor.close();
         db.close();
 
         return oneul;
@@ -118,6 +121,7 @@ public class dbHelper extends SQLiteOpenHelper {
         }
 
         adapter.notifyDataSetChanged();
+        cursor.close();
         db.close();
     }
 

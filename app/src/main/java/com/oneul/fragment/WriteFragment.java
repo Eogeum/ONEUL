@@ -2,9 +2,8 @@ package com.oneul.fragment;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +21,6 @@ import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.extra.DateTime;
 import com.oneul.extra.dbHelper;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 import java.util.Objects;
 
@@ -137,7 +132,7 @@ public class WriteFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode==1) {
+        if (resultCode == 1) {
 
         }
     }

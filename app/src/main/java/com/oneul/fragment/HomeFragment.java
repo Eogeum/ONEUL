@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -125,23 +125,7 @@ public class HomeFragment extends Fragment {
         c_cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                String pickYear = Integer.toString(year);
-                String pickMonth;
-                String pickDay;
-
-                if (month + 1 <= 9) {
-                    pickMonth = "0" + Integer.toString(month + 1);
-                } else {
-                    pickMonth = Integer.toString(month + 1);
-                }
-
-                if (dayOfMonth <= 9) {
-                    pickDay = "0" + Integer.toString(dayOfMonth);
-                } else {
-                    pickDay = Integer.toString(dayOfMonth);
-                }
-
-                MainActivity.showDay = pickYear + "/" + pickMonth + "/" + pickDay;
+                MainActivity.showDay = String.format(year + "/%02d/%02d", month + 1, dayOfMonth);
                 dateChange();
             }
         });

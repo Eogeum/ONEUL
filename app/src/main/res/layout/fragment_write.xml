@@ -184,8 +184,8 @@
                     android:id="@+id/btnImg"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:background="@drawable/btnplus" />
+                    android:layout_marginHorizontal="20dp" />
+<!--                    android:background="@drawable/btnplus" />-->
 
             </LinearLayout>
         </LinearLayout>
