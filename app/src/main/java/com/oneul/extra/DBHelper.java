@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
 
-public class dbHelper extends SQLiteOpenHelper {
+public class DBHelper extends SQLiteOpenHelper {
     //    일과 테이블 정보
     public static final String TABLE_ONEUL = "Oneul";
     public static final String COLUMN_ONO = "oNo";
@@ -43,8 +43,24 @@ public class dbHelper extends SQLiteOpenHelper {
             + TABLE_ONEUL + "(" + COLUMN_ONO + "));";
 
     //    디비 생성자
-    public dbHelper(Context context) {
+    public DBHelper(Context context) {
         super(context, DATABASE_ONEUL, null, DATABASE_VERSION);
+    }
+
+    //    일과 추가
+    public void addOneul(String oDate, String oStart, String oEnd, String oTitle, String oMemo, int oDone) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(DBHelper.COLUMN_ODATE, oDate);
+        values.put(DBHelper.COLUMN_OSTART, oStart);
+        values.put(DBHelper.COLUMN_OEND, oEnd);
+        values.put(DBHelper.COLUMN_OTITLE, oTitle);
+        values.put(DBHelper.COLUMN_OMEMO, oMemo);
+        values.put(DBHelper.COLUMN_ODONE, oDone);
+
+        db.insert(TABLE_ONEUL, null, values);
+        db.close();
     }
 
     //    기록중인 일과 불러오기
@@ -76,7 +92,7 @@ public class dbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(dbHelper.COLUMN_OMEMO, oMemo);
+        values.put(DBHelper.COLUMN_OMEMO, oMemo);
 
         db.update(TABLE_ONEUL, values, COLUMN_ONO + " = " + oNo, null);
         db.close();
@@ -87,26 +103,10 @@ public class dbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(dbHelper.COLUMN_OEND, oEnd);
-        values.put(dbHelper.COLUMN_ODONE, 1);
+        values.put(DBHelper.COLUMN_OEND, oEnd);
+        values.put(DBHelper.COLUMN_ODONE, 1);
 
         db.update(TABLE_ONEUL, values, COLUMN_ONO + " = " + oNo, null);
-        db.close();
-    }
-
-    //    일과 추가
-    public void addOneul(String oDate, String oStart, String oEnd, String oTitle, String oMemo, int oDone) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(dbHelper.COLUMN_ODATE, oDate);
-        values.put(dbHelper.COLUMN_OSTART, oStart);
-        values.put(dbHelper.COLUMN_OEND, oEnd);
-        values.put(dbHelper.COLUMN_OTITLE, oTitle);
-        values.put(dbHelper.COLUMN_OMEMO, oMemo);
-        values.put(dbHelper.COLUMN_ODONE, oDone);
-
-        db.insert(TABLE_ONEUL, null, values);
         db.close();
     }
 

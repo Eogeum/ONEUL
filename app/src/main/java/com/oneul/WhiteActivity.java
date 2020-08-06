@@ -18,7 +18,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.oneul.extra.DateTime;
-import com.oneul.extra.dbHelper;
+import com.oneul.extra.DBHelper;
 
 import java.util.Objects;
 
@@ -30,7 +30,7 @@ public class WhiteActivity extends AppCompatActivity {
     View dlgImage;
 
     //    디비
-    dbHelper dbHelper;
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class WhiteActivity extends AppCompatActivity {
         editMemo = findViewById(R.id.editMemo);
 
 //        디비
-        dbHelper = new dbHelper(this);
+        dbHelper = new DBHelper(this);
 
 //        시작 시간 입력
         timeStart = findViewById(R.id.timeStart);
@@ -129,13 +129,13 @@ public class WhiteActivity extends AppCompatActivity {
     //    뒤로가기 시
     @Override
     public void onBackPressed() {
-        final AlertDialog dialog = new AlertDialog.Builder(this).setMessage("일과 작성을 취소하시겠습니까?\n작성한 내용은 저장되지 않습니다.")
-                .setPositiveButton("예", new DialogInterface.OnClickListener() {
+        final AlertDialog dialog = new AlertDialog.Builder(this).setMessage("일과 작성을 취소합니다.\n작성한 내용은 저장되지 않습니다.")
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         finish();
                     }
                 })
-                .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 }).create();

@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".WhiteActivity" />
+        <activity
+            android:name=".WhiteActivity"
+            android:screenOrientation="nosensor"
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".MainActivity"

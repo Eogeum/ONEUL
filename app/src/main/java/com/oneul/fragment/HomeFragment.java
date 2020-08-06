@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,8 @@ import com.oneul.R;
 import com.oneul.WhiteActivity;
 import com.oneul.extra.Animation;
 import com.oneul.extra.DateTime;
-import com.oneul.extra.dbHelper;
+import com.oneul.extra.OnSingleClickListener;
+import com.oneul.extra.DBHelper;
 import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
 
@@ -41,22 +41,24 @@ import java.util.Objects;
 
 public class HomeFragment extends Fragment {
     //    뷰
-    public static EditText et_todayBox, et_oMemo;
-    Button btn_ok, btn_stop, btn_picMemo, btn_cancelMemo, btn_saveMemo;
-    LinearLayout ll_todayBox;
-    FrameLayout fl_startBox;
     RecyclerView r_oneul;
-    TextView t_oTitle, t_oTime, t_open, t_oNo;
-    ConstraintLayout cl_startBox;
-    LinearLayout ll_memoBox;
     CalendarView c_cal;
     FloatingActionButton fab_goWhite;
+
+    LinearLayout ll_todayBox;
+    Button btn_ok, btn_stop, btn_picMemo, btn_cancelMemo, btn_saveMemo;
+    EditText et_oTitle, et_oMemo;
+
+    FrameLayout fl_startBox;
+    ConstraintLayout cl_startBox;
+    TextView t_oTitle, t_oTime, t_open, t_oNo;
+    LinearLayout ll_memoBox;
 
     //    키보드
     InputMethodManager imm;
 
     //    디비
-    dbHelper dbHelper;
+    DBHelper dbHelper;
 
     //    어댑터
     OneulAdapter adapter = new OneulAdapter();
@@ -79,10 +81,12 @@ public class HomeFragment extends Fragment {
         r_oneul = homeView.findViewById(R.id.r_oneul);
         c_cal = homeView.findViewById(R.id.c_cal);
         fab_goWhite = homeView.findViewById(R.id.fab_goWrite);
+
 //        투데이박스
         ll_todayBox = homeView.findViewById(R.id.ll_todayBox);
         btn_ok = homeView.findViewById(R.id.btn_ok);
-        et_todayBox = homeView.findViewById(R.id.et_oTitle);
+        et_oTitle = homeView.findViewById(R.id.et_oTitle);
+
 //        스타트박스
         fl_startBox = homeView.findViewById(R.id.fl_startBox);
         cl_startBox = homeView.findViewById(R.id.cl_startBox);
@@ -90,6 +94,7 @@ public class HomeFragment extends Fragment {
         t_open = homeView.findViewById(R.id.t_open);
         t_oTitle = homeView.findViewById(R.id.t_oTitle);
         t_oTime = homeView.findViewById(R.id.t_oTime);
+
 //        스타트박스 메모
         ll_memoBox = homeView.findViewById(R.id.ll_memoBox);
         btn_picMemo = homeView.findViewById(R.id.btn_picMemo);
@@ -101,7 +106,7 @@ public class HomeFragment extends Fragment {
         imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
 
 //        디비
-        dbHelper = new dbHelper(getActivity());
+        dbHelper = new DBHelper(getActivity());
 
 //        리스트
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -109,7 +114,6 @@ public class HomeFragment extends Fragment {
         r_oneul.setHasFixedSize(true);
 
 //        시작 시
-        t_oTitle.setSelected(true);
         dateChange();
 
         try {
@@ -119,7 +123,7 @@ public class HomeFragment extends Fragment {
         }
 
 //        입력하던 투데이 박스 값 불러오기
-        et_todayBox.setText(MainActivity.inputText);
+        et_oTitle.setText(MainActivity.inputText);
 
 //        날짜 변경
         c_cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -135,19 +139,19 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
 //                일과 제목이 없으면
-                if (TextUtils.isEmpty(et_todayBox.getText().toString().trim())) {
+                if (TextUtils.isEmpty(et_oTitle.getText().toString().trim())) {
                     Toast.makeText(getActivity(), "일과 제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
 
 //                    투데이박스 포커스, 키보드 올리기
-                    et_todayBox.requestFocus();
-                    imm.showSoftInput(et_todayBox, InputMethodManager.SHOW_IMPLICIT);
+                    et_oTitle.requestFocus();
+                    imm.showSoftInput(et_oTitle, InputMethodManager.SHOW_IMPLICIT);
                 } else {
 //                    기록 시작 및 새로고침
-                    dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null, et_todayBox.getText().toString(), null, 0);
+                    dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null, et_oTitle.getText().toString(), null, 0);
                     dateChange();
 
 //                    투데이박스 값 초기화
-                    et_todayBox.getText().clear();
+                    et_oTitle.getText().clear();
                 }
             }
         });
@@ -193,6 +197,7 @@ public class HomeFragment extends Fragment {
                     imm.showSoftInput(et_oMemo, InputMethodManager.SHOW_IMPLICIT);
                     btn_cancelMemo.setVisibility(View.VISIBLE);
                     btn_saveMemo.setVisibility(View.VISIBLE);
+                    MainActivity.useEditMemo = true;
                 }
             }
         });
@@ -204,6 +209,7 @@ public class HomeFragment extends Fragment {
                 btn_picMemo.setVisibility(View.VISIBLE);
                 btn_cancelMemo.setVisibility(View.GONE);
                 btn_saveMemo.setVisibility(View.GONE);
+                MainActivity.useEditMemo = false;
 
 //                새로고침
                 dateChange();
@@ -217,6 +223,7 @@ public class HomeFragment extends Fragment {
                 btn_picMemo.setVisibility(View.VISIBLE);
                 btn_cancelMemo.setVisibility(View.GONE);
                 btn_saveMemo.setVisibility(View.GONE);
+                MainActivity.useEditMemo = false;
 
 //                메모 저장 및 새로고침
                 dbHelper.editMemo(dbHelper.getStartOneul().getoNo(), et_oMemo.getText().toString());
@@ -245,9 +252,9 @@ public class HomeFragment extends Fragment {
         });
 
 //        fab 클릭 시
-        fab_goWhite.setOnClickListener(new View.OnClickListener() {
+        fab_goWhite.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 Intent intent = new Intent(getActivity(), WhiteActivity.class);
                 startActivity(intent);
             }
@@ -258,12 +265,14 @@ public class HomeFragment extends Fragment {
 
     //    날짜 확인 및 헤더 변경
     private void dateChange() {
+        ll_todayBox.setVisibility(View.GONE);
+        fl_startBox.setVisibility(View.GONE);
+
 //        오늘이면
         if (TextUtils.equals(MainActivity.showDay, DateTime.today())) {
 //            기록중인 일과 있으면
             if (dbHelper.getStartOneul() != null) {
-//                스타트박스 보이기
-                ll_todayBox.setVisibility(View.GONE);
+//                스타트박스 표시
                 fl_startBox.setVisibility(View.VISIBLE);
 
 //                디비에서 기록중인 일과 불러오기
@@ -272,9 +281,8 @@ public class HomeFragment extends Fragment {
                 t_oTitle.setText(startOneul.getoTitle());
                 et_oMemo.setText(startOneul.getoMemo());
             } else {
-//                리스트 헤더 투데이박스로 변경
+//                투데이박스 표시
                 ll_todayBox.setVisibility(View.VISIBLE);
-                fl_startBox.setVisibility(View.GONE);
             }
         }
 
@@ -285,5 +293,19 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        MainActivity.inputText = et_oTitle.getText().toString();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        dbHelper.getOneul(MainActivity.showDay, r_oneul, adapter);
     }
 }

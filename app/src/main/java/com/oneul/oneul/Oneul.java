@@ -24,7 +24,9 @@ public class Oneul {
         return oNo;
     }
 
-    public String getoDate() { return oDate; }
+    public String getoDate() {
+        return oDate;
+    }
 
     public String getoStart() {
         return oStart;

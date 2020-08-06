@@ -7,6 +7,6 @@
         <item>3시간 뒤</item>
         <item>4시간 뒤</item>
         <item>5시간 뒤</item>
-<!--        todo: 사용자 지정 추가-->
+        <!--        todo: 사용자 지정 추가-->
     </string-array>
 </resources>
