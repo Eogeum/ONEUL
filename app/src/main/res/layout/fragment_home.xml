@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".fragment.HomeFragment"
-    tools:ignore="HardcodedText">
+    tools:ignore="HardcodedText, RelativeOverlap">
 
     <LinearLayout
         android:id="@+id/ll_listHeader"
@@ -157,19 +157,15 @@
                     android:textColor="@color/gray"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/t_open"
+                    app:layout_constraintEnd_toStartOf="@+id/i_memoBox"
                     app:layout_constraintStart_toEndOf="@id/t_oTitle"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/t_open"
+                <ImageView
+                    android:id="@+id/i_memoBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="@font/nanum_barun_gothic_bold"
-                    android:text="∨"
-                    android:textColor="@color/mainColor"
-                    android:textStyle="bold"
+                    android:src="@drawable/ic_expand"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btn_stop"
                     app:layout_constraintStart_toEndOf="@id/t_oTime"
@@ -209,39 +205,43 @@
         android:id="@+id/fab_goWrite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@id/fab_goCalendar"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="4dp"
+        app:backgroundTint="@color/white"
+        app:borderWidth="0dp"
+        android:visibility="invisible"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_goCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/fab_main"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="8dp"
+        app:backgroundTint="@color/white"
+        app:borderWidth="0dp"
+        android:visibility="invisible"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_input_add"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/ic_fab"
         app:backgroundTint="@color/mainColor"
         app:borderWidth="0dp" />
 
-    <SlidingDrawer
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/c"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:content="@+id/ll_cal"
-        android:handle="@+id/btn_cal">
-
-        <Button
-            android:id="@+id/btn_cal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="캘린더" />
-
-        <LinearLayout
-            android:id="@+id/ll_cal"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@color/lightGray"
-            android:gravity="center">
-
-            <CalendarView
-                android:id="@+id/c_cal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom" />
-        </LinearLayout>
-    </SlidingDrawer>
+        android:layout_height="wrap_content"
+        app:mcv_showOtherDates="all"
+        app:mcv_selectionColor="@color/mainColor"
+        android:visibility="gone"/>
 </RelativeLayout>

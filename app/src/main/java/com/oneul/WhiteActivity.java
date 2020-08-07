@@ -107,7 +107,7 @@ public class WhiteActivity extends AppCompatActivity {
                     dbHelper.addOneul(MainActivity.showDay, timeStart.getText().toString(), timeEnd.getText().toString(),
                             editTitle.getText().toString(), editMemo.getText().toString(), 1);
 
-                    Toast.makeText(getApplicationContext(), "일과가 저장되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), MainActivity.showDay + "\n일과를 저장했습니다.", Toast.LENGTH_SHORT).show();
 
 
                     finish();
@@ -152,6 +152,5 @@ public class WhiteActivity extends AppCompatActivity {
     }
 }
 
-//    todo: 홈화면 추가 버튼으로 이동 버튼 변경
-//    todo: 닫는 버튼이 필요해지고 뒤로가기로 다이얼로그 (작성 취소하겠습니까?)등 표시
+//    todo: 닫는 버튼이 필요
 //    todo: 작성 화면에서도 날짜 바꿀 수 있게 해야 할듯

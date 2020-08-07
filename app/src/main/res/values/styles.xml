@@ -15,19 +15,6 @@
 
         <!--        멀티터치 블록-->
         <item name="android:splitMotionEvents">false</item>
-    </style>
-
-    <!--    다이얼로그-->
-    <style name="DialogTheme" parent="Widget.AppCompat.ButtonBar.AlertDialog">
-        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
-        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
-    </style>
-
-    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/mainColor</item>
-    </style>
-
-    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/gray</item>
+        <item name="android:windowEnableSplitTouch">false</item>
     </style>
 </resources>

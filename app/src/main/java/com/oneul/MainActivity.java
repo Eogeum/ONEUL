@@ -28,7 +28,7 @@ import com.oneul.fragment.StatFragment;
 public class MainActivity extends AppCompatActivity {
     //    데이터 저장
     public static String inputText;
-    public static String showDay;
+    public static String showDay = DateTime.today();
     public static Fragment showFragment = HomeFragment.newInstance();
     public static boolean useEditMemo = false;
 
@@ -63,20 +63,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        하단 메뉴
-        bot_menu = findViewById(R.id.bot_menu);
-
 //        시작 시 홈화면 불러오기
-        showDay = DateTime.today();
         openFragment(HomeFragment.newInstance());
 
 //        하단 메뉴 클릭 시
+        bot_menu = findViewById(R.id.bot_menu);
         bot_menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 //                메모 작성중일 시
                 if (useEditMemo) {
-                    MemoDialog(item.getItemId());
+                    editMemoDialog(item.getItemId());
 
                     return false;
                 } else {
@@ -109,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 //        메모 작성중일 시
         if (useEditMemo) {
-            MemoDialog(0);
+            editMemoDialog(0);
         } else {
             if (doubleBackToExitPressedOnce) {
                 finish();
@@ -140,14 +137,14 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    public void MemoDialog(final int i) {
+    public void editMemoDialog(final int bottomButtonId) {
         final AlertDialog dialog = new AlertDialog.Builder(this).setMessage("메모 수정을 취소합니다.")
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         findViewById(R.id.btn_cancelMemo).callOnClick();
 
-                        if (i != 0) {
-                            findViewById(i).callOnClick();
+                        if (bottomButtonId != 0) {
+                            findViewById(bottomButtonId).callOnClick();
                         }
                     }
                 })

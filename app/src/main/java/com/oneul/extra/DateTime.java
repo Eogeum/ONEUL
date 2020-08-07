@@ -9,33 +9,21 @@ import java.util.Date;
 public class DateTime {
     //    오늘 날짜 불러오기
     public static String today() {
-        Date now = new Date(System.currentTimeMillis());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-
-        return dateFormat.format(now);
+        return new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis());
     }
 
     //    현재 시간 불러오기
     public static String nowTime() {
-        Date now = new Date(System.currentTimeMillis());
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-
-        return timeFormat.format(now);
+        return new SimpleDateFormat("HH:mm").format(System.currentTimeMillis());
     }
 
     //    현재 시 불러오기
     public static int nowHour() {
-        Date now = new Date(System.currentTimeMillis());
-        SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
-
-        return Integer.parseInt(hourFormat.format(now));
+        return Integer.parseInt(new SimpleDateFormat("HH").format(System.currentTimeMillis()));
     }
 
     //    현재 분 불러오기
-    public static int nowMinute() {
-        Date now = new Date(System.currentTimeMillis());
-        SimpleDateFormat minuteFormat = new SimpleDateFormat("mm");
-
-        return Integer.parseInt(minuteFormat.format(now));
+    public static int nowMinute() { new Date();
+        return Integer.parseInt(new SimpleDateFormat("mm").format(System.currentTimeMillis()));
     }
 }
