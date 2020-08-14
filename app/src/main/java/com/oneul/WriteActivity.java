@@ -17,12 +17,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.oneul.extra.DateTime;
 import com.oneul.extra.DBHelper;
+import com.oneul.extra.DateTime;
 
 import java.util.Objects;
 
-public class WhiteActivity extends AppCompatActivity {
+public class WriteActivity extends AppCompatActivity {
 
     //    뷰
     Button btnOk, timeStart, timeEnd, btnImg;
@@ -35,7 +35,7 @@ public class WhiteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_white);
+        setContentView(R.layout.activity_write);
 
 //        뷰
         editTitle = findViewById(R.id.editTitle);
@@ -49,7 +49,7 @@ public class WhiteActivity extends AppCompatActivity {
         timeStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(WhiteActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(WriteActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         timeStart.setText(String.format("%02d:%02d", hourOfDay, minute));
@@ -66,7 +66,7 @@ public class WhiteActivity extends AppCompatActivity {
         timeEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(WhiteActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(WriteActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         timeEnd.setText(String.format("%02d:%02d", hourOfDay, minute));
@@ -97,7 +97,7 @@ public class WhiteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(editTitle.getText().toString())) {
-                    Toast.makeText(WhiteActivity.this, "일과 제목을 입력하세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WriteActivity.this, "일과 제목을 입력하세요.", Toast.LENGTH_SHORT).show();
 
 //                    에딧 텍스트 포커스, 키보드 올리기
                     editTitle.requestFocus();

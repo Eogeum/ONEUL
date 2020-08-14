@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,7 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.oneul.MainActivity;
 import com.oneul.R;
-import com.oneul.WhiteActivity;
+import com.oneul.WriteActivity;
 import com.oneul.extra.Animation;
 import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
@@ -38,7 +39,6 @@ import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 import org.threeten.bp.LocalDate;
@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     LinearLayout ll_memoBox;
 
     //    ㄴㄴ fab
-    FloatingActionButton fab_main, fab_goCalendar, fab_goWhite;
+    FloatingActionButton fab_main, fab_goCalendar, fab_goWrite;
     android.view.animation.Animation anim_fabOpen;
     android.view.animation.Animation anim_fabClose;
     private Boolean isFabOpen = false;
@@ -99,7 +99,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 //        스타트박스 메모
         ll_memoBox = homeView.findViewById(R.id.ll_memoBox);
-        btn_picMemo = homeView.findViewById(R.id.btn_picMemo);
 
 //        ㄴㄴ 키보드
         imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -112,28 +111,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         r_oneul = homeView.findViewById(R.id.r_oneul);
         r_oneul.setLayoutManager(linearLayoutManager);
         r_oneul.setHasFixedSize(true);
+        r_oneul.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
-//        ㄴㄴ 캘린더
-        materialCalendarView = homeView.findViewById(R.id.c);
-//        최소 최대 날짜 설정
-        materialCalendarView.state().edit()
-                .setMinimumDate(CalendarDay.from(2000, 1, 1))
-                .setMaximumDate(CalendarDay.from(2040, 1, 1))
-                .commit();
-//        캘린더 헤더 수정
-        materialCalendarView.setTitleFormatter(new TitleFormatter() {
-            @Override
-            public CharSequence format(CalendarDay day) {
-                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy. M"));
+                if (dy < 0) {
+                    fab_main.show();
+                } else if (dy > 0) {
+                    fab_main.hide();
+
+                    if (isFabOpen) {
+                        fabAnim();
+                    }
+                }
             }
-        });
-//        날짜 변경 시
-        materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                MainActivity.showDay = date.getDate().toString();
-                dateChange();
-            }
+
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//
+//                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
+////                    todo 맨위로 올라가는 버튼 생성 (오늘 어댑터 footer 수정)
+//                }
+//            }
         });
 
 //        투데이박스 입력 완료
@@ -172,7 +173,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                     case View.VISIBLE:
                         if (MainActivity.useEditMemo) {
-                            editMemoDialog();
+                            DialogFragment.editMemoDialog(getActivity(), 0);
                         } else {
                             Animation.collapse(ll_memoBox);
                             i_memoBox.setImageResource(R.drawable.ic_expand);
@@ -192,6 +193,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         ll_memoBox.setLayoutParams(layoutParams);
                     }
                 }, 1000);
+            }
+        });
+
+//        사진메모 작성 활성화
+        btn_picMemo = homeView.findViewById(R.id.btn_picMemo);
+        btn_picMemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment.UploadImageDialog(getActivity(), 1);
+//                todo i = resultCode
             }
         });
 
@@ -250,7 +261,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void onClick(View v) {
 //                메모 작성중일 시
                 if (MainActivity.useEditMemo) {
-                    editMemoDialog();
+                    DialogFragment.editMemoDialog(getActivity(), 0);
                 } else {
 //                    쇼데이 변경
                     MainActivity.showDay = dbHelper.getStartOneul().getoDate();
@@ -267,20 +278,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        //        fab
+//        ㄴㄴ fab
         fab_main = homeView.findViewById(R.id.fab_main);
         fab_main.setOnClickListener(this);
         fab_goCalendar = homeView.findViewById(R.id.fab_goCalendar);
         fab_goCalendar.setOnClickListener(this);
-        fab_goWhite = homeView.findViewById(R.id.fab_goWrite);
-        fab_goWhite.setOnClickListener(this);
+        fab_goWrite = homeView.findViewById(R.id.fab_goWrite);
+        fab_goWrite.setOnClickListener(this);
 
         anim_fabOpen = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_open);
         anim_fabClose = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_close);
 
         //        시작 시
         dateChange();
-        materialCalendarView.setSelectedDate(LocalDate.parse(MainActivity.showDay));
         et_oTitle.setText(MainActivity.inputText);
 
         return homeView;
@@ -313,41 +323,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         dbHelper.getOneul(MainActivity.showDay, r_oneul, adapter);
     }
 
-    public void editMemoDialog() {
-        final AlertDialog dialog = new AlertDialog.Builder(getActivity()).setMessage("메모 수정을 취소합니다.")
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        btn_cancelMemo.callOnClick();
-                    }
-                })
-                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                }).create();
-
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#E88346"));
-            }
-        });
-
-        dialog.show();
-    }
-
     public void fabAnim() {
+        Animation.fabSpin(fab_main, isFabOpen);
+
         if (isFabOpen) {
             fab_goCalendar.startAnimation(anim_fabClose);
             fab_goCalendar.setClickable(false);
-            fab_goWhite.startAnimation(anim_fabClose);
-            fab_goWhite.setClickable(false);
+            fab_goWrite.startAnimation(anim_fabClose);
+            fab_goWrite.setClickable(false);
             isFabOpen = false;
         } else {
             fab_goCalendar.startAnimation(anim_fabOpen);
             fab_goCalendar.setClickable(true);
-            fab_goWhite.startAnimation(anim_fabOpen);
-            fab_goWhite.setClickable(true);
+            fab_goWrite.startAnimation(anim_fabOpen);
+            fab_goWrite.setClickable(true);
             isFabOpen = true;
         }
     }
@@ -356,17 +345,62 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_main:
-
                 fabAnim();
                 break;
             case R.id.fab_goCalendar:
-
                 fabAnim();
+                calendarDialog();
                 break;
             case R.id.fab_goWrite:
-                startActivity(new Intent(getActivity(), WhiteActivity.class));
                 fabAnim();
+                startActivity(new Intent(getActivity(), WriteActivity.class));
                 break;
+        }
+    }
+
+    public void calendarDialog() {
+        final View calendarView = getActivity().getLayoutInflater().inflate(R.layout.fragment_calendar, null);
+
+        final MaterialCalendarView widget = calendarView.findViewById(R.id.mc_calendar);
+//        최소 최대 날짜 설정
+        widget.state().edit()
+                .setMinimumDate(CalendarDay.from(2000, 1, 1))
+                .setMaximumDate(CalendarDay.from(2040, 1, 1))
+                .commit();
+        widget.setSelectedDate(LocalDate.parse(MainActivity.showDay));
+//        캘린더 헤더 수정
+        widget.setTitleFormatter(new TitleFormatter() {
+            @Override
+            public CharSequence format(CalendarDay day) {
+                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy. M"));
+            }
+        });
+
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setView(calendarView)
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        MainActivity.showDay = widget.getSelectedDate().getDate().toString();
+                        dateChange();
+                    }
+                }).create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#E88346"));
+            }
+        });
+
+        dialog.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            ;
         }
     }
 

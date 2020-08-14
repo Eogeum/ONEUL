@@ -1,10 +1,7 @@
 package com.oneul.calendar;
 
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
 
 import com.oneul.extra.DateTime;
 import com.prolificinteractive.materialcalendarview.CalendarDay;

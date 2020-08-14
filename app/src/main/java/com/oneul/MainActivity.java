@@ -1,9 +1,8 @@
 package com.oneul;
 
-import android.app.AlertDialog;
+import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,11 +15,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.oneul.extra.DateTime;
+import com.oneul.fragment.DialogFragment;
 import com.oneul.fragment.HomeFragment;
 import com.oneul.fragment.SettingFragment;
 import com.oneul.fragment.StatFragment;
@@ -29,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     //    데이터 저장
     public static String inputText;
     public static String showDay = DateTime.today();
-    public static Fragment showFragment = HomeFragment.newInstance();
     public static boolean useEditMemo = false;
 
     //    하단 메뉴
@@ -62,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 //        시작 시 홈화면 불러오기
         openFragment(HomeFragment.newInstance());
 
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 //                메모 작성중일 시
                 if (useEditMemo) {
-                    editMemoDialog(item.getItemId());
+                    DialogFragment.editMemoDialog(MainActivity.this, item.getItemId());
 
                     return false;
                 } else {
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 //        메모 작성중일 시
         if (useEditMemo) {
-            editMemoDialog(0);
+            DialogFragment.editMemoDialog(this, 0);
         } else {
             if (doubleBackToExitPressedOnce) {
                 finish();
@@ -126,41 +126,23 @@ public class MainActivity extends AppCompatActivity {
 
     //    화면 전환
     public void openFragment(Fragment fragment) {
+        Fragment fragmentId = getSupportFragmentManager().findFragmentById(R.id.container);
 //        같은 탭을 누를 시 쇼데이 초기화
-        if (fragment.getClass() == showFragment.getClass()) {
-            showDay = DateTime.today();
+        if (fragmentId != null) {
+            if (fragment.getClass() == fragmentId.getClass()) {
+                showDay = DateTime.today();
+            }
         }
 
-        showFragment = fragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.commit();
     }
-
-    public void editMemoDialog(final int bottomButtonId) {
-        final AlertDialog dialog = new AlertDialog.Builder(this).setMessage("메모 수정을 취소합니다.")
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        findViewById(R.id.btn_cancelMemo).callOnClick();
-
-                        if (bottomButtonId != 0) {
-                            findViewById(bottomButtonId).callOnClick();
-                        }
-                    }
-                })
-                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                }).create();
-
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#E88346"));
-            }
-        });
-
-        dialog.show();
-    }
 }
+
+//todo: 화면 전환 시 새로운 프래그먼트로 불러오지 말고 기존 프래그먼트로 불러오게
+//todo 캘린더 뷰 다이얼로그 화 및 일과 있는날 점 표시
+//todo 사진 다운 스케일링 및 카메라, 갤러리 접속 등 사진 관련
+//todo 슬라드 날짜 변경
+// fixme : 화면에 날짜를 표시할 방법
+// fixme : 1일날 시작한 일과를 2일에 완료하면 화면에 일과 시간을 어떻게 표시할 지

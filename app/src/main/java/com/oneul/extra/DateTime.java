@@ -3,7 +3,6 @@ package com.oneul.extra;
 import android.annotation.SuppressLint;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @SuppressLint("SimpleDateFormat")
 public class DateTime {
@@ -23,7 +22,7 @@ public class DateTime {
     }
 
     //    현재 분 불러오기
-    public static int nowMinute() { new Date();
+    public static int nowMinute() {
         return Integer.parseInt(new SimpleDateFormat("mm").format(System.currentTimeMillis()));
     }
 }

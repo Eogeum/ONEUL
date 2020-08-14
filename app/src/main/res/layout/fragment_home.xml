@@ -209,9 +209,10 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="4dp"
+        android:src="@drawable/ic_write"
+        android:visibility="invisible"
         app:backgroundTint="@color/white"
-        app:borderWidth="0dp"
-        android:visibility="invisible"/>
+        app:borderWidth="0dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_goCalendar"
@@ -221,9 +222,10 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_calendar"
+        android:visibility="invisible"
         app:backgroundTint="@color/white"
-        app:borderWidth="0dp"
-        android:visibility="invisible"/>
+        app:borderWidth="0dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_main"
@@ -236,12 +238,4 @@
         android:src="@drawable/ic_fab"
         app:backgroundTint="@color/mainColor"
         app:borderWidth="0dp" />
-
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        android:id="@+id/c"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:mcv_showOtherDates="all"
-        app:mcv_selectionColor="@color/mainColor"
-        android:visibility="gone"/>
 </RelativeLayout>
