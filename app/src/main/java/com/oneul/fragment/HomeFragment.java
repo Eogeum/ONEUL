@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +31,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.WriteActivity;
+import com.oneul.calendar.OneulDecorator;
 import com.oneul.extra.Animation;
 import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
@@ -49,7 +49,6 @@ import java.util.Objects;
 public class HomeFragment extends Fragment implements View.OnClickListener {
     //    ㄴㄴ 뷰
     RecyclerView r_oneul;
-    MaterialCalendarView materialCalendarView;
 
     LinearLayout ll_todayBox;
     Button btn_ok, btn_stop, btn_picMemo, btn_cancelMemo, btn_saveMemo;
@@ -201,7 +200,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btn_picMemo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment.UploadImageDialog(getActivity(), 1);
+                DialogFragment.UploadImageDialog(getActivity());
 //                todo i = resultCode
             }
         });
@@ -376,6 +375,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+//        캘린더 데코레이터
+        widget.addDecorators(new OneulDecorator(dbHelper.getOneulDates()));
+
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setView(calendarView)
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -393,15 +395,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
 
         dialog.show();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1) {
-            ;
-        }
     }
 
     @Override

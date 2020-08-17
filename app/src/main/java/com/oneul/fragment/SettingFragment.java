@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import com.oneul.R;
 
 public class SettingFragment extends Fragment {
-
     private static final String ARG_PARAM1 = "param1";
     private String mParam1;
 

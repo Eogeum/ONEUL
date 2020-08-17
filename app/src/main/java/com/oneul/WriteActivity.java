@@ -23,7 +23,6 @@ import com.oneul.extra.DateTime;
 import java.util.Objects;
 
 public class WriteActivity extends AppCompatActivity {
-
     //    뷰
     Button btnOk, timeStart, timeEnd, btnImg;
     EditText editTitle, editMemo;

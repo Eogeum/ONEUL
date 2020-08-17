@@ -10,6 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import org.threeten.bp.LocalDate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
     //    일과 테이블 정보
@@ -67,8 +73,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public Oneul getStartOneul() {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_ONEUL, null, "oDone = 0", null,
-                null, null, null);
+        Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODONE + " = 0",
+                null, null, null, null);
         Oneul oneul = null;
 
         while (cursor.moveToNext()) {
@@ -113,8 +119,9 @@ public class DBHelper extends SQLiteOpenHelper {
     //    일과 불러오기
     public void getOneul(String oDate, RecyclerView r_oneul, OneulAdapter adapter) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_ONEUL, null, "oDate = ? AND oDone = 1",
-                new String[]{oDate}, null, null, "oStart DESC, oNo DESC");
+        Cursor cursor = db.query(TABLE_ONEUL, null,
+                COLUMN_ODATE + " = ? AND " + COLUMN_ODONE + " = 1", new String[]{oDate},
+                null, null, COLUMN_OSTART + " DESC, " + COLUMN_ONO + " DESC");
         Oneul oneul;
 
         adapter.clear();
@@ -133,6 +140,24 @@ public class DBHelper extends SQLiteOpenHelper {
         adapter.notifyDataSetChanged();
         cursor.close();
         db.close();
+    }
+
+    //    일과 날짜 불러오기
+    public List<CalendarDay> getOneulDates() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(true, TABLE_ONEUL, null, COLUMN_ODONE + " = 1",
+                null, null, null, null, null);
+        ArrayList<CalendarDay> calendarDays = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            String oDate = cursor.getString(cursor.getColumnIndex(COLUMN_ODATE));
+            calendarDays.add(CalendarDay.from(LocalDate.parse(oDate)));
+        }
+
+        cursor.close();
+        db.close();
+
+        return calendarDays;
     }
 
     @Override

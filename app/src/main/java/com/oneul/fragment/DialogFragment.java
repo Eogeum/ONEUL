@@ -13,11 +13,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.oneul.R;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 public class DialogFragment extends Fragment {
-    static CalendarDay selectDay;
-
     public static void editMemoDialog(final Activity activity, final int bottomButtonId) {
         final AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setMessage("메모 작성을 취소합니다.")
@@ -48,12 +45,13 @@ public class DialogFragment extends Fragment {
         dialog.show();
     }
 
-    public static void UploadImageDialog(final Activity activity, int re) {
+    public static void UploadImageDialog(final Activity activity) {
+//        권한 없을 시
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != 0 ||
                 ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != 0 ||
                 ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != 0) {
             final AlertDialog dialog = new AlertDialog.Builder(activity)
-                    .setMessage("사진 첨부를 위해 저장소 권한이 필요합니다.")
+                    .setMessage("사진 첨부를 위해 카메라 및\n저장소 권한이 필요합니다.")
                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -75,25 +73,23 @@ public class DialogFragment extends Fragment {
 
             dialog.show();
         } else {
+            final int CAMERA_REQUEST_CODE = 101;
+            final int GALLERY_REQUEST_CODE = 202;
+
             new AlertDialog.Builder(activity)
-                    .setTitle("앱 선택")
                     .setItems(new CharSequence[]{"카메라", "갤러리"}, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent chooserIntent = null;
-
                             switch (i) {
                                 case 0:
                                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                    chooserIntent = Intent.createChooser(cameraIntent, "앱 선택");
-                                    activity.startActivityForResult(chooserIntent, 1);
+                                    activity.startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
                                     break;
 
                                 case 1:
-                                    Intent galleryIntent = new Intent();
-                                    galleryIntent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                                    chooserIntent = Intent.createChooser(galleryIntent, "앱 선택");
-                                    activity.startActivityForResult(chooserIntent, 1);
+                                    Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+                                    galleryIntent.setType("image/*");
+                                    activity.startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
                                     break;
                             }
                         }

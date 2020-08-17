@@ -1,8 +1,8 @@
 package com.oneul;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,9 +14,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -28,12 +27,17 @@ import com.oneul.fragment.SettingFragment;
 import com.oneul.fragment.StatFragment;
 
 public class MainActivity extends AppCompatActivity {
-    //    데이터 저장
+    //    ㄴㄴ 리퀘스트 코드
+    final int CAMERA_REQUEST_CODE = 101;
+    final int GALLERY_REQUEST_CODE = 202;
+
+
+    //    ㄴㄴ 데이터 저장
     public static String inputText;
     public static String showDay = DateTime.today();
     public static boolean useEditMemo = false;
 
-    //    하단 메뉴
+    //    ㄴㄴ 하단 메뉴
     public static BottomNavigationView bot_menu;
 
     //    뒤로가기 종료
@@ -138,11 +142,36 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.container, fragment);
         transaction.commit();
     }
+
+    //    private File createImageFile() throws IOException {
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(System.currentTimeMillis());
+//        String imageFileName = "JPEG_" + timeStamp + "_";
+//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//        File image = File.createTempFile(
+//                imageFileName,  /* prefix */
+//                ".jpg",         /* suffix */
+//                storageDir      /* directory */
+//        );
+//
+//        // Save a file: path for use with ACTION_VIEW intents
+//        currentPhotoPath = image.getAbsolutePath();
+
+//        return image;
+//    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            Bitmap bitmap = (Bitmap) bundle.get("data");
+
+        }
+    }
 }
 
-//todo: 화면 전환 시 새로운 프래그먼트로 불러오지 말고 기존 프래그먼트로 불러오게
-//todo 캘린더 뷰 다이얼로그 화 및 일과 있는날 점 표시
-//todo 사진 다운 스케일링 및 카메라, 갤러리 접속 등 사진 관련
 //todo 슬라드 날짜 변경
+//todo 사진 저장 취소 아이콘
 // fixme : 화면에 날짜를 표시할 방법
 // fixme : 1일날 시작한 일과를 2일에 완료하면 화면에 일과 시간을 어떻게 표시할 지
