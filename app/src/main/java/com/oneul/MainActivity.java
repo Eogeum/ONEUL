@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,11 +28,12 @@ import com.oneul.fragment.HomeFragment;
 import com.oneul.fragment.SettingFragment;
 import com.oneul.fragment.StatFragment;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
     //    ㄴㄴ 리퀘스트 코드
     final int CAMERA_REQUEST_CODE = 101;
     final int GALLERY_REQUEST_CODE = 202;
-
 
     //    ㄴㄴ 데이터 저장
     public static String inputText;
@@ -62,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.dispatchTouchEvent(ev);
     }
+
+    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        imageView = findViewById(R.id.imageView);
     }
 
     //    뒤로가기 종료
@@ -143,31 +150,29 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    //    private File createImageFile() throws IOException {
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(System.currentTimeMillis());
-//        String imageFileName = "JPEG_" + timeStamp + "_";
-//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(
-//                imageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                storageDir      /* directory */
-//        );
-//
-//        // Save a file: path for use with ACTION_VIEW intents
-//        currentPhotoPath = image.getAbsolutePath();
-
-//        return image;
-//    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case CAMERA_REQUEST_CODE:
 
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            Bundle bundle = data.getExtras();
-            Bitmap bitmap = (Bitmap) bundle.get("data");
+//                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                    String string = DialogFragment.currentPhotoPath;
+//                    File f = new File(string);
+//                    Uri uri = Uri.fromFile(f);
+//                    mediaScanIntent.setData(uri);
+//                    sendBroadcast(mediaScanIntent);
+                    imageView.setImageURI(Uri.parse(DialogFragment.currentPhotoPath));
 
+                    break;
+
+                case GALLERY_REQUEST_CODE:
+
+
+            }
         }
+
     }
 }
 

@@ -8,7 +8,7 @@
         android:id="@+id/mc_calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="20dp"
         app:mcv_selectionColor="@color/mainColor"
-        app:mcv_showOtherDates="all"
-        android:padding="20dp"/>
+        app:mcv_showOtherDates="all" />
 </LinearLayout>

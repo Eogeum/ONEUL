@@ -1,6 +1,7 @@
 package com.oneul.oneul;
 
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +10,7 @@ import com.oneul.R;
 
 public class OneulHolder extends RecyclerView.ViewHolder {
     TextView t_oTitle, t_oTime, t_oMemo, t_oMore;
+    LinearLayout ll_oPhoto;
 
     public OneulHolder(View itemView) {
         super(itemView);
@@ -17,6 +19,7 @@ public class OneulHolder extends RecyclerView.ViewHolder {
         t_oTitle = itemView.findViewById(R.id.t_oTitle);
         t_oMemo = itemView.findViewById(R.id.t_oMemo);
         t_oMore = itemView.findViewById(R.id.t_oMore);
+        ll_oPhoto = itemView.findViewById(R.id.ll_oPhoto);
     }
 
     public void onBind(Oneul oneul) {
