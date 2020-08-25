@@ -40,7 +40,6 @@ public class DialogFragment extends Fragment {
                     }
                 })
                 .create();
-
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
@@ -48,9 +47,11 @@ public class DialogFragment extends Fragment {
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#E88346"));
             }
         });
-
         dialog.show();
     }
+
+    //    fixme later
+    public static String currentPhotoPath;
 
     public static void UploadImageDialog(final Activity activity) {
 //        권한 없을 시
@@ -70,14 +71,12 @@ public class DialogFragment extends Fragment {
                         }
                     })
                     .create();
-
             dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface dialogInterface) {
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#E88346"));
                 }
             });
-
             dialog.show();
         } else {
             final int CAMERA_REQUEST_CODE = 101;
@@ -124,8 +123,6 @@ public class DialogFragment extends Fragment {
                     .show();
         }
     }
-
-    public static String currentPhotoPath;
 
     private static File createImageFile() throws IOException {
         String imageFileName = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(System.currentTimeMillis()) + ".jpg";

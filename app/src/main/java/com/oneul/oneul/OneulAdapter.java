@@ -32,13 +32,13 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         if (viewType == 1) {
             LinearLayout linearLayout = new LinearLayout(parent.getContext());
-            linearLayout.setLayoutParams(new ViewGroup.LayoutParams(0, 300));
+            linearLayout.setLayoutParams(new ViewGroup.LayoutParams(0, 200));
 
             return new RecyclerView.ViewHolder(linearLayout) {
             };
         }
 
-        return new OneulHolder(view);
+        return new OneulHolder(view, parent.getContext());
     }
 
     @Override
@@ -57,11 +57,15 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                         if (ellipsisCount > 0) {
                             oneulHolder.t_oMore.setVisibility(View.VISIBLE);
+                        } else if (ellipsisCount == 0) {
+                            String string = oneulHolder.t_oMemo.getText().toString() + "\n";
+                            oneulHolder.t_oMemo.setText(string);
+                        } else if (oneulHolder.t_oMemo.getText().toString().trim().equals("")) {
+                            oneulHolder.t_oMemo.setText("\n\n");
                         }
                     }
                 }
             });
-
             oneulHolder.t_oMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -78,10 +82,6 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     }
                 }
             });
-
-            if (oneulHolder.t_oMemo.getText().toString().trim().equals("")) {
-                oneulHolder.t_oMemo.setText("\n\n");
-            }
         }
     }
 

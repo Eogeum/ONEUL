@@ -11,25 +11,22 @@ public class Animation {
     //    메모박스 확장
     public static void expand(LinearLayout linearLayout) {
         linearLayout.setVisibility(View.VISIBLE);
-        final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        final int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        linearLayout.measure(widthSpec, heightSpec);
-        ValueAnimator mAnimator = slideAnimator(linearLayout, 0, linearLayout.getMeasuredHeight());
+        linearLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-        mAnimator.start();
+        slideAnimator(linearLayout, 0, linearLayout.getMeasuredHeight())
+                .start();
     }
 
     //    메모박스 축소
     public static void collapse(final LinearLayout linearLayout) {
-        int finalHeight = linearLayout.getHeight();
-        ValueAnimator mAnimator = slideAnimator(linearLayout, finalHeight, 0);
+        ValueAnimator mAnimator = slideAnimator(linearLayout, linearLayout.getHeight(), 0);
         mAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 linearLayout.setVisibility(View.GONE);
             }
         });
-
         mAnimator.start();
     }
 
@@ -38,9 +35,8 @@ public class Animation {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                int value = (int) valueAnimator.getAnimatedValue();
                 ViewGroup.LayoutParams layoutParams = linearLayout.getLayoutParams();
-                layoutParams.height = value;
+                layoutParams.height = (int) valueAnimator.getAnimatedValue();
                 linearLayout.setLayoutParams(layoutParams);
             }
         });

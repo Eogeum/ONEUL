@@ -15,14 +15,20 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
+import com.oneul.fragment.DialogFragment;
 
 import java.util.Objects;
 
 public class WriteActivity extends AppCompatActivity {
+    //    ㄴㄴ 리퀘스트 코드
+    final int CAMERA_REQUEST_CODE = 101;
+    final int GALLERY_REQUEST_CODE = 202;
+
     //    뷰
     Button btnOk, timeStart, timeEnd, btnImg;
     EditText editTitle, editMemo;
@@ -83,10 +89,7 @@ public class WriteActivity extends AppCompatActivity {
         btnImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "select image"), 1);
+                DialogFragment.UploadImageDialog(WriteActivity.this);
             }
         });
 
@@ -108,7 +111,6 @@ public class WriteActivity extends AppCompatActivity {
 
                     Toast.makeText(getApplicationContext(), MainActivity.showDay + "\n일과를 저장했습니다.", Toast.LENGTH_SHORT).show();
 
-
                     finish();
                 }
             }
@@ -117,11 +119,18 @@ public class WriteActivity extends AppCompatActivity {
     }
 
 //    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode == RESULT_OK) {
+//            switch (requestCode) {
+//                case CAMERA_REQUEST_CODE:
 //
-//        if (resultCode == 1) {
+//                    break;
 //
+//                case GALLERY_REQUEST_CODE:
+//
+//
+//            }
 //        }
 //    }
 

@@ -1,4 +1,5 @@
 <resources>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!--        타이틀 바 제거-->
         <item name="windowActionBar">false</item>

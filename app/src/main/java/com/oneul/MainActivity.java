@@ -1,10 +1,13 @@
 package com.oneul;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Rect;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -12,12 +15,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -28,25 +33,22 @@ import com.oneul.fragment.HomeFragment;
 import com.oneul.fragment.SettingFragment;
 import com.oneul.fragment.StatFragment;
 
-import java.io.File;
-
 public class MainActivity extends AppCompatActivity {
     //    ㄴㄴ 리퀘스트 코드
     final int CAMERA_REQUEST_CODE = 101;
     final int GALLERY_REQUEST_CODE = 202;
 
     //    ㄴㄴ 데이터 저장
-    public static String inputText;
     public static String showDay = DateTime.today();
     public static boolean useEditMemo = false;
 
     //    ㄴㄴ 하단 메뉴
-    public static BottomNavigationView bot_menu;
+    BottomNavigationView bot_menu;
 
     //    뒤로가기 종료
     boolean doubleBackToExitPressedOnce = false;
 
-    //    에딧 텍스트 클리어 포커스, 키보드 내리기
+    //    에딧텍스트 언포커스
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -63,15 +65,35 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+
         return super.dispatchTouchEvent(ev);
     }
-
-    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        ㄴㄴ 상단
+        createNotificationChannel();
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, getIntent(), 0);
+//        RemoteViews fixedNotice = new RemoteViews(getPackageName(), R.layout.test);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "fixed")
+                .setSmallIcon(R.drawable.ic_home1)
+                .setContentTitle("O:NEUL")
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                .setCustomContentView(fixedNotice)
+                .setOngoing(true)
+                .setColor(Color.parseColor("#E88346"))
+                .setContentIntent(pendingIntent);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(101, builder.build());
+
+
 //        시작 시 홈화면 불러오기
         openFragment(HomeFragment.newInstance());
 
@@ -108,8 +130,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        imageView = findViewById(R.id.imageView);
     }
 
     //    뒤로가기 종료
@@ -137,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
 
     //    화면 전환
     public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
         Fragment fragmentId = getSupportFragmentManager().findFragmentById(R.id.container);
 //        같은 탭을 누를 시 쇼데이 초기화
         if (fragmentId != null) {
@@ -145,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.commit();
     }
@@ -157,14 +178,6 @@ public class MainActivity extends AppCompatActivity {
             switch (requestCode) {
                 case CAMERA_REQUEST_CODE:
 
-//                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//                    String string = DialogFragment.currentPhotoPath;
-//                    File f = new File(string);
-//                    Uri uri = Uri.fromFile(f);
-//                    mediaScanIntent.setData(uri);
-//                    sendBroadcast(mediaScanIntent);
-                    imageView.setImageURI(Uri.parse(DialogFragment.currentPhotoPath));
-
                     break;
 
                 case GALLERY_REQUEST_CODE:
@@ -172,7 +185,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+    }
 
+    private void createNotificationChannel() {
+//        오레오 이상이면
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("fixed", "고정", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }
 

@@ -27,6 +27,3 @@ public class OneulDecorator implements DayViewDecorator {
         view.addSpan(new DotSpan(6, Color.parseColor("#E88346")));
     }
 }
-
-
-

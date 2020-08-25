@@ -12,7 +12,8 @@ public class Oneul {
         this.oMemo = oMemo;
     }
 
-    public Oneul(String oDate, String oStart, String oEnd, String oTitle, String oMemo) {
+    public Oneul(int oNo, String oDate, String oStart, String oEnd, String oTitle, String oMemo) {
+        this.oNo = oNo;
         this.oDate = oDate;
         this.oStart = oStart;
         this.oEnd = oEnd;

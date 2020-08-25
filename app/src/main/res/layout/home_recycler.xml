@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="\n\n"
+                android:text="소소프트웨어 배포 \n최인석 교수님"
                 android:textColor="@color/gray"
                 android:textSize="14sp" />
 
@@ -83,7 +83,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/a"
+                android:src="@drawable/ic_home1"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
     </LinearLayout>

@@ -55,9 +55,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //    일과 추가
     public void addOneul(String oDate, String oStart, String oEnd, String oTitle, String oMemo, int oDone) {
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put(DBHelper.COLUMN_ODATE, oDate);
         values.put(DBHelper.COLUMN_OSTART, oStart);
         values.put(DBHelper.COLUMN_OEND, oEnd);
@@ -65,17 +63,17 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(DBHelper.COLUMN_OMEMO, oMemo);
         values.put(DBHelper.COLUMN_ODONE, oDone);
 
+        SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_ONEUL, null, values);
         db.close();
     }
 
     //    기록중인 일과 불러오기
     public Oneul getStartOneul() {
+        Oneul oneul = null;
         SQLiteDatabase db = this.getReadableDatabase();
-
         Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODONE + " = 0",
                 null, null, null, null);
-        Oneul oneul = null;
 
         while (cursor.moveToNext()) {
             int oNo = cursor.getInt(cursor.getColumnIndex(COLUMN_ONO));
@@ -95,59 +93,59 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //    일과 메모 수정
     public void editMemo(int oNo, String oMemo) {
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put(DBHelper.COLUMN_OMEMO, oMemo);
 
+        SQLiteDatabase db = this.getWritableDatabase();
         db.update(TABLE_ONEUL, values, COLUMN_ONO + " = " + oNo, null);
         db.close();
     }
 
-    //    일과 기록 종료, 로우 수정
+    //    일과 기록 종료 및 저장
     public void endOneul(int oNo, String oEnd) {
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put(DBHelper.COLUMN_OEND, oEnd);
         values.put(DBHelper.COLUMN_ODONE, 1);
 
+        SQLiteDatabase db = this.getWritableDatabase();
         db.update(TABLE_ONEUL, values, COLUMN_ONO + " = " + oNo, null);
         db.close();
     }
 
-    //    일과 불러오기
+    //    완료일과 불러오기
     public void getOneul(String oDate, RecyclerView r_oneul, OneulAdapter adapter) {
+        Oneul oneul;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_ONEUL, null,
                 COLUMN_ODATE + " = ? AND " + COLUMN_ODONE + " = 1", new String[]{oDate},
                 null, null, COLUMN_OSTART + " DESC, " + COLUMN_ONO + " DESC");
-        Oneul oneul;
 
         adapter.clear();
 
         while (cursor.moveToNext()) {
+            int oNo = cursor.getInt(cursor.getColumnIndex(COLUMN_ONO));
             String oStart = cursor.getString(cursor.getColumnIndex(COLUMN_OSTART));
             String oEnd = cursor.getString(cursor.getColumnIndex(COLUMN_OEND));
             String oTitle = cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE));
             String oMemo = cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO));
-            oneul = new Oneul(oDate, oStart, oEnd, oTitle, oMemo);
+            oneul = new Oneul(oNo, oDate, oStart, oEnd, oTitle, oMemo);
 
             adapter.addItem(oneul);
             r_oneul.setAdapter(adapter);
         }
 
         adapter.notifyDataSetChanged();
+
         cursor.close();
         db.close();
     }
 
     //    일과 날짜 불러오기
     public List<CalendarDay> getOneulDates() {
+        ArrayList<CalendarDay> calendarDays = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(true, TABLE_ONEUL, null, COLUMN_ODONE + " = 1",
                 null, null, null, null, null);
-        ArrayList<CalendarDay> calendarDays = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             String oDate = cursor.getString(cursor.getColumnIndex(COLUMN_ODATE));
@@ -158,6 +156,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         return calendarDays;
+    }
+
+    //    일과 삭제
+    public void deleteOneul(int oNo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_PHOTO, COLUMN_ONO + " = " + oNo, null);
+        db.delete(TABLE_ONEUL, COLUMN_ONO + " = " + oNo, null);
+        db.close();
     }
 
     @Override

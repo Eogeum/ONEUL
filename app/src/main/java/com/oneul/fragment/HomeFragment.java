@@ -48,7 +48,7 @@ import java.util.Objects;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
     //    ㄴㄴ 뷰
-    RecyclerView r_oneul;
+    public static RecyclerView r_oneul;
 
     LinearLayout ll_todayBox;
     Button btn_ok, btn_stop, btn_picMemo, btn_cancelMemo, btn_saveMemo;
@@ -70,8 +70,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     InputMethodManager imm;
 
     //    ㄴㄴ 디비
-    DBHelper dbHelper;
-    OneulAdapter adapter = new OneulAdapter();
+    public static DBHelper dbHelper;
+    public static OneulAdapter adapter = new OneulAdapter();
 
     public HomeFragment() {
     }
@@ -89,13 +89,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 //        투데이박스
         ll_todayBox = homeView.findViewById(R.id.ll_todayBox);
         et_oTitle = homeView.findViewById(R.id.et_oTitle);
-
 //        스타트박스
         fl_startBox = homeView.findViewById(R.id.fl_startBox);
         i_memoBox = homeView.findViewById(R.id.i_memoBox);
         t_oTitle = homeView.findViewById(R.id.t_oTitle);
         t_oTime = homeView.findViewById(R.id.t_oTime);
-
 //        스타트박스 메모
         ll_memoBox = homeView.findViewById(R.id.ll_memoBox);
 
@@ -248,7 +246,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 //                메모 저장 및 새로고침
                 dbHelper.editMemo(dbHelper.getStartOneul().getoNo(), et_oMemo.getText().toString());
-
                 Toast.makeText(getActivity(), "메모를 저장했습니다.", Toast.LENGTH_LONG).show();
             }
         });
@@ -290,21 +287,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         //        시작 시
         dateChange();
-        et_oTitle.setText(MainActivity.inputText);
 
         return homeView;
     }
 
     //    날짜 확인 및 헤더 변경
     private void dateChange() {
-        ll_todayBox.setVisibility(View.GONE);
-        fl_startBox.setVisibility(View.GONE);
-
 //        오늘이면
         if (TextUtils.equals(MainActivity.showDay, DateTime.today())) {
 //            기록중인 일과 있으면
             if (dbHelper.getStartOneul() != null) {
 //                스타트박스 표시
+                ll_todayBox.setVisibility(View.GONE);
                 fl_startBox.setVisibility(View.VISIBLE);
 
 //                디비에서 기록중인 일과 불러오기
@@ -315,7 +309,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             } else {
 //                투데이박스 표시
                 ll_todayBox.setVisibility(View.VISIBLE);
+                fl_startBox.setVisibility(View.GONE);
             }
+        } else {
+            ll_todayBox.setVisibility(View.GONE);
+            fl_startBox.setVisibility(View.GONE);
         }
 
 //        일과 불러오기
@@ -403,16 +401,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        MainActivity.inputText = et_oTitle.getText().toString();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
-        dbHelper.getOneul(MainActivity.showDay, r_oneul, adapter);
+        dateChange();
     }
 }
