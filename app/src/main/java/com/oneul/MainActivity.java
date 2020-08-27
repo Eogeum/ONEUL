@@ -15,7 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.RemoteInput;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -75,17 +75,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        ㄴㄴ 상단
-        createNotificationChannel();
+        //        오레오 이상이면 채널 만들기
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(new NotificationChannel("fixed", "고정", NotificationManager.IMPORTANCE_LOW));
+        }
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, getIntent(), 0);
-//        RemoteViews fixedNotice = new RemoteViews(getPackageName(), R.layout.test);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, getIntent(),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        RemoteInput remoteInput = new RemoteInput.Builder("KEY_TEXT_REPLY")
+                .setLabel("새로운 일과 제목을 입력하세요.")
+                .build();
+
+        NotificationCompat.Action action =
+                new NotificationCompat.Action.Builder(null, "START", pendingIntent)
+                        .addRemoteInput(remoteInput)
+                        .setAllowGeneratedReplies(true)
+                        .build();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "fixed")
                 .setSmallIcon(R.drawable.ic_home1)
-                .setContentTitle("O:NEUL")
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-//                .setCustomContentView(fixedNotice)
+                .setContentTitle("새로운 일과를 시작해보세요.")
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .addAction(action)
+                .setShowWhen(false)
                 .setOngoing(true)
                 .setColor(Color.parseColor("#E88346"))
                 .setContentIntent(pendingIntent);
@@ -184,15 +199,6 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-        }
-    }
-
-    private void createNotificationChannel() {
-//        오레오 이상이면
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("fixed", "고정", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
         }
     }
 }
