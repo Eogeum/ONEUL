@@ -47,6 +47,7 @@
                     android:id="@+id/statLeft"
                     android:layout_width="50sp"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
                     />
 
                 <TextView
@@ -83,6 +84,7 @@
                     android:id="@+id/statRight"
                     android:layout_width="50sp"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
                     />
 
             </LinearLayout>
@@ -90,11 +92,12 @@
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pieChart"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="300dp"
+                android:layout_margin="20dp"
                 />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/statRecycle"
+                android:id="@+id/statRecycler"
                 android:scrollbars="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

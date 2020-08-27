@@ -1,14 +1,17 @@
 package com.oneul.fragment;
 
+import android.content.ClipData;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -27,6 +30,11 @@ public class StatFragment extends Fragment {
     TextView statYear, statMonth;
     PieChart pieChart;
 
+    RecyclerView statRecycler;
+    Adapter statAdapter;
+    RecyclerView.LayoutManager statLayoutManager;
+    ArrayList<ClipData.Item> items = new ArrayList<>();
+
     public StatFragment() {
     }
 
@@ -39,6 +47,8 @@ public class StatFragment extends Fragment {
 //        인플레이터
         final View statView = inflater.inflate(R.layout.fragment_stat, container, false);
 
+
+        //년,월 표시
         statLeft = statView.findViewById(R.id.statLeft);
         statRight = statView.findViewById(R.id.statRight);
         statYear = statView.findViewById(R.id.statYear);
@@ -54,6 +64,8 @@ public class StatFragment extends Fragment {
         statYear.setText(cuYear);
         statMonth.setText(cuMonth);
 
+
+        //파이차트
         pieChart = statView.findViewById(R.id.pieChart);
 
         pieChart.setUsePercentValues(true);
@@ -75,6 +87,12 @@ public class StatFragment extends Fragment {
         pValues.add(new PieEntry(5, "과제"));
 
 
+        //일과별 리스트
+        statRecycler = statView.findViewById(R.id.statRecycler);
+        statRecycler.setHasFixedSize(true);
+        statLayoutManager = new LinearLayoutManager(getActivity());
+        statRecycler.setLayoutManager(statLayoutManager);
+        statRecycler.scrollToPosition(0);
 
         return statView;
     }
