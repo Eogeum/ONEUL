@@ -112,6 +112,30 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    //    특정 일과 불러오기
+    public String[] getEditOneul(int oNo) {
+        String[] strings = null;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ONO + " = " + oNo,
+                null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            String oDate = cursor.getString(cursor.getColumnIndex((COLUMN_ODATE)));
+            String oStart = cursor.getString(cursor.getColumnIndex(COLUMN_OSTART));
+            String oEnd = cursor.getString(cursor.getColumnIndex(COLUMN_OEND));
+            String oTitle = cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE));
+            String oMemo = cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO));
+
+            strings = new String[]{String.valueOf(oNo), oDate, oStart, oEnd, oTitle, oMemo};
+        }
+
+        cursor.close();
+        db.close();
+
+        return strings;
+    }
+
     //    완료일과 불러오기
     public void getOneul(String oDate, RecyclerView r_oneul, OneulAdapter adapter) {
         Oneul oneul;
@@ -163,6 +187,20 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_PHOTO, COLUMN_ONO + " = " + oNo, null);
         db.delete(TABLE_ONEUL, COLUMN_ONO + " = " + oNo, null);
+        db.close();
+    }
+
+    //    일과 수정
+    public void editOneul(int oNo, String oDate, String oStart, String oEnd, String oTitle, String oMemo) {
+        ContentValues values = new ContentValues();
+        values.put(DBHelper.COLUMN_ODATE, oDate);
+        values.put(DBHelper.COLUMN_OSTART, oStart);
+        values.put(DBHelper.COLUMN_OEND, oEnd);
+        values.put(DBHelper.COLUMN_OTITLE, oTitle);
+        values.put(DBHelper.COLUMN_OMEMO, oMemo);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.update(TABLE_ONEUL, values, COLUMN_ONO + " = " + oNo, null);
         db.close();
     }
 

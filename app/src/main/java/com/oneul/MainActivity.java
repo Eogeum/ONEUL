@@ -34,19 +34,17 @@ import com.oneul.fragment.SettingFragment;
 import com.oneul.fragment.StatFragment;
 
 public class MainActivity extends AppCompatActivity {
-    //    ㄴㄴ 리퀘스트 코드
+    //    ㄴㄴ 데이터
+    public static String showDay = DateTime.today();
+    public static boolean useEditMemo = false;
+    boolean doubleBackToExitPressedOnce = false;
+    //    리퀘스트 코드
     final int CAMERA_REQUEST_CODE = 101;
     final int GALLERY_REQUEST_CODE = 202;
 
-    //    ㄴㄴ 데이터 저장
-    public static String showDay = DateTime.today();
-    public static boolean useEditMemo = false;
-
-    //    ㄴㄴ 하단 메뉴
+    //    ㄴㄴ 뷰
+//    하단 메뉴
     BottomNavigationView bot_menu;
-
-    //    뒤로가기 종료
-    boolean doubleBackToExitPressedOnce = false;
 
     //    에딧텍스트 언포커스
     @Override
@@ -78,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
         //        오레오 이상이면 채널 만들기
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(new NotificationChannel("fixed", "고정", NotificationManager.IMPORTANCE_LOW));
+            notificationManager.createNotificationChannel(new NotificationChannel("fixed", "고정",
+                    NotificationManager.IMPORTANCE_LOW));
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, getIntent(),
@@ -108,11 +107,7 @@ public class MainActivity extends AppCompatActivity {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(101, builder.build());
 
-
-//        시작 시 홈화면 불러오기
-        openFragment(HomeFragment.newInstance());
-
-//        하단 메뉴 클릭 시
+//        하단메뉴 클릭 시
         bot_menu = findViewById(R.id.bot_menu);
         bot_menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -145,6 +140,9 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+//        시작 시 홈화면 불러오기
+        openFragment(HomeFragment.newInstance());
     }
 
     //    뒤로가기 종료
@@ -152,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 //        메모 작성중일 시
         if (useEditMemo) {
-            DialogFragment.editMemoDialog(this, 0);
+            DialogFragment.editMemoDialog(MainActivity.this, 0);
         } else {
             if (doubleBackToExitPressedOnce) {
                 finish();
@@ -204,6 +202,4 @@ public class MainActivity extends AppCompatActivity {
 }
 
 //todo 슬라드 날짜 변경
-//todo 사진 저장 취소 아이콘
-// fixme : 화면에 날짜를 표시할 방법
 // fixme : 1일날 시작한 일과를 2일에 완료하면 화면에 일과 시간을 어떻게 표시할 지

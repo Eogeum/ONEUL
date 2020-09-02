@@ -7,23 +7,57 @@
     android:orientation="vertical"
     tools:ignore="HardcodedText">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/write_sh"
-        android:gravity="center_vertical|end">
+        android:paddingHorizontal="12dp">
+
+        <LinearLayout
+            android:id="@+id/ll_goCalendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:src="@drawable/ic_calendar" />
+
+            <TextView
+                android:id="@+id/t_oDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="2020-08-31"
+                android:textColor="@color/darkGray"
+                android:textSize="24sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_expand" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnOk"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:background="@color/white"
             android:fontFamily="@font/nanum_barun_gothic_bold"
             android:text="OK"
             android:textColor="@color/mainColor"
             android:textSize="18sp" />
-    </LinearLayout>
+    </RelativeLayout>
+
 
     <ScrollView
         android:layout_width="match_parent"

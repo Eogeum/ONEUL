@@ -3,6 +3,7 @@ package com.oneul.oneul;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -11,13 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.oneul.MainActivity;
 import com.oneul.R;
+import com.oneul.WriteActivity;
 import com.oneul.fragment.HomeFragment;
 
 public class OneulHolder extends RecyclerView.ViewHolder {
     TextView t_oNo, t_oTitle, t_oTime, t_oMemo, t_oMore;
     LinearLayout ll_oPhoto;
 
-    public OneulHolder(View itemView, final Context context) {
+    public OneulHolder(View itemView) {
         super(itemView);
 
         t_oNo = itemView.findViewById(R.id.t_oNo);
@@ -30,6 +32,9 @@ public class OneulHolder extends RecyclerView.ViewHolder {
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                final Context context = v.getContext();
+                final Intent intent = new Intent(context, WriteActivity.class);
+
                 new AlertDialog.Builder(context)
                         .setItems(new CharSequence[]{"수정", "삭제"}, new DialogInterface.OnClickListener() {
                             @Override
@@ -37,7 +42,9 @@ public class OneulHolder extends RecyclerView.ViewHolder {
                                 switch (i) {
 //                            수정
                                     case 0:
-                                        ;
+                                        String[] strings = HomeFragment.dbHelper.getEditOneul(Integer.parseInt(t_oNo.getText().toString()));
+                                        intent.putExtra("editOneul", strings);
+                                        context.startActivity(intent);
                                         break;
 //                            삭제
                                     case 1:

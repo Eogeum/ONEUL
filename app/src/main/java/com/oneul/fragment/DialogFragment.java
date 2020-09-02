@@ -9,11 +9,11 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.View;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 
 import com.oneul.R;
 
@@ -21,13 +21,13 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
-public class DialogFragment extends Fragment {
+public class DialogFragment {
     public static void editMemoDialog(final Activity activity, final int bottomButtonId) {
         final AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setMessage("메모 작성을 취소합니다.")
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        activity.findViewById(R.id.btn_cancelMemo).callOnClick();
+                        activity.findViewById(R.id.ll_cancelMemo).callOnClick();
 
                         if (bottomButtonId != 0) {
                             activity.findViewById(bottomButtonId).callOnClick();
@@ -36,7 +36,7 @@ public class DialogFragment extends Fragment {
                 })
                 .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
+                        dialog.dismiss();
                     }
                 })
                 .create();
@@ -48,6 +48,14 @@ public class DialogFragment extends Fragment {
             }
         });
         dialog.show();
+    }
+
+    public static AlertDialog calendarDialog(Activity activity, View view) {
+        AlertDialog dialog = new AlertDialog.Builder(activity)
+                .setView(view)
+                .create();
+
+        return dialog;
     }
 
     //    fixme later

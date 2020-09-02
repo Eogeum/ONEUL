@@ -38,7 +38,7 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             };
         }
 
-        return new OneulHolder(view, parent.getContext());
+        return new OneulHolder(view);
     }
 
     @Override

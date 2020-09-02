@@ -15,14 +15,4 @@ public class DateTime {
     public static String nowTime() {
         return new SimpleDateFormat("HH:mm").format(System.currentTimeMillis());
     }
-
-    //    현재 시 불러오기
-    public static int nowHour() {
-        return Integer.parseInt(new SimpleDateFormat("HH").format(System.currentTimeMillis()));
-    }
-
-    //    현재 분 불러오기
-    public static int nowMinute() {
-        return Integer.parseInt(new SimpleDateFormat("mm").format(System.currentTimeMillis()));
-    }
 }
