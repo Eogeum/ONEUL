@@ -38,15 +38,24 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     //     테이블 생성
-    private static final String CREATE_ONEUL = "CREATE TABLE " + TABLE_ONEUL + "("
-            + COLUMN_ONO + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ODATE + " TEXT NOT NULL, "
-            + COLUMN_OSTART + " TEXT, " + COLUMN_OEND + " TEXT, " + COLUMN_OTITLE + " TEXT NOT NULL, "
-            + COLUMN_OMEMO + " TEXT, " + COLUMN_ODONE + " INTEGER NOT NULL);";
+    private static final String CREATE_ONEUL =
+            "CREATE TABLE " + TABLE_ONEUL + "(" +
+                    COLUMN_ONO + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_ODATE + " TEXT NOT NULL, " +
+                    COLUMN_OSTART + " TEXT, " +
+                    COLUMN_OEND + " TEXT, " +
+                    COLUMN_OTITLE + " TEXT NOT NULL, " +
+                    COLUMN_OMEMO + " TEXT, " +
+                    COLUMN_ODONE + " INTEGER NOT NULL);";
 
-    private static final String CREATE_PHOTO = "CREATE TABLE " + TABLE_PHOTO + "("
-            + COLUMN_PNO + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_PPHOTO + " BLOB, "
-            + COLUMN_ONO + " INTEGER, CONSTRAINT p_o_oNo FOREIGN KEY(" + COLUMN_ONO + ") REFERENCES "
-            + TABLE_ONEUL + "(" + COLUMN_ONO + "));";
+    private static final String CREATE_PHOTO =
+            "CREATE TABLE " + TABLE_PHOTO + "(" +
+                    COLUMN_PNO + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_PPHOTO + " BLOB, " +
+                    COLUMN_ONO + " INTEGER, " +
+
+                    "CONSTRAINT p_o_oNo FOREIGN KEY(" + COLUMN_ONO + ") REFERENCES " + TABLE_ONEUL +
+                    "(" + COLUMN_ONO + "));";
 
     //    디비 생성자
     public DBHelper(Context context) {
@@ -72,8 +81,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public Oneul getStartOneul() {
         Oneul oneul = null;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODONE + " = 0",
-                null, null, null, null);
+        Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODONE + " = 0", null,
+                null, null, null);
 
         while (cursor.moveToNext()) {
             int oNo = cursor.getInt(cursor.getColumnIndex(COLUMN_ONO));
@@ -117,8 +126,8 @@ public class DBHelper extends SQLiteOpenHelper {
         String[] strings = null;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ONO + " = " + oNo,
-                null, null, null, null);
+        Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ONO + " = " + oNo, null,
+                null, null, null);
 
         while (cursor.moveToNext()) {
             String oDate = cursor.getString(cursor.getColumnIndex((COLUMN_ODATE)));
@@ -140,9 +149,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public void getOneul(String oDate, RecyclerView r_oneul, OneulAdapter adapter) {
         Oneul oneul;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_ONEUL, null,
-                COLUMN_ODATE + " = ? AND " + COLUMN_ODONE + " = 1", new String[]{oDate},
-                null, null, COLUMN_OSTART + " DESC, " + COLUMN_ONO + " DESC");
+        Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODATE + " = ? AND " + COLUMN_ODONE + " = 1",
+                new String[]{oDate}, null, null, COLUMN_OSTART + " DESC, " + COLUMN_ONO + " DESC");
 
         adapter.clear();
 

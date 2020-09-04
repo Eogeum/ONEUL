@@ -22,6 +22,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class DialogFragment {
+    //    fixme 사진
+    public static String currentPhotoPath;
+    public static final int CAMERA_REQUEST_CODE = 101;
+    public static final int GALLERY_REQUEST_CODE = 202;
+
     public static void editMemoDialog(final Activity activity, final int bottomButtonId) {
         final AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setMessage("메모 작성을 취소합니다.")
@@ -58,11 +63,8 @@ public class DialogFragment {
         return dialog;
     }
 
-    //    fixme later
-    public static String currentPhotoPath;
-
     public static void UploadImageDialog(final Activity activity) {
-//        권한 없을 시
+//        권한 없다면
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != 0 ||
                 ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != 0 ||
                 ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != 0) {
@@ -86,10 +88,8 @@ public class DialogFragment {
                 }
             });
             dialog.show();
+//            권한 있다면
         } else {
-            final int CAMERA_REQUEST_CODE = 101;
-            final int GALLERY_REQUEST_CODE = 202;
-
             new AlertDialog.Builder(activity)
                     .setItems(new CharSequence[]{"카메라", "갤러리"}, new DialogInterface.OnClickListener() {
                         @Override
@@ -109,7 +109,8 @@ public class DialogFragment {
 
 //                                        촬영한 사진이 있다면
                                         if (photoFile != null) {
-                                            Uri photoURI = FileProvider.getUriForFile(activity, "com.oneul.fileprovider", photoFile);
+                                            Uri photoURI = FileProvider.getUriForFile(activity,
+                                                    "com.oneul.fileprovider", photoFile);
                                             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
                                             activity.startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
@@ -136,7 +137,7 @@ public class DialogFragment {
         String imageFileName = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(System.currentTimeMillis()) + ".jpg";
         File storageDir = new File(Environment.getExternalStorageDirectory() + "/DCIM", "O:NEUL");
 
-//        폴더가 없으면
+//        폴더 없으면 생성
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }

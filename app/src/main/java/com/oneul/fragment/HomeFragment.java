@@ -49,7 +49,6 @@ public class HomeFragment extends Fragment {
     LinearLayout ll_todayBox, ll_goCalendar, ll_picMemo, ll_cancelMemo, ll_saveMemo;
     Button btn_ok, btn_stop;
     EditText et_oTitle, et_oMemo;
-
     FrameLayout fl_startBox;
     ConstraintLayout cl_startBox;
     TextView t_oTitle, t_oTime, t_oNo, t_oDate;
@@ -180,19 +179,21 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
 //                일과 제목이 없으면
-                if (TextUtils.isEmpty(et_oTitle.getText().toString().trim())) {
+                if (TextUtils.isEmpty(et_oTitle.getText().toString())) {
                     Toast.makeText(getActivity(), "일과 제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
 
 //                    투데이박스 포커스, 키보드 올리기
                     et_oTitle.requestFocus();
                     imm.showSoftInput(et_oTitle, InputMethodManager.SHOW_IMPLICIT);
                 } else {
-//                    기록 시작 및 새로고침
-                    dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null, et_oTitle.getText().toString(),
-                            null, 0);
-                    dateChange();
+                    if (dbHelper.getStartOneul() == null) {
+//                        기록 시작
+                        dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null, et_oTitle.getText().toString(),
+                                null, 0);
+                    }
 
-//                    투데이박스 값 초기화
+//                    새로고침 및 투데이박스 값 초기화
+                    dateChange();
                     et_oTitle.getText().clear();
                 }
             }
@@ -240,7 +241,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogFragment.UploadImageDialog(getActivity());
-//                todo i = resultCode
             }
         });
 
@@ -305,7 +305,8 @@ public class HomeFragment extends Fragment {
 
 //                    기록 종료 및 새로고침
                     dbHelper.endOneul(dbHelper.getStartOneul().getoNo(), DateTime.nowTime());
-                    Toast.makeText(getActivity(), MainActivity.showDay + "\n일과를 저장했습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), MainActivity.showDay + "\n일과를 저장했습니다.",
+                            Toast.LENGTH_LONG).show();
                     dateChange();
 
 //                    메모박스 초기화

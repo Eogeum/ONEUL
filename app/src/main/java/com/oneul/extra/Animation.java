@@ -14,8 +14,7 @@ public class Animation {
         linearLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-        slideAnimator(linearLayout, 0, linearLayout.getMeasuredHeight())
-                .start();
+        slideAnimator(linearLayout, 0, linearLayout.getMeasuredHeight()).start();
     }
 
     //    메모박스 축소

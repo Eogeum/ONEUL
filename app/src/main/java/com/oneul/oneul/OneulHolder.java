@@ -42,14 +42,16 @@ public class OneulHolder extends RecyclerView.ViewHolder {
                                 switch (i) {
 //                            수정
                                     case 0:
-                                        String[] strings = HomeFragment.dbHelper.getEditOneul(Integer.parseInt(t_oNo.getText().toString()));
+                                        String[] strings = HomeFragment.dbHelper.getEditOneul(
+                                                Integer.parseInt(t_oNo.getText().toString()));
                                         intent.putExtra("editOneul", strings);
                                         context.startActivity(intent);
                                         break;
 //                            삭제
                                     case 1:
                                         HomeFragment.dbHelper.deleteOneul(Integer.parseInt(t_oNo.getText().toString()));
-                                        HomeFragment.dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul, HomeFragment.adapter);
+                                        HomeFragment.dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul,
+                                                HomeFragment.adapter);
                                         break;
                                 }
                             }

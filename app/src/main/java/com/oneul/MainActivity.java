@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,7 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.RemoteInput;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -38,34 +38,9 @@ public class MainActivity extends AppCompatActivity {
     public static String showDay = DateTime.today();
     public static boolean useEditMemo = false;
     boolean doubleBackToExitPressedOnce = false;
-    //    리퀘스트 코드
-    final int CAMERA_REQUEST_CODE = 101;
-    final int GALLERY_REQUEST_CODE = 202;
 
     //    ㄴㄴ 뷰
-//    하단 메뉴
     BottomNavigationView bot_menu;
-
-    //    에딧텍스트 언포커스
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-
-            if (v instanceof EditText) {
-                Rect outRect = new Rect();
-                v.getGlobalVisibleRect(outRect);
-
-                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
-                    v.clearFocus();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        }
-
-        return super.dispatchTouchEvent(ev);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,25 +48,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        ㄴㄴ 상단
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+
         //        오레오 이상이면 채널 만들기
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(new NotificationChannel("fixed", "고정",
-                    NotificationManager.IMPORTANCE_LOW));
+//            채널이 없다면
+            if (notificationManager.getNotificationChannel("fixed") == null) {
+                notificationManager.createNotificationChannel(new NotificationChannel("fixed", "고정",
+                        NotificationManager.IMPORTANCE_LOW));
+            }
         }
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, getIntent(),
+//        답장 인텐트
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        RemoteInput remoteInput = new RemoteInput.Builder("KEY_TEXT_REPLY")
-                .setLabel("새로운 일과 제목을 입력하세요.")
+        RemoteInput remoteInput = new RemoteInput.Builder("KEY_REPLY")
+                .setLabel("일과 제목을 입력하세요.")
                 .build();
 
-        NotificationCompat.Action action =
-                new NotificationCompat.Action.Builder(null, "START", pendingIntent)
-                        .addRemoteInput(remoteInput)
-                        .setAllowGeneratedReplies(true)
-                        .build();
+        NotificationCompat.Action action = new NotificationCompat.Action.Builder(null, "START", pendingIntent)
+                .addRemoteInput(remoteInput)
+                .setAllowGeneratedReplies(true)
+                .build();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "fixed")
                 .setSmallIcon(R.drawable.ic_home1)
@@ -99,12 +79,12 @@ public class MainActivity extends AppCompatActivity {
                 .setContentTitle("새로운 일과를 시작해보세요.")
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .addAction(action)
+                .setOnlyAlertOnce(true)
                 .setShowWhen(false)
                 .setOngoing(true)
                 .setColor(Color.parseColor("#E88346"))
                 .setContentIntent(pendingIntent);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(101, builder.build());
 
 //        하단메뉴 클릭 시
@@ -143,6 +123,44 @@ public class MainActivity extends AppCompatActivity {
 
 //        시작 시 홈화면 불러오기
         openFragment(HomeFragment.newInstance());
+        handleIntent();
+    }
+
+    //    화면 전환
+    public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        Fragment fragmentId = getSupportFragmentManager().findFragmentById(R.id.container);
+//        같은 탭을 누를 시 쇼데이 초기화
+        if (fragmentId != null) {
+            if (fragment.getClass() == fragmentId.getClass()) {
+                showDay = DateTime.today();
+            }
+        }
+
+        transaction.replace(R.id.container, fragment);
+        transaction.commit();
+    }
+
+    //    에딧텍스트 언포커스
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+
+                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+
+        return super.dispatchTouchEvent(ev);
     }
 
     //    뒤로가기 종료
@@ -168,20 +186,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //    화면 전환
-    public void openFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    private void handleIntent() {
+        Intent intent = this.getIntent();
 
-        Fragment fragmentId = getSupportFragmentManager().findFragmentById(R.id.container);
-//        같은 탭을 누를 시 쇼데이 초기화
-        if (fragmentId != null) {
-            if (fragment.getClass() == fragmentId.getClass()) {
-                showDay = DateTime.today();
-            }
+        Bundle bundle = RemoteInput.getResultsFromIntent(intent);
+
+        if (bundle != null) {
+            Log.d("TAG", bundle.getCharSequence("KEY_REPLY").toString());
+            HomeFragment.dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null,
+                    bundle.getCharSequence("KEY_REPLY").toString(), null, 0);
         }
-
-        transaction.replace(R.id.container, fragment);
-        transaction.commit();
     }
 
     @Override
@@ -189,13 +203,13 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case CAMERA_REQUEST_CODE:
+                case DialogFragment.CAMERA_REQUEST_CODE:
 
                     break;
 
-                case GALLERY_REQUEST_CODE:
+                case DialogFragment.GALLERY_REQUEST_CODE:
 
-
+                    break;
             }
         }
     }

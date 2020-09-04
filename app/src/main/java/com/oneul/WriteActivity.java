@@ -35,9 +35,6 @@ import java.util.Objects;
 public class WriteActivity extends AppCompatActivity {
     //    ㄴㄴ 데이터
     int startHour, startMinute, endHour, endMinute;
-    //    리퀘스트 코드
-    final int CAMERA_REQUEST_CODE = 101;
-    final int GALLERY_REQUEST_CODE = 202;
 
     //    ㄴㄴ 뷰
     Button btnOk, timeStart, timeEnd, btnImg;
@@ -158,10 +155,10 @@ public class WriteActivity extends AppCompatActivity {
             editTitle.setText(strings[4]);
             editMemo.setText(strings[5]);
 
-            startHour = Integer.parseInt(strings[2].substring(0, 1));
-            startMinute = Integer.parseInt(strings[2].substring(3, 4));
-            endHour = Integer.parseInt(strings[3].substring(0, 1));
-            endMinute = Integer.parseInt(strings[3].substring(3, 4));
+            startHour = Integer.parseInt(strings[2].substring(0, 2));
+            startMinute = Integer.parseInt(strings[2].substring(3, 5));
+            endHour = Integer.parseInt(strings[3].substring(0, 2));
+            endMinute = Integer.parseInt(strings[3].substring(3, 5));
 
             btnOk.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -175,10 +172,12 @@ public class WriteActivity extends AppCompatActivity {
                                 .getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(editTitle, InputMethodManager.SHOW_IMPLICIT);
                     } else {
-                        HomeFragment.dbHelper.editOneul(Integer.parseInt(strings[0]), t_oDate.getText().toString(), timeStart.getText().toString(),
+                        HomeFragment.dbHelper.editOneul(Integer.parseInt(strings[0]), t_oDate.getText().toString(),
+                                timeStart.getText().toString(),
                                 timeEnd.getText().toString(), editTitle.getText().toString(), editMemo.getText().toString());
 
-                        Toast.makeText(getApplicationContext(), MainActivity.showDay + "\n일과를 저장했습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), MainActivity.showDay + "\n일과를 저장했습니다.",
+                                Toast.LENGTH_SHORT).show();
 
                         finish();
                     }
@@ -197,10 +196,12 @@ public class WriteActivity extends AppCompatActivity {
                                 .getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(editTitle, InputMethodManager.SHOW_IMPLICIT);
                     } else {
-                        HomeFragment.dbHelper.addOneul(MainActivity.showDay, timeStart.getText().toString(), timeEnd.getText().toString(),
+                        HomeFragment.dbHelper.addOneul(MainActivity.showDay, timeStart.getText().toString(),
+                                timeEnd.getText().toString(),
                                 editTitle.getText().toString(), editMemo.getText().toString(), 1);
 
-                        Toast.makeText(getApplicationContext(), MainActivity.showDay + "\n일과를 저장했습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), MainActivity.showDay + "\n일과를 저장했습니다.",
+                                Toast.LENGTH_SHORT).show();
 
                         finish();
                     }
@@ -244,6 +245,3 @@ public class WriteActivity extends AppCompatActivity {
         dialog.show();
     }
 }
-
-//    todo: 닫는 버튼이 필요
-//    todo: 작성 화면에서도 날짜 바꿀 수 있게 해야 할듯
