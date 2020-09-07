@@ -10,7 +10,6 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -188,11 +187,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleIntent() {
         Intent intent = this.getIntent();
-
         Bundle bundle = RemoteInput.getResultsFromIntent(intent);
 
         if (bundle != null) {
-            Log.d("TAG", bundle.getCharSequence("KEY_REPLY").toString());
             HomeFragment.dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null,
                     bundle.getCharSequence("KEY_REPLY").toString(), null, 0);
         }

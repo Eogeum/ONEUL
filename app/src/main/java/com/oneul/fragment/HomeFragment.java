@@ -186,8 +186,8 @@ public class HomeFragment extends Fragment {
                     et_oTitle.requestFocus();
                     imm.showSoftInput(et_oTitle, InputMethodManager.SHOW_IMPLICIT);
                 } else {
+//                    기록중인 일과가 없으면 기록 시작
                     if (dbHelper.getStartOneul() == null) {
-//                        기록 시작
                         dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null, et_oTitle.getText().toString(),
                                 null, 0);
                     }
