@@ -80,6 +80,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //    기록중인 일과 불러오기
     public Oneul getStartOneul() {
         Oneul oneul = null;
+
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODONE + " = 0", null,
                 null, null, null);
@@ -148,6 +149,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //    완료일과 불러오기
     public void getOneul(String oDate, RecyclerView r_oneul, OneulAdapter adapter) {
         Oneul oneul;
+
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODATE + " = ? AND " + COLUMN_ODONE + " = 1",
                 new String[]{oDate}, null, null, COLUMN_OSTART + " DESC, " + COLUMN_ONO + " DESC");

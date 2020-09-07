@@ -1,15 +1,12 @@
 package com.oneul;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,8 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.RemoteInput;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -31,6 +26,7 @@ import com.oneul.fragment.DialogFragment;
 import com.oneul.fragment.HomeFragment;
 import com.oneul.fragment.SettingFragment;
 import com.oneul.fragment.StatFragment;
+import com.oneul.service.RealService;
 
 public class MainActivity extends AppCompatActivity {
     //    ㄴㄴ 데이터
@@ -41,50 +37,32 @@ public class MainActivity extends AppCompatActivity {
     //    ㄴㄴ 뷰
     BottomNavigationView bot_menu;
 
+    //    ㄴㄴ 서비스
+    public static Intent serviceIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        ㄴㄴ 상단
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+//        ㄴㄴ 서비스
+//        전원 설정
+        PowerManager pm = (PowerManager) getApplicationContext().getSystemService(POWER_SERVICE);
+        boolean isWhiteListing = pm.isIgnoringBatteryOptimizations(getApplicationContext().getPackageName());
 
-        //        오레오 이상이면 채널 만들기
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            채널이 없다면
-            if (notificationManager.getNotificationChannel("fixed") == null) {
-                notificationManager.createNotificationChannel(new NotificationChannel("fixed", "고정",
-                        NotificationManager.IMPORTANCE_LOW));
-            }
+        if (!isWhiteListing) {
+            Intent intent = new Intent();
+            intent.setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+            startActivity(intent);
         }
-
-//        답장 인텐트
-        Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        RemoteInput remoteInput = new RemoteInput.Builder("KEY_REPLY")
-                .setLabel("일과 제목을 입력하세요.")
-                .build();
-
-        NotificationCompat.Action action = new NotificationCompat.Action.Builder(null, "START", pendingIntent)
-                .addRemoteInput(remoteInput)
-                .setAllowGeneratedReplies(true)
-                .build();
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "fixed")
-                .setSmallIcon(R.drawable.ic_home1)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentTitle("새로운 일과를 시작해보세요.")
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                .addAction(action)
-                .setOnlyAlertOnce(true)
-                .setShowWhen(false)
-                .setOngoing(true)
-                .setColor(Color.parseColor("#E88346"))
-                .setContentIntent(pendingIntent);
-
-        notificationManager.notify(101, builder.build());
+//        서비스 시작
+        if (RealService.serviceIntent == null) {
+            serviceIntent = new Intent(this, RealService.class);
+            startService(serviceIntent);
+        } else {
+            serviceIntent = RealService.serviceIntent;
+        }
 
 //        하단메뉴 클릭 시
         bot_menu = findViewById(R.id.bot_menu);
@@ -122,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
 //        시작 시 홈화면 불러오기
         openFragment(HomeFragment.newInstance());
-        handleIntent();
     }
 
     //    화면 전환
@@ -185,16 +162,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void handleIntent() {
-        Intent intent = this.getIntent();
-        Bundle bundle = RemoteInput.getResultsFromIntent(intent);
-
-        if (bundle != null) {
-            HomeFragment.dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null,
-                    bundle.getCharSequence("KEY_REPLY").toString(), null, 0);
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -209,6 +176,16 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+//        if (serviceIntent != null) {
+//            stopService(serviceIntent);
+//            serviceIntent = null;
+//        }
     }
 }
 

@@ -42,14 +42,4 @@ public class Animation {
 
         return animator;
     }
-
-    //    fab
-    public static void fabSpin(final View view, boolean isFabOpen) {
-        view.animate().setDuration(200).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-            }
-        }).rotation(isFabOpen ? 0f : 135f);
-    }
 }

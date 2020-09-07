@@ -34,6 +34,7 @@ import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
 import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
+import com.oneul.service.RealService;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -51,7 +52,7 @@ public class HomeFragment extends Fragment {
     EditText et_oTitle, et_oMemo;
     FrameLayout fl_startBox;
     ConstraintLayout cl_startBox;
-    TextView t_oTitle, t_oTime, t_oNo, t_oDate;
+    TextView t_oTitle, t_oTime, t_oDate;
     ImageView i_memoBox;
     LinearLayout ll_memoBox;
 
@@ -178,23 +179,31 @@ public class HomeFragment extends Fragment {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                일과 제목이 없으면
-                if (TextUtils.isEmpty(et_oTitle.getText().toString())) {
-                    Toast.makeText(getActivity(), "일과 제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                if (dbHelper.getStartOneul() == null) {
+                    //                일과 제목이 없으면
+                    if (TextUtils.isEmpty(et_oTitle.getText().toString())) {
+                        Toast.makeText(getActivity(), "일과 제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
 
 //                    투데이박스 포커스, 키보드 올리기
-                    et_oTitle.requestFocus();
-                    imm.showSoftInput(et_oTitle, InputMethodManager.SHOW_IMPLICIT);
-                } else {
+                        et_oTitle.requestFocus();
+                        imm.showSoftInput(et_oTitle, InputMethodManager.SHOW_IMPLICIT);
+                    } else {
 //                    기록중인 일과가 없으면 기록 시작
-                    if (dbHelper.getStartOneul() == null) {
-                        dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null, et_oTitle.getText().toString(),
-                                null, 0);
-                    }
+                        if (dbHelper.getStartOneul() == null) {
+                            dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null, et_oTitle.getText().toString(),
+                                    null, 0);
+                        }
 
+//                    새로고침 및 투데이박스 값 초기화
+                        dateChange();
+                        et_oTitle.getText().clear();
+                        restartService();
+                    }
+                } else {
 //                    새로고침 및 투데이박스 값 초기화
                     dateChange();
                     et_oTitle.getText().clear();
+                    restartService();
                 }
             }
         });
@@ -296,22 +305,30 @@ public class HomeFragment extends Fragment {
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                메모 작성중일 시
-                if (MainActivity.useEditMemo) {
-                    DialogFragment.editMemoDialog(getActivity(), 0);
-                } else {
+                if (dbHelper.getStartOneul() != null) {
+                    //                메모 작성중일 시
+                    if (MainActivity.useEditMemo) {
+                        DialogFragment.editMemoDialog(getActivity(), 0);
+                    } else {
 //                    쇼데이 변경
-                    MainActivity.showDay = dbHelper.getStartOneul().getoDate();
+                        MainActivity.showDay = dbHelper.getStartOneul().getoDate();
 
 //                    기록 종료 및 새로고침
-                    dbHelper.endOneul(dbHelper.getStartOneul().getoNo(), DateTime.nowTime());
-                    Toast.makeText(getActivity(), MainActivity.showDay + "\n일과를 저장했습니다.",
-                            Toast.LENGTH_LONG).show();
-                    dateChange();
+                        dbHelper.endOneul(dbHelper.getStartOneul().getoNo(), DateTime.nowTime());
+                        Toast.makeText(getActivity(), MainActivity.showDay + "\n일과를 저장했습니다.",
+                                Toast.LENGTH_LONG).show();
+                        dateChange();
 
 //                    메모박스 초기화
+                        i_memoBox.setImageResource(R.drawable.ic_expand);
+                        Animation.collapse(ll_memoBox);
+                        restartService();
+                    }
+                } else {
                     i_memoBox.setImageResource(R.drawable.ic_expand);
                     Animation.collapse(ll_memoBox);
+                    dateChange();
+                    restartService();
                 }
             }
         });
@@ -320,6 +337,13 @@ public class HomeFragment extends Fragment {
         dateChange();
 
         return homeView;
+    }
+
+    //        서비스 재시작
+    public void restartService() {
+        getActivity().stopService(MainActivity.serviceIntent);
+        MainActivity.serviceIntent = new Intent(getActivity(), RealService.class);
+        getActivity().startService(MainActivity.serviceIntent);
     }
 
     //    날짜 확인 및 헤더 변경
