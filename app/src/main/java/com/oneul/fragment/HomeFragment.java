@@ -60,7 +60,7 @@ public class HomeFragment extends Fragment {
     InputMethodManager imm;
 
     //    ㄴㄴ 디비
-    public static DBHelper dbHelper;
+    DBHelper dbHelper;
     public static OneulAdapter adapter = new OneulAdapter();
 
     //    ㄴㄴ 리사이클
@@ -103,7 +103,7 @@ public class HomeFragment extends Fragment {
         imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
 
 //        ㄴㄴ 디비
-        dbHelper = new DBHelper(getActivity());
+        dbHelper = DBHelper.getDB(getActivity());
 
 //        ㄴㄴ 리사이클
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -341,9 +341,12 @@ public class HomeFragment extends Fragment {
 
     //        서비스 재시작
     public void restartService() {
-        getActivity().stopService(MainActivity.serviceIntent);
-        MainActivity.serviceIntent = new Intent(getActivity(), RealService.class);
-        getActivity().startService(MainActivity.serviceIntent);
+        if (RealService.serviceIntent != null) {
+            getActivity().stopService(RealService.serviceIntent);
+        } else {
+            RealService.serviceIntent = new Intent(getActivity(), RealService.class);
+            getActivity().startService(RealService.serviceIntent);
+        }
     }
 
     //    날짜 확인 및 헤더 변경

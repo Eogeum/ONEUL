@@ -20,8 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.oneul.calendar.OneulDecorator;
+import com.oneul.extra.DBHelper;
 import com.oneul.fragment.DialogFragment;
-import com.oneul.fragment.HomeFragment;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -42,6 +42,9 @@ public class WriteActivity extends AppCompatActivity {
     TextView t_oDate;
     LinearLayout ll_goCalendar;
 
+    //    ㄴㄴ 디비
+    DBHelper dbHelper;
+
     //    ㄴㄴ 캘린더
     View calendarView;
     MaterialCalendarView widget;
@@ -56,6 +59,9 @@ public class WriteActivity extends AppCompatActivity {
         editTitle = findViewById(R.id.editTitle);
         editMemo = findViewById(R.id.editMemo);
         t_oDate = findViewById(R.id.t_oDate);
+
+        //        ㄴㄴ 디비
+        dbHelper = DBHelper.getDB(this);
 
 //        ㄴㄴ 캘린더
         calendarView = getLayoutInflater().inflate(R.layout.fragment_calendar, null);
@@ -81,7 +87,7 @@ public class WriteActivity extends AppCompatActivity {
             }
         });
 //        캘린더 데코레이터
-        widget.addDecorators(new OneulDecorator(HomeFragment.dbHelper.getOneulDates()));
+        widget.addDecorators(new OneulDecorator(dbHelper.getOneulDates()));
 
         //        캘린더 열기
         ll_goCalendar = findViewById(R.id.ll_goCalendar);
@@ -172,7 +178,7 @@ public class WriteActivity extends AppCompatActivity {
                                 .getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(editTitle, InputMethodManager.SHOW_IMPLICIT);
                     } else {
-                        HomeFragment.dbHelper.editOneul(Integer.parseInt(strings[0]), t_oDate.getText().toString(),
+                        dbHelper.editOneul(Integer.parseInt(strings[0]), t_oDate.getText().toString(),
                                 timeStart.getText().toString(),
                                 timeEnd.getText().toString(), editTitle.getText().toString(), editMemo.getText().toString());
 
@@ -196,7 +202,7 @@ public class WriteActivity extends AppCompatActivity {
                                 .getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(editTitle, InputMethodManager.SHOW_IMPLICIT);
                     } else {
-                        HomeFragment.dbHelper.addOneul(MainActivity.showDay, timeStart.getText().toString(),
+                        dbHelper.addOneul(MainActivity.showDay, timeStart.getText().toString(),
                                 timeEnd.getText().toString(),
                                 editTitle.getText().toString(), editMemo.getText().toString(), 1);
 

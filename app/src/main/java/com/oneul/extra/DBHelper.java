@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
+    //    디비
+    private static DBHelper dbHelper;
+
     //    일과 테이블 정보
     public static final String TABLE_ONEUL = "Oneul";
     public static final String COLUMN_ONO = "oNo";
@@ -58,8 +61,17 @@ public class DBHelper extends SQLiteOpenHelper {
                     "(" + COLUMN_ONO + "));";
 
     //    디비 생성자
-    public DBHelper(Context context) {
+    private DBHelper(Context context) {
         super(context, DATABASE_ONEUL, null, DATABASE_VERSION);
+    }
+
+    //    디비 만들기
+    public static synchronized DBHelper getDB(Context context) {
+        if (dbHelper == null) {
+            dbHelper = new DBHelper(context.getApplicationContext());
+        }
+
+        return dbHelper;
     }
 
     //    일과 추가
@@ -99,6 +111,24 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         return oneul;
+    }
+
+    //    일과 사진 추가
+    public void addPhoto(int oNo, String pPhoto) {
+        ContentValues values = new ContentValues();
+        values.put(DBHelper.COLUMN_ONO, oNo);
+        values.put(DBHelper.COLUMN_PPHOTO, pPhoto);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.insert(TABLE_PHOTO, null, values);
+        db.close();
+    }
+
+    //    일과 사진 삭제
+    public void deletePhoto(int pNo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_PHOTO, COLUMN_ONO + " = " + pNo, null);
+        db.close();
     }
 
     //    일과 메모 수정

@@ -36,7 +36,6 @@
             android:name=".service.RealService"
             android:enabled="true" />
 
-        <receiver android:name=".service.AlarmReceiver" />
         <receiver android:name=".service.OneulReceiver" />
         <receiver
             android:name=".service.RebootReceiver"

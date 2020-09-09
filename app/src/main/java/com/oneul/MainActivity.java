@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
 import com.oneul.fragment.DialogFragment;
 import com.oneul.fragment.HomeFragment;
@@ -37,13 +38,16 @@ public class MainActivity extends AppCompatActivity {
     //    ㄴㄴ 뷰
     BottomNavigationView bot_menu;
 
-    //    ㄴㄴ 서비스
-    public static Intent serviceIntent;
+    //    ㄴㄴ 디비
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //    ㄴㄴ 디비
+        dbHelper = DBHelper.getDB(this);
 
 //        ㄴㄴ 서비스
 //        전원 설정
@@ -56,12 +60,10 @@ public class MainActivity extends AppCompatActivity {
             intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
             startActivity(intent);
         }
-//        서비스 시작
+//        서비스없다면 서비스 만들고 시작
         if (RealService.serviceIntent == null) {
-            serviceIntent = new Intent(this, RealService.class);
-            startService(serviceIntent);
-        } else {
-            serviceIntent = RealService.serviceIntent;
+            RealService.serviceIntent = new Intent(this, RealService.class);
+            startService(RealService.serviceIntent);
         }
 
 //        하단메뉴 클릭 시
@@ -168,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case DialogFragment.CAMERA_REQUEST_CODE:
+                    dbHelper.addPhoto(dbHelper.getStartOneul().getoNo(), DialogFragment.currentPhotoPath);
 
                     break;
 
@@ -176,16 +179,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-//        if (serviceIntent != null) {
-//            stopService(serviceIntent);
-//            serviceIntent = null;
-//        }
     }
 }
 

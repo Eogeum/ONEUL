@@ -1,11 +1,9 @@
 package com.oneul.service;
 
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -16,9 +14,7 @@ import androidx.core.app.RemoteInput;
 
 import com.oneul.MainActivity;
 import com.oneul.R;
-import com.oneul.fragment.HomeFragment;
-
-import java.util.Calendar;
+import com.oneul.extra.DBHelper;
 
 public class RealService extends Service {
     public static Intent serviceIntent = null;
@@ -29,6 +25,7 @@ public class RealService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         serviceIntent = intent;
+        DBHelper dbHelper = DBHelper.getDB(this);
 
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
 
@@ -54,7 +51,7 @@ public class RealService extends Service {
         Intent mintent = new Intent(this, OneulReceiver.class);
 
         //            기록중인 일과 있으면
-        if (HomeFragment.dbHelper.getStartOneul() != null) {
+        if (dbHelper.getStartOneul() != null) {
             RemoteInput.Builder remoteInput = new RemoteInput.Builder("KEY_OMEMO")
                     .setLabel("추가할 메모를 입력하세요.");
 
@@ -71,9 +68,9 @@ public class RealService extends Service {
             PendingIntent stopOneulIntent = PendingIntent.getBroadcast(this, 2, mintent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
-            builder.setContentTitle(HomeFragment.dbHelper.getStartOneul().getoTitle())
+            builder.setContentTitle(dbHelper.getStartOneul().getoTitle())
                     .setSubText("진행 중")
-                    .setContentText(HomeFragment.dbHelper.getStartOneul().getoStart())
+                    .setContentText(dbHelper.getStartOneul().getoStart())
                     .addAction(editMemoAction)
                     .addAction(0, "STOP", stopOneulIntent);
         } else {
@@ -102,8 +99,8 @@ public class RealService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        serviceIntent = null;
-        setAlarmTimer();
+        serviceIntent = new Intent(this, RealService.class);
+        startService(serviceIntent);
     }
 
     @Override
@@ -119,16 +116,5 @@ public class RealService extends Service {
     @Override
     public boolean onUnbind(Intent intent) {
         return super.onUnbind(intent);
-    }
-
-    protected void setAlarmTimer() {
-        final Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(System.currentTimeMillis());
-        c.add(Calendar.SECOND, 1);
-        PendingIntent sender = PendingIntent.getBroadcast(this, 0,
-                new Intent(this, AlarmReceiver.class), 0);
-
-        AlarmManager mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        mAlarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
     }
 }

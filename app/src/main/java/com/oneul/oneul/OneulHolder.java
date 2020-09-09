@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.WriteActivity;
+import com.oneul.extra.DBHelper;
 import com.oneul.fragment.HomeFragment;
 
 public class OneulHolder extends RecyclerView.ViewHolder {
@@ -33,6 +34,7 @@ public class OneulHolder extends RecyclerView.ViewHolder {
             @Override
             public boolean onLongClick(View v) {
                 final Context context = v.getContext();
+                final DBHelper dbHelper = DBHelper.getDB(context);
                 final Intent intent = new Intent(context, WriteActivity.class);
 
                 new AlertDialog.Builder(context)
@@ -42,16 +44,15 @@ public class OneulHolder extends RecyclerView.ViewHolder {
                                 switch (i) {
 //                            수정
                                     case 0:
-                                        String[] strings = HomeFragment.dbHelper.getEditOneul(
+                                        String[] strings = dbHelper.getEditOneul(
                                                 Integer.parseInt(t_oNo.getText().toString()));
                                         intent.putExtra("editOneul", strings);
                                         context.startActivity(intent);
                                         break;
 //                            삭제
                                     case 1:
-                                        HomeFragment.dbHelper.deleteOneul(Integer.parseInt(t_oNo.getText().toString()));
-                                        HomeFragment.dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul,
-                                                HomeFragment.adapter);
+                                        dbHelper.deleteOneul(Integer.parseInt(t_oNo.getText().toString()));
+                                        dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul, HomeFragment.adapter);
                                         break;
                                 }
                             }

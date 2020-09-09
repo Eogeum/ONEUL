@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -22,13 +23,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class DialogFragment {
-    //    fixme 사진
     public static String currentPhotoPath;
     public static final int CAMERA_REQUEST_CODE = 101;
     public static final int GALLERY_REQUEST_CODE = 202;
 
+    private static AlertDialog dialog;
+
     public static void editMemoDialog(final Activity activity, final int bottomButtonId) {
-        final AlertDialog dialog = new AlertDialog.Builder(activity)
+        dialog = new AlertDialog.Builder(activity)
                 .setMessage("메모 작성을 취소합니다.")
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -56,7 +58,7 @@ public class DialogFragment {
     }
 
     public static AlertDialog calendarDialog(Activity activity, View view) {
-        AlertDialog dialog = new AlertDialog.Builder(activity)
+        dialog = new AlertDialog.Builder(activity)
                 .setView(view)
                 .create();
 
@@ -68,7 +70,7 @@ public class DialogFragment {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != 0 ||
                 ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != 0 ||
                 ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != 0) {
-            final AlertDialog dialog = new AlertDialog.Builder(activity)
+            dialog = new AlertDialog.Builder(activity)
                     .setMessage("사진 첨부를 위해 카메라 및\n저장소 권한이 필요합니다.")
                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
@@ -88,6 +90,7 @@ public class DialogFragment {
                 }
             });
             dialog.show();
+
 //            권한 있다면
         } else {
             new AlertDialog.Builder(activity)
@@ -104,6 +107,8 @@ public class DialogFragment {
                                         try {
                                             photoFile = createImageFile();
                                         } catch (IOException e) {
+                                            Toast.makeText(activity, "이미지 처리 오류", Toast.LENGTH_SHORT).show();
+                                            activity.finish();
                                             e.printStackTrace();
                                         }
 
@@ -119,9 +124,9 @@ public class DialogFragment {
                                     break;
 
                                 case 1:
-                                    Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-                                    galleryIntent.setType("image/*");
-                                    galleryIntent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                                    Intent galleryIntent = new Intent(Intent.ACTION_PICK)
+                                            .setType("image/*")
+                                            .setType(MediaStore.Images.Media.CONTENT_TYPE);
 
                                     activity.startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
                                     break;
