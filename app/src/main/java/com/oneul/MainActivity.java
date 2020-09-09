@@ -3,6 +3,7 @@ package com.oneul;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -170,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case DialogFragment.CAMERA_REQUEST_CODE:
+                    MediaScannerConnection.scanFile(this, new String[]{DialogFragment.currentPhotoPath},
+                            null, null);
                     dbHelper.addPhoto(dbHelper.getStartOneul().getoNo(), DialogFragment.currentPhotoPath);
 
                     break;

@@ -369,14 +369,20 @@ public class HomeFragment extends Fragment {
                 ll_todayBox.setVisibility(View.VISIBLE);
                 fl_startBox.setVisibility(View.GONE);
             }
+
+            //        일과 불러오기
+            t_oDate.setText(MainActivity.showDay);
+            dbHelper.getOneul(MainActivity.showDay, r_oneul, adapter, "DESC");
+
+//            오늘이 아니면
         } else {
             ll_todayBox.setVisibility(View.GONE);
             fl_startBox.setVisibility(View.GONE);
-        }
 
-//        일과 불러오기
-        t_oDate.setText(MainActivity.showDay);
-        dbHelper.getOneul(MainActivity.showDay, r_oneul, adapter);
+            //        일과 불러오기
+            t_oDate.setText(MainActivity.showDay);
+            dbHelper.getOneul(MainActivity.showDay, r_oneul, adapter, "ASC");
+        }
     }
 
     @Override

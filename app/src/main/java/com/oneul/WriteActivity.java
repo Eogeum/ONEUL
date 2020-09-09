@@ -153,7 +153,7 @@ public class WriteActivity extends AppCompatActivity {
 
 //        일과 저장
         btnOk = findViewById(R.id.btnOk);
-//        불러온 일과가 있으면
+//        불러온 일과 있으면
         if (getIntent().getExtras() != null) {
             final String[] strings = getIntent().getExtras().getStringArray("editOneul");
             timeStart.setText(strings[2]);
@@ -169,44 +169,34 @@ public class WriteActivity extends AppCompatActivity {
             btnOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+//                    일과 제목 공백 체크
                     if (TextUtils.isEmpty(editTitle.getText().toString())) {
-                        Toast.makeText(WriteActivity.this, "일과 제목을 입력하세요.", Toast.LENGTH_SHORT).show();
-
-//                    에딧 텍스트 포커스, 키보드 올리기
-                        editTitle.requestFocus();
-                        InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getApplicationContext())
-                                .getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(editTitle, InputMethodManager.SHOW_IMPLICIT);
+                        checkBlankTitle();
                     } else {
-                        dbHelper.editOneul(Integer.parseInt(strings[0]), t_oDate.getText().toString(),
-                                timeStart.getText().toString(),
+                        dbHelper.editOneul(Integer.parseInt(strings[0]), t_oDate.getText().toString(), timeStart.getText().toString(),
                                 timeEnd.getText().toString(), editTitle.getText().toString(), editMemo.getText().toString());
 
-                        Toast.makeText(getApplicationContext(), MainActivity.showDay + "\n일과를 저장했습니다.",
+                        Toast.makeText(getApplicationContext(), t_oDate.getText() + "\n일과를 수정했습니다.",
                                 Toast.LENGTH_SHORT).show();
 
                         finish();
                     }
                 }
             });
+
+//            불러온 일과 없으면
         } else {
             btnOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+//                    일과 제목 공백 체크
                     if (TextUtils.isEmpty(editTitle.getText().toString())) {
-                        Toast.makeText(WriteActivity.this, "일과 제목을 입력하세요.", Toast.LENGTH_SHORT).show();
-
-//                    에딧 텍스트 포커스, 키보드 올리기
-                        editTitle.requestFocus();
-                        InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getApplicationContext())
-                                .getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(editTitle, InputMethodManager.SHOW_IMPLICIT);
+                        checkBlankTitle();
                     } else {
-                        dbHelper.addOneul(MainActivity.showDay, timeStart.getText().toString(),
-                                timeEnd.getText().toString(),
+                        dbHelper.addOneul(t_oDate.getText().toString(), timeStart.getText().toString(), timeEnd.getText().toString(),
                                 editTitle.getText().toString(), editMemo.getText().toString(), 1);
 
-                        Toast.makeText(getApplicationContext(), MainActivity.showDay + "\n일과를 저장했습니다.",
+                        Toast.makeText(getApplicationContext(), t_oDate.getText() + "\n일과를 저장했습니다.",
                                 Toast.LENGTH_SHORT).show();
 
                         finish();
@@ -217,6 +207,17 @@ public class WriteActivity extends AppCompatActivity {
 
 //        시작 시
         t_oDate.setText(MainActivity.showDay);
+    }
+
+    //    일과 제목 공백 체크
+    private void checkBlankTitle() {
+        Toast.makeText(WriteActivity.this, "일과 제목을 입력하세요.", Toast.LENGTH_SHORT).show();
+
+//        에딧 텍스트 포커스, 키보드 올리기
+        editTitle.requestFocus();
+        InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getApplicationContext())
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editTitle, InputMethodManager.SHOW_IMPLICIT);
     }
 
     //    뒤로가기 시
@@ -241,9 +242,11 @@ public class WriteActivity extends AppCompatActivity {
             }
         });
 
-        //        불러온 일과가 있으면
+//        불러온 일과 있으면
         if (getIntent().getExtras() != null) {
             dialog.setMessage("일과 수정을 취소합니다.\n변경된 내용은 저장되지 않습니다.");
+
+//        불러온 일과 없으면
         } else {
             dialog.setMessage("일과 작성을 취소합니다.\n작성한 내용은 저장되지 않습니다.");
         }

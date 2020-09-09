@@ -71,20 +71,32 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_oPhoto"
+        <RelativeLayout
+            android:id="@+id/rl_oPhoto"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".25"
-            android:orientation="vertical">
+            android:layout_weight=".25">
 
             <ImageView
+                android:id="@+id/i_oPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_home1"
                 tools:ignore="ContentDescription" />
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/t_oPhotoCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:background="@color/mainColor"
+                android:padding="1dp"
+                android:text="+3 "
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

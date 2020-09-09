@@ -123,6 +123,7 @@ public class DialogFragment {
                                     }
                                     break;
 
+//                                갤러리 선택 시
                                 case 1:
                                     Intent galleryIntent = new Intent(Intent.ACTION_PICK)
                                             .setType("image/*")

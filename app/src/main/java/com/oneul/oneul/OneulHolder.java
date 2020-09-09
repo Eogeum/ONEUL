@@ -4,8 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,11 +17,13 @@ import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.WriteActivity;
 import com.oneul.extra.DBHelper;
+import com.oneul.extra.DateTime;
 import com.oneul.fragment.HomeFragment;
 
 public class OneulHolder extends RecyclerView.ViewHolder {
-    TextView t_oNo, t_oTitle, t_oTime, t_oMemo, t_oMore;
-    LinearLayout ll_oPhoto;
+    TextView t_oNo, t_oTitle, t_oTime, t_oMemo, t_oMore, t_oPhotoCount;
+    ImageView i_oPhoto;
+    RelativeLayout rl_oPhoto;
 
     public OneulHolder(View itemView) {
         super(itemView);
@@ -28,7 +33,9 @@ public class OneulHolder extends RecyclerView.ViewHolder {
         t_oTitle = itemView.findViewById(R.id.t_oTitle);
         t_oMemo = itemView.findViewById(R.id.t_oMemo);
         t_oMore = itemView.findViewById(R.id.t_oMore);
-        ll_oPhoto = itemView.findViewById(R.id.ll_oPhoto);
+        t_oPhotoCount = itemView.findViewById(R.id.t_oPhotoCount);
+        i_oPhoto = itemView.findViewById(R.id.i_oPhoto);
+        rl_oPhoto = itemView.findViewById(R.id.rl_oPhoto);
 
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -52,7 +59,14 @@ public class OneulHolder extends RecyclerView.ViewHolder {
 //                            삭제
                                     case 1:
                                         dbHelper.deleteOneul(Integer.parseInt(t_oNo.getText().toString()));
-                                        dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul, HomeFragment.adapter);
+                                        //        오늘이면
+                                        if (TextUtils.equals(MainActivity.showDay, DateTime.today())) {
+                                            dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul, HomeFragment.adapter, "DESC");
+
+//                                            오늘이 아니면
+                                        } else {
+                                            dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul, HomeFragment.adapter, "ASC");
+                                        }
                                         break;
                                 }
                             }
@@ -71,5 +85,8 @@ public class OneulHolder extends RecyclerView.ViewHolder {
         t_oTime.append(" ~ " + oneul.oEnd);
         t_oTitle.setText(oneul.oTitle);
         t_oMemo.setText(oneul.oMemo);
+        if (oneul.pPhoto != null) {
+            i_oPhoto.setImageURI(Uri.parse(oneul.pPhoto));
+        }
     }
 }

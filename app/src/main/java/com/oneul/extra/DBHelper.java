@@ -177,12 +177,14 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //    완료일과 불러오기
-    public void getOneul(String oDate, RecyclerView r_oneul, OneulAdapter adapter) {
+    public void getOneul(String oDate, RecyclerView r_oneul, OneulAdapter adapter, String sort) {
         Oneul oneul;
+        sort = " " + sort;
+        String pPhoto = null;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODATE + " = ? AND " + COLUMN_ODONE + " = 1",
-                new String[]{oDate}, null, null, COLUMN_OSTART + " DESC, " + COLUMN_ONO + " DESC");
+                new String[]{oDate}, null, null, COLUMN_OSTART + sort + ", " + COLUMN_ONO + sort);
 
         adapter.clear();
 
@@ -192,14 +194,22 @@ public class DBHelper extends SQLiteOpenHelper {
             String oEnd = cursor.getString(cursor.getColumnIndex(COLUMN_OEND));
             String oTitle = cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE));
             String oMemo = cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO));
-            oneul = new Oneul(oNo, oDate, oStart, oEnd, oTitle, oMemo);
+
+            Cursor photoCursor = db.query(TABLE_PHOTO, null, COLUMN_ONO + " = " + oNo, null,
+                    null, null, COLUMN_PNO + " ASC");
+            if (photoCursor.moveToFirst()) {
+                pPhoto = photoCursor.getString(photoCursor.getColumnIndex(COLUMN_PPHOTO));
+            }
+
+            oneul = new Oneul(oNo, oDate, oStart, oEnd, oTitle, oMemo, pPhoto);
+
+            photoCursor.close();
 
             adapter.addItem(oneul);
             r_oneul.setAdapter(adapter);
         }
 
         adapter.notifyDataSetChanged();
-
         cursor.close();
         db.close();
     }

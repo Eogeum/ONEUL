@@ -70,12 +70,12 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     if (TextUtils.equals(oneulHolder.t_oMore.getText().toString(), "더보기")) {
-                        oneulHolder.ll_oPhoto.setVisibility(View.GONE);
+                        oneulHolder.rl_oPhoto.setVisibility(View.GONE);
                         oneulHolder.t_oMemo.setMaxLines(Integer.MAX_VALUE);
                         oneulHolder.t_oMemo.setEllipsize(null);
                         oneulHolder.t_oMore.setText("닫기");
                     } else if (TextUtils.equals(oneulHolder.t_oMore.getText().toString(), "닫기")) {
-                        oneulHolder.ll_oPhoto.setVisibility(View.VISIBLE);
+                        oneulHolder.rl_oPhoto.setVisibility(View.VISIBLE);
                         oneulHolder.t_oMemo.setMaxLines(2);
                         oneulHolder.t_oMemo.setEllipsize(TextUtils.TruncateAt.END);
                         oneulHolder.t_oMore.setText("더보기");
