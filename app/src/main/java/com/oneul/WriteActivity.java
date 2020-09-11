@@ -5,8 +5,10 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -218,6 +220,31 @@ public class WriteActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getApplicationContext())
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editTitle, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    //    에딧텍스트 언포커스
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+
+                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
+                    v.clearFocus();
+                    if (v.hasFocus()) {
+                        v.getRootView().requestFocus();
+                    }
+
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+
+        return super.dispatchTouchEvent(ev);
     }
 
     //    뒤로가기 시

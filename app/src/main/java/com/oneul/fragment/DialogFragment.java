@@ -136,6 +136,17 @@ public class DialogFragment {
                     })
                     .create()
                     .show();
+
+//            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//            Intent galleryIntent = new Intent(Intent.ACTION_PICK)
+//                    .setType("image/*")
+//                    .setType(MediaStore.Images.Media.CONTENT_TYPE);
+//
+//            Intent intent = new Intent().createChooser(new Intent(), "null");
+//            intent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{cameraIntent, galleryIntent});
+//
+//            activity.startActivity(intent);
         }
     }
 

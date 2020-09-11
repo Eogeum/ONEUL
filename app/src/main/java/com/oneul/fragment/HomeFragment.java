@@ -47,14 +47,13 @@ import java.util.Objects;
 
 public class HomeFragment extends Fragment {
     //    ㄴㄴ 뷰
-    LinearLayout ll_todayBox, ll_goCalendar, ll_picMemo, ll_cancelMemo, ll_saveMemo;
+    LinearLayout ll_todayBox, ll_goCalendar, ll_memoBox, ll_picMemo, ll_cancelMemo, ll_saveMemo;
     Button btn_ok, btn_stop;
     EditText et_oTitle, et_oMemo;
     FrameLayout fl_startBox;
     ConstraintLayout cl_startBox;
     TextView t_oTitle, t_oTime, t_oDate;
     ImageView i_memoBox;
-    LinearLayout ll_memoBox;
 
     //    ㄴㄴ 키보드
     InputMethodManager imm;
@@ -109,6 +108,7 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         r_oneul = homeView.findViewById(R.id.r_oneul);
         r_oneul.setLayoutManager(linearLayoutManager);
+        r_oneul.setAdapter(adapter);
         r_oneul.setHasFixedSize(true);
         r_oneul.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -197,13 +197,13 @@ public class HomeFragment extends Fragment {
 //                    새로고침 및 투데이박스 값 초기화
                         dateChange();
                         et_oTitle.getText().clear();
-                        restartService();
+                        RealService.restartService(getActivity());
                     }
                 } else {
 //                    새로고침 및 투데이박스 값 초기화
                     dateChange();
                     et_oTitle.getText().clear();
-                    restartService();
+                    RealService.restartService(getActivity());
                 }
             }
         });
@@ -322,13 +322,13 @@ public class HomeFragment extends Fragment {
 //                    메모박스 초기화
                         i_memoBox.setImageResource(R.drawable.ic_expand);
                         Animation.collapse(ll_memoBox);
-                        restartService();
+                        RealService.restartService(getActivity());
                     }
                 } else {
                     i_memoBox.setImageResource(R.drawable.ic_expand);
                     Animation.collapse(ll_memoBox);
                     dateChange();
-                    restartService();
+                    RealService.restartService(getActivity());
                 }
             }
         });
@@ -337,16 +337,6 @@ public class HomeFragment extends Fragment {
         dateChange();
 
         return homeView;
-    }
-
-    //        서비스 재시작
-    public void restartService() {
-        if (RealService.serviceIntent != null) {
-            getActivity().stopService(RealService.serviceIntent);
-        } else {
-            RealService.serviceIntent = new Intent(getActivity(), RealService.class);
-            getActivity().startService(RealService.serviceIntent);
-        }
     }
 
     //    날짜 확인 및 헤더 변경

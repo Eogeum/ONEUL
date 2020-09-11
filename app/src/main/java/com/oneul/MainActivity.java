@@ -61,11 +61,8 @@ public class MainActivity extends AppCompatActivity {
             intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
             startActivity(intent);
         }
-//        서비스없다면 서비스 만들고 시작
-        if (RealService.serviceIntent == null) {
-            RealService.serviceIntent = new Intent(this, RealService.class);
-            startService(RealService.serviceIntent);
-        }
+        //        서비스 재시작
+        RealService.restartService(this);
 
 //        하단메뉴 클릭 시
         bot_menu = findViewById(R.id.bot_menu);
@@ -133,6 +130,10 @@ public class MainActivity extends AppCompatActivity {
 
                 if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
                     v.clearFocus();
+                    if (v.hasFocus()) {
+                        v.getRootView().requestFocus();
+                    }
+
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }

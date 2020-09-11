@@ -1,5 +1,6 @@
 package com.oneul.service;
 
+import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,7 +13,6 @@ import android.os.IBinder;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
-import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.extra.DBHelper;
 
@@ -41,12 +41,13 @@ public class RealService extends Service {
                 .setSmallIcon(R.drawable.ic_home1)
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setShowWhen(false)
+                .setOnlyAlertOnce(true)
                 .setOngoing(true)
-                .setColor(Color.parseColor("#E88346"))
-                .setContentIntent(PendingIntent.getActivity(this, 0,
-                        new Intent(this, MainActivity.class)
-                                .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK),
-                        PendingIntent.FLAG_UPDATE_CURRENT));
+                .setAutoCancel(false)
+                .setColor(Color.parseColor("#E88346"));
+//                .setContentIntent(PendingIntent.getActivity(this, 0,
+//                        new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP),
+//                        PendingIntent.FLAG_UPDATE_CURRENT));
 
         Intent mintent = new Intent(this, OneulReceiver.class);
 
@@ -64,14 +65,20 @@ public class RealService extends Service {
                     .setAllowGeneratedReplies(true)
                     .build();
 
+
             mintent.putExtra("requestCode", 2);
             PendingIntent stopOneulIntent = PendingIntent.getBroadcast(this, 2, mintent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            mintent.putExtra("requestCode", 3);
+            PendingIntent addPhotoIntent = PendingIntent.getBroadcast(this, 3, mintent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
             builder.setContentTitle(dbHelper.getStartOneul().getoTitle())
                     .setSubText("진행 중")
                     .setContentText(dbHelper.getStartOneul().getoStart())
                     .addAction(editMemoAction)
+                    .addAction(0, "사진", addPhotoIntent)
                     .addAction(0, "STOP", stopOneulIntent);
         } else {
             RemoteInput.Builder remoteInput = new RemoteInput.Builder("KEY_OTITLE")
@@ -95,13 +102,22 @@ public class RealService extends Service {
         return START_REDELIVER_INTENT;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        serviceIntent = new Intent(this, RealService.class);
-        startService(serviceIntent);
+    public static void restartService(Activity activity) {
+        if (RealService.serviceIntent != null) {
+            activity.stopService(RealService.serviceIntent);
+        } else {
+            RealService.serviceIntent = new Intent(activity, RealService.class);
+            activity.startService(RealService.serviceIntent);
+        }
     }
+
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//
+//        serviceIntent = new Intent(this, RealService.class);
+//        startService(serviceIntent);
+//    }
 
     @Override
     public void onCreate() {

@@ -1,5 +1,6 @@
 package com.oneul.service;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import androidx.core.app.RemoteInput;
 import com.oneul.MainActivity;
 import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
+import com.oneul.fragment.DialogFragment;
 import com.oneul.oneul.Oneul;
 
 public class OneulReceiver extends BroadcastReceiver {
@@ -58,6 +60,10 @@ public class OneulReceiver extends BroadcastReceiver {
 
                 dbHelper.endOneul(oNo, DateTime.nowTime());
                 Toast.makeText(context, MainActivity.showDay + "\n일과를 저장했습니다.", Toast.LENGTH_LONG).show();
+                break;
+
+            case 3:
+//                DialogFragment.UploadImageDialog((Activity) context);
                 break;
         }
 
