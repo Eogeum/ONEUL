@@ -1,11 +1,10 @@
 package com.oneul.service;
 
-import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.RemoteInput;
@@ -13,7 +12,6 @@ import androidx.core.app.RemoteInput;
 import com.oneul.MainActivity;
 import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
-import com.oneul.fragment.DialogFragment;
 import com.oneul.oneul.Oneul;
 
 public class OneulReceiver extends BroadcastReceiver {
@@ -21,8 +19,6 @@ public class OneulReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         DBHelper dbHelper = DBHelper.getDB(context);
         Bundle bundle;
-
-        Log.d("TAG", String.valueOf(intent.getExtras().getInt("requestCode")));
 
         switch (intent.getExtras().getInt("requestCode")) {
             case 0:
@@ -63,16 +59,12 @@ public class OneulReceiver extends BroadcastReceiver {
                 break;
 
             case 3:
+//                fixme 상단바 호환
 //                DialogFragment.UploadImageDialog((Activity) context);
                 break;
         }
 
-        //        서비스 재시작
-        if (RealService.serviceIntent != null) {
-            context.stopService(RealService.serviceIntent);
-        } else {
-            RealService.serviceIntent = new Intent(context, RealService.class);
-            context.startService(RealService.serviceIntent);
-        }
+//        알림 새로고침
+        context.getSystemService(NotificationManager.class).notify(101, RealService.createNotification(context));
     }
 }

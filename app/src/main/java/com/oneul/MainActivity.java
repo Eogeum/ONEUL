@@ -1,7 +1,9 @@
 package com.oneul;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -18,10 +20,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.oneul.extra.BitmapChanger;
 import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
 import com.oneul.fragment.DialogFragment;
@@ -61,8 +65,11 @@ public class MainActivity extends AppCompatActivity {
             intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
             startActivity(intent);
         }
-        //        서비스 재시작
-        RealService.restartService(this);
+//        서비스가 없으면
+        if (RealService.serviceIntent == null) {
+            RealService.serviceIntent = new Intent(this, RealService.class);
+            startService(RealService.serviceIntent);
+        }
 
 //        하단메뉴 클릭 시
         bot_menu = findViewById(R.id.bot_menu);
@@ -172,16 +179,33 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case DialogFragment.CAMERA_REQUEST_CODE:
+//                    미디어 스캔
                     MediaScannerConnection.scanFile(this, new String[]{DialogFragment.currentPhotoPath},
                             null, null);
-                    dbHelper.addPhoto(dbHelper.getStartOneul().getoNo(), DialogFragment.currentPhotoPath);
 
+//                    사진 디비 저장
+//                    fixme null object
+                    Bitmap bitmap = BitmapChanger.getBitmap(Uri.parse(DialogFragment.currentPhotoPath), this);
+//                    fixme 리사이징
+                    dbHelper.addPhoto(dbHelper.getStartOneul().getoNo(), BitmapChanger.getBytes(bitmap));
                     break;
 
                 case DialogFragment.GALLERY_REQUEST_CODE:
 
                     break;
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+//        todo 효율적인 퍼미션 체크로 변경
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == 0 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
+            DialogFragment.selectorDialog(this);
         }
     }
 }

@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -19,7 +18,6 @@ import androidx.core.content.FileProvider;
 import com.oneul.R;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class DialogFragment {
@@ -43,7 +41,6 @@ public class DialogFragment {
                 })
                 .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
                     }
                 })
                 .create();
@@ -93,50 +90,51 @@ public class DialogFragment {
 
 //            권한 있다면
         } else {
-            new AlertDialog.Builder(activity)
-                    .setItems(new CharSequence[]{"카메라", "갤러리"}, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            switch (i) {
-//                                카메라 선택 시
-                                case 0:
-                                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            selectorDialog(activity);
+        }
 
-                                    if (cameraIntent.resolveActivity(activity.getPackageManager()) != null) {
-                                        File photoFile = null;
-                                        try {
-                                            photoFile = createImageFile();
-                                        } catch (IOException e) {
-                                            Toast.makeText(activity, "이미지 처리 오류", Toast.LENGTH_SHORT).show();
-                                            activity.finish();
-                                            e.printStackTrace();
-                                        }
+    }
+
+    public static void selectorDialog(final Activity activity) {
+        new AlertDialog.Builder(activity)
+                .setItems(new CharSequence[]{"카메라", "갤러리"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        switch (i) {
+//                                카메라 선택 시
+                            case 0:
+                                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                                if (cameraIntent.resolveActivity(activity.getPackageManager()) != null) {
+                                    File photoFile = null;
+                                    photoFile = createImageFile();
 
 //                                        촬영한 사진이 있다면
-                                        if (photoFile != null) {
-                                            Uri photoURI = FileProvider.getUriForFile(activity,
-                                                    "com.oneul.fileprovider", photoFile);
-                                            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                                    if (photoFile != null) {
+                                        Uri photoURI = FileProvider.getUriForFile(activity,
+                                                "com.oneul.fileprovider", photoFile);
+                                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
-                                            activity.startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-                                        }
+                                        activity.startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
                                     }
-                                    break;
+                                }
+                                break;
 
 //                                갤러리 선택 시
-                                case 1:
-                                    Intent galleryIntent = new Intent(Intent.ACTION_PICK)
-                                            .setType("image/*")
-                                            .setType(MediaStore.Images.Media.CONTENT_TYPE);
+                            case 1:
+                                Intent galleryIntent = new Intent(Intent.ACTION_PICK)
+                                        .setType("image/*")
+                                        .setType(MediaStore.Images.Media.CONTENT_TYPE);
 
-                                    activity.startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
-                                    break;
-                            }
+                                activity.startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
+                                break;
                         }
-                    })
-                    .create()
-                    .show();
+                    }
+                })
+                .create()
+                .show();
 
+//            fixme 상단바 호환 처리
 //            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //
 //            Intent galleryIntent = new Intent(Intent.ACTION_PICK)
@@ -147,13 +145,11 @@ public class DialogFragment {
 //            intent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{cameraIntent, galleryIntent});
 //
 //            activity.startActivity(intent);
-        }
     }
 
-    private static File createImageFile() throws IOException {
+    private static File createImageFile() {
         String imageFileName = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(System.currentTimeMillis()) + ".jpg";
         File storageDir = new File(Environment.getExternalStorageDirectory() + "/DCIM", "O:NEUL");
-
 //        폴더 없으면 생성
         if (!storageDir.exists()) {
             storageDir.mkdirs();

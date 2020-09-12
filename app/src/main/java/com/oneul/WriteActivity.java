@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.oneul.calendar.OneulDecorator;
@@ -73,7 +75,6 @@ public class WriteActivity extends AppCompatActivity {
                 .setMinimumDate(CalendarDay.from(2000, 1, 1))
                 .setMaximumDate(CalendarDay.from(2040, 1, 1))
                 .commit();
-        widget.setSelectedDate(LocalDate.parse(MainActivity.showDay));
 //        캘린더 헤더 수정
         widget.setTitleFormatter(new TitleFormatter() {
             @Override
@@ -85,13 +86,11 @@ public class WriteActivity extends AppCompatActivity {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 t_oDate.setText(widget.getSelectedDate().getDate().toString());
-                calendarDialog.cancel();
+                calendarDialog.dismiss();
             }
         });
-//        캘린더 데코레이터
-        widget.addDecorators(new OneulDecorator(dbHelper.getOneulDates()));
 
-        //        캘린더 열기
+//        캘린더 열기
         ll_goCalendar = findViewById(R.id.ll_goCalendar);
         ll_goCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,5 +278,12 @@ public class WriteActivity extends AppCompatActivity {
         }
 
         dialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+//        fixme 메인 액티비티 복붙
     }
 }

@@ -1,6 +1,7 @@
 package com.oneul.fragment;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -123,7 +124,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //        ㄴㄴ fab
+//        ㄴㄴ fab
         fab_goWrite = homeView.findViewById(R.id.fab_goWrite);
         fab_goWrite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,15 +133,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //        ㄴㄴ 캘린더
+//        ㄴㄴ 캘린더
         calendarView = inflater.inflate(R.layout.fragment_calendar, null);
         widget = calendarView.findViewById(R.id.mc_calendar);
-        //        최소 최대 날짜 설정
+//        최소 최대 날짜 설정
         widget.state().edit()
                 .setMinimumDate(CalendarDay.from(2000, 1, 1))
                 .setMaximumDate(CalendarDay.from(2040, 1, 1))
                 .commit();
-        widget.setSelectedDate(LocalDate.parse(MainActivity.showDay));
 //        캘린더 헤더 수정
         widget.setTitleFormatter(new TitleFormatter() {
             @Override
@@ -153,11 +153,8 @@ public class HomeFragment extends Fragment {
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 MainActivity.showDay = widget.getSelectedDate().getDate().toString();
                 dateChange();
-                calendarDialog.dismiss();
             }
         });
-//        캘린더 데코레이터
-        widget.addDecorators(new OneulDecorator(dbHelper.getOneulDates()));
 
 //        캘린더 열기
         ll_goCalendar = homeView.findViewById(R.id.ll_goCalendar);
@@ -169,6 +166,8 @@ public class HomeFragment extends Fragment {
                     calendarDialog = DialogFragment.calendarDialog(getActivity(), calendarView);
                 }
 
+                widget.removeDecorators();
+                widget.addDecorators(new OneulDecorator(dbHelper.getOneulDates()));
                 widget.setSelectedDate(LocalDate.parse(MainActivity.showDay));
                 calendarDialog.show();
             }
@@ -180,30 +179,34 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (dbHelper.getStartOneul() == null) {
-                    //                일과 제목이 없으면
+//                    일과 제목이 없으면
                     if (TextUtils.isEmpty(et_oTitle.getText().toString())) {
                         Toast.makeText(getActivity(), "일과 제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
 
-//                    투데이박스 포커스, 키보드 올리기
+//                        투데이박스 포커스, 키보드 올리기
                         et_oTitle.requestFocus();
                         imm.showSoftInput(et_oTitle, InputMethodManager.SHOW_IMPLICIT);
                     } else {
-//                    기록중인 일과가 없으면 기록 시작
+//                        기록중인 일과가 없으면 기록 시작
                         if (dbHelper.getStartOneul() == null) {
                             dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null, et_oTitle.getText().toString(),
                                     null, 0);
                         }
 
-//                    새로고침 및 투데이박스 값 초기화
+//                       새로고침 및 투데이박스 값 초기화
                         dateChange();
                         et_oTitle.getText().clear();
-                        RealService.restartService(getActivity());
+//                       알림 새로고침
+                        getActivity().getSystemService(NotificationManager.class).notify(101,
+                                RealService.createNotification(getActivity()));
                     }
                 } else {
 //                    새로고침 및 투데이박스 값 초기화
                     dateChange();
                     et_oTitle.getText().clear();
-                    RealService.restartService(getActivity());
+//                   알림 새로고침
+                    getActivity().getSystemService(NotificationManager.class).notify(101,
+                            RealService.createNotification(getActivity()));
                 }
             }
         });
@@ -322,18 +325,22 @@ public class HomeFragment extends Fragment {
 //                    메모박스 초기화
                         i_memoBox.setImageResource(R.drawable.ic_expand);
                         Animation.collapse(ll_memoBox);
-                        RealService.restartService(getActivity());
+//                       알림 새로고침
+                        getActivity().getSystemService(NotificationManager.class).notify(101,
+                                RealService.createNotification(getActivity()));
                     }
                 } else {
                     i_memoBox.setImageResource(R.drawable.ic_expand);
                     Animation.collapse(ll_memoBox);
                     dateChange();
-                    RealService.restartService(getActivity());
+//                   알림 새로고침
+                    getActivity().getSystemService(NotificationManager.class).notify(101,
+                            RealService.createNotification(getActivity()));
                 }
             }
         });
 
-        //        시작 시
+//        시작 시
         dateChange();
 
         return homeView;

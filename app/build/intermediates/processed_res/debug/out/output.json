@@ -21,7 +21,7 @@
       "properties": {
         "packageId": "com.oneul",
         "split": "",
-        "minSdkVersion": "22"
+        "minSdkVersion": "24"
       }
     }
   ]

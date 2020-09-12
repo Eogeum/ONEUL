@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.WriteActivity;
+import com.oneul.extra.BitmapChanger;
 import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
 import com.oneul.fragment.HomeFragment;
@@ -86,7 +86,7 @@ public class OneulHolder extends RecyclerView.ViewHolder {
         t_oTitle.setText(oneul.oTitle);
         t_oMemo.setText(oneul.oMemo);
         if (oneul.pPhoto != null) {
-            i_oPhoto.setImageURI(Uri.parse(oneul.pPhoto));
+            i_oPhoto.setImageBitmap(BitmapChanger.getBitmap(oneul.pPhoto));
         }
     }
 }

@@ -82,6 +82,8 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     }
                 }
             });
+
+//            fixme 사진 눌렀을 때 자세히보기 추가
         }
     }
 

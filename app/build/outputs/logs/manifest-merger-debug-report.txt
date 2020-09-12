@@ -1,13 +1,13 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-41:12
-INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-41:12
-INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-41:12
-INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-41:12
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-61:12
+INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-61:12
+INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-61:12
+INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-61:12
 MERGED from [com.google.android.material:material:1.2.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\d776e52f087aabc381b0b4907fc988e8\material-1.2.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\65b26ec11e574f5d68d3fe93c8217bcb\jetified-viewpager2-1.0.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\6e57c04e98c372fcd8878b95a3d5645d\recyclerview-1.1.0\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.constraintlayout:constraintlayout:2.0.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\cfc3727f378f618c2734a1d3997e85c9\constraintlayout-2.0.0\AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\86e1e5d883ec66c1063a0d9a82a27792\constraintlayout-2.0.1\AndroidManifest.xml:2:1-11:12
 MERGED from [com.github.prolificinteractive:material-calendarview:2.0.1] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\c0fbe01bd6e6c401395ec5e3d470235e\jetified-material-calendarview-2.0.1\AndroidManifest.xml:2:1-19:12
 MERGED from [androidx.appcompat:appcompat:1.2.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\bf96d2b5a86ecd602a621e7e96856420\appcompat-1.2.0\AndroidManifest.xml:17:1-24:12
 MERGED from [com.jakewharton.threetenabp:threetenabp:1.2.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\f97a537468deb4120d564ba2513e9deb\jetified-threetenabp-1.2.0\AndroidManifest.xml:2:1-9:12
@@ -44,49 +44,59 @@ MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\Eogeum\.gradl
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\7282e00d74c6a6acf53f4bfd68421266\lifecycle-livedata-core-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\73114719268a97e9fd391905563b2ee9\core-runtime-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.annotation:annotation-experimental:1.0.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\1e0614212b25f4ae67724a3587ed8129\jetified-annotation-experimental-1.0.0\AndroidManifest.xml:17:1-24:12
-INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-41:12
-INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-41:12
-INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-41:12
+INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-61:12
+INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-61:12
+INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-61:12
 	package
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:3:5-24
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:4:5-24
 		INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml
 		INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml
 	android:versionName
 		INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-41:12
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-61:12
 		INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml
+	xmlns:tools
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:3:5-51
 	android:versionCode
 		INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-41:12
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:1-61:12
 		INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:2:11-69
 uses-feature#android.hardware.camera2
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:5:5-61
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:6:5-61
 	android:name
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:5:19-58
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:6:19-58
 uses-permission#android.permission.FOREGROUND_SERVICE
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:7:5-77
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:8:5-77
 	android:name
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:7:22-74
-uses-permission#android.permission.READ_EXTERNAL_STORAGE
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:8:5-80
-	android:name
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:8:22-77
-uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:8:22-74
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
 ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:9:5-81
 	android:name
 		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:9:22-78
-uses-permission#android.permission.CAMERA
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:10:5-65
+uses-permission#android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:10:5-95
 	android:name
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:10:22-62
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:10:22-92
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:11:5-80
+	android:name
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:11:22-77
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:12:5-81
+	android:name
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:12:22-78
+uses-permission#android.permission.CAMERA
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:13:5-65
+	android:name
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:13:22-62
 application
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:12:5-40:19
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:15:5-60:19
 MERGED from [com.google.android.material:material:1.2.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\d776e52f087aabc381b0b4907fc988e8\material-1.2.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.2.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\d776e52f087aabc381b0b4907fc988e8\material-1.2.0\AndroidManifest.xml:22:5-20
-MERGED from [androidx.constraintlayout:constraintlayout:2.0.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\cfc3727f378f618c2734a1d3997e85c9\constraintlayout-2.0.0\AndroidManifest.xml:9:5-20
-MERGED from [androidx.constraintlayout:constraintlayout:2.0.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\cfc3727f378f618c2734a1d3997e85c9\constraintlayout-2.0.0\AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\86e1e5d883ec66c1063a0d9a82a27792\constraintlayout-2.0.1\AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\86e1e5d883ec66c1063a0d9a82a27792\constraintlayout-2.0.1\AndroidManifest.xml:9:5-20
 MERGED from [com.github.prolificinteractive:material-calendarview:2.0.1] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\c0fbe01bd6e6c401395ec5e3d470235e\jetified-material-calendarview-2.0.1\AndroidManifest.xml:11:5-17:19
 MERGED from [com.github.prolificinteractive:material-calendarview:2.0.1] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\c0fbe01bd6e6c401395ec5e3d470235e\jetified-material-calendarview-2.0.1\AndroidManifest.xml:11:5-17:19
 MERGED from [com.jakewharton.threetenabp:threetenabp:1.2.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\f97a537468deb4120d564ba2513e9deb\jetified-threetenabp-1.2.0\AndroidManifest.xml:7:5-20
@@ -96,59 +106,89 @@ MERGED from [androidx.core:core:1.3.1] C:\Users\Eogeum\.gradle\caches\transforms
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\67aa86ef8808cac41aa5afe6d271f3ea\versionedparcelable-1.1.0\AndroidManifest.xml:24:5-25:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\67aa86ef8808cac41aa5afe6d271f3ea\versionedparcelable-1.1.0\AndroidManifest.xml:24:5-25:19
 	android:screenOrientation
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:18:9-45
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:21:9-45
 	android:requestLegacyExternalStorage
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:16:9-52
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:19:9-52
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.3.1] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\ae3468b444d41a56f261ecbb8448fe17\core-1.3.1\AndroidManifest.xml:24:18-86
 	android:supportsRtl
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:19:9-35
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:22:9-35
 	android:label
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:15:9-41
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:18:9-41
 	android:roundIcon
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:17:9-54
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:20:9-54
+	tools:targetApi
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:24:9-28
 	android:icon
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:14:9-43
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:17:9-43
 	android:allowBackup
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:13:9-36
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:16:9-36
 	android:theme
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:20:9-40
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:23:9-40
 provider#androidx.core.content.FileProvider
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:21:9-29:20
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:25:9-33:20
 	android:grantUriPermissions
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:25:13-47
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:29:13-47
 	android:authorities
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:23:13-57
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:27:13-57
 	android:exported
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:24:13-37
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:28:13-37
 	android:name
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:22:13-62
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:26:13-62
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:26:13-28:54
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:30:13-32:54
 	android:resource
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:28:17-51
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:32:17-51
 	android:name
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:27:17-67
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:31:17-67
+service#com.oneul.service.RealService
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:35:9-37:38
+	android:enabled
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:37:13-35
+	android:name
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:36:13-48
+receiver#com.oneul.service.OneulReceiver
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:39:9-59
+	android:name
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:39:19-56
+receiver#com.oneul.service.RebootReceiver
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:40:9-48:20
+	android:process
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:44:13-38
+	android:enabled
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:42:13-35
+	android:exported
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:43:13-37
+	android:name
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:41:13-51
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:45:13-47:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:46:17-79
+	android:name
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:46:25-76
 activity#com.oneul.WriteActivity
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:31:9-51
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:50:9-51
 	android:name
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:31:19-48
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:50:19-48
 activity#com.oneul.MainActivity
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:32:9-39:20
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:51:9-59:20
+	android:launchMode
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:53:13-43
 	android:windowSoftInputMode
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:34:13-52
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:54:13-52
 	android:name
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:33:13-41
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:52:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:35:13-38:29
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:55:13-58:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:36:17-69
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:56:17-69
 	android:name
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:36:25-66
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:56:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:37:17-77
+ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:57:17-77
 	android:name
-		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:37:27-74
+		ADDED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml:57:27-74
 uses-sdk
 INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\Eogeum\AndroidStudioProjects\ONEUL\app\src\main\AndroidManifest.xml
@@ -159,8 +199,8 @@ MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\Eogeum\.gradle\cache
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\65b26ec11e574f5d68d3fe93c8217bcb\jetified-viewpager2-1.0.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\6e57c04e98c372fcd8878b95a3d5645d\recyclerview-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.recyclerview:recyclerview:1.1.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\6e57c04e98c372fcd8878b95a3d5645d\recyclerview-1.1.0\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.constraintlayout:constraintlayout:2.0.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\cfc3727f378f618c2734a1d3997e85c9\constraintlayout-2.0.0\AndroidManifest.xml:5:5-7:41
-MERGED from [androidx.constraintlayout:constraintlayout:2.0.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\cfc3727f378f618c2734a1d3997e85c9\constraintlayout-2.0.0\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\86e1e5d883ec66c1063a0d9a82a27792\constraintlayout-2.0.1\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\86e1e5d883ec66c1063a0d9a82a27792\constraintlayout-2.0.1\AndroidManifest.xml:5:5-7:41
 MERGED from [com.github.prolificinteractive:material-calendarview:2.0.1] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\c0fbe01bd6e6c401395ec5e3d470235e\jetified-material-calendarview-2.0.1\AndroidManifest.xml:7:5-9:41
 MERGED from [com.github.prolificinteractive:material-calendarview:2.0.1] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\c0fbe01bd6e6c401395ec5e3d470235e\jetified-material-calendarview-2.0.1\AndroidManifest.xml:7:5-9:41
 MERGED from [androidx.appcompat:appcompat:1.2.0] C:\Users\Eogeum\.gradle\caches\transforms-2\files-2.1\bf96d2b5a86ecd602a621e7e96856420\appcompat-1.2.0\AndroidManifest.xml:20:5-22:41

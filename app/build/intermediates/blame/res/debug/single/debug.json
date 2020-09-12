@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\layout_home_recycler.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\layout\\home_recycler.xml"
+    },
+    {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher_round.xml"
     },
@@ -8,24 +12,28 @@
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\layout\\fragment_stat.xml"
     },
     {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v24_ic_launcher_foreground.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v24\\ic_launcher_foreground.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_ic_launcher_foreground.png.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\generated\\res\\pngs\\debug\\drawable-xxhdpi\\ic_launcher_foreground.png"
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_setting.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_setting.xml"
     },
     {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\font_nanum_barun_gothic.otf.flat",
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\font\\nanum_barun_gothic.otf"
     },
     {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_home2.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_home2.xml"
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_add_photo.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_add_photo.xml"
     },
     {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_ic_launcher_foreground.png.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\generated\\res\\pngs\\debug\\drawable-xhdpi\\ic_launcher_foreground.png"
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\xml_file_paths.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\xml\\file_paths.xml"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher.xml"
     },
     {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
@@ -56,80 +64,8 @@
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\layout\\activity_write.xml"
     },
     {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_home3.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_home3.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher_round.png.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_round.png"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\layout_test.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\layout\\test.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_home_startbox_et.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\home_startbox_et.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_round.png"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher_round.png.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher_round.png"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_write.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_write.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\font_font.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\font\\font.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_home_todaybox_et.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\home_todaybox_et.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_ic_launcher_foreground.png.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\generated\\res\\pngs\\debug\\drawable-mdpi\\ic_launcher_foreground.png"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_calendar.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_calendar.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_write_et.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\write_et.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\layout_home_recycler.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\layout\\home_recycler.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\xml_file_paths.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\xml\\file_paths.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\anim_fab_open.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\anim\\fab_open.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi_ic_launcher_foreground.png.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\generated\\res\\pngs\\debug\\drawable-ldpi\\ic_launcher_foreground.png"
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_launcher_foreground.xml"
     },
     {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_launcher_background.xml.flat",
@@ -152,24 +88,24 @@
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\write_sh.xml"
     },
     {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_ic_launcher_foreground.png.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\generated\\res\\pngs\\debug\\drawable-xxxhdpi\\ic_launcher_foreground.png"
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_stat.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_stat.xml"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_round.png"
     },
     {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_setting.xml.flat",
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\layout\\fragment_setting.xml"
     },
     {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_fab.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_fab.xml"
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_cancel.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_cancel.xml"
     },
     {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\menu_bot_menu.xml.flat",
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\menu\\bot_menu.xml"
-    },
-    {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\anim_fab_close.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\anim\\fab_close.xml"
     },
     {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\color_bot_menu.xml.flat",
@@ -184,20 +120,56 @@
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_expand.xml"
     },
     {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_home_startbox_et.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\home_startbox_et.xml"
+    },
+    {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_home_todaybox_cl.xml.flat",
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\home_todaybox_cl.xml"
     },
     {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_home1.xml.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_home1.xml"
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_save.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_save.xml"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_home.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_home.xml"
     },
     {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_home_memobox_ll.xml.flat",
         "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\home_memobox_ll.xml"
     },
     {
-        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_ic_launcher_foreground.png.flat",
-        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\generated\\res\\pngs\\debug\\drawable-hdpi\\ic_launcher_foreground.png"
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_write.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_write.xml"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\font_font.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\font\\font.xml"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_home_todaybox_et.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\home_todaybox_et.xml"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_write_et.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\write_et.xml"
+    },
+    {
+        "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_calendar.xml.flat",
+        "source": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\src\\main\\res\\drawable\\ic_calendar.xml"
     },
     {
         "merged": "C:\\Users\\Eogeum\\AndroidStudioProjects\\ONEUL\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_main.xml.flat",

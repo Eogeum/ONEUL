@@ -1,8 +1,11 @@
 package com.oneul.oneul;
 
+import androidx.annotation.Nullable;
+
 public class Oneul {
     int oNo;
-    String oDate, oStart, oEnd, oTitle, oMemo, pPhoto;
+    String oDate, oStart, oEnd, oTitle, oMemo;
+    byte[] pPhoto;
 
     public Oneul(int oNo, String oDate, String oStart, String oTitle, String oMemo) {
         this.oNo = oNo;
@@ -12,7 +15,7 @@ public class Oneul {
         this.oMemo = oMemo;
     }
 
-    public Oneul(int oNo, String oDate, String oStart, String oEnd, String oTitle, String oMemo, String pPhoto) {
+    public Oneul(int oNo, String oDate, String oStart, String oEnd, String oTitle, String oMemo, @Nullable byte[] pPhoto) {
         this.oNo = oNo;
         this.oDate = oDate;
         this.oStart = oStart;
@@ -46,7 +49,7 @@ public class Oneul {
         return oMemo;
     }
 
-    public String getpPhoto() {
+    public byte[] getpPhoto() {
         return pPhoto;
     }
 }
