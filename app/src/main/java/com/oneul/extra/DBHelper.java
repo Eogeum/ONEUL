@@ -155,7 +155,6 @@ public class DBHelper extends SQLiteOpenHelper {
     //    특정 일과 불러오기
     public String[] getEditOneul(int oNo) {
         String[] strings = null;
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ONO + " = " + oNo, null,
                 null, null, null);
@@ -178,15 +177,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //    완료일과 불러오기
     public void getOneul(String oDate, RecyclerView r_oneul, OneulAdapter adapter, String sort) {
-        Oneul oneul;
+        adapter.clear();
         sort = " " + sort;
-        byte[] pPhoto = null;
 
+        Oneul oneul;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODATE + " = ? AND " + COLUMN_ODONE + " = 1",
                 new String[]{oDate}, null, null, COLUMN_OSTART + sort + ", " + COLUMN_ONO + sort);
-
-        adapter.clear();
 
         while (cursor.moveToNext()) {
             int oNo = cursor.getInt(cursor.getColumnIndex(COLUMN_ONO));
@@ -194,9 +191,8 @@ public class DBHelper extends SQLiteOpenHelper {
             String oEnd = cursor.getString(cursor.getColumnIndex(COLUMN_OEND));
             String oTitle = cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE));
             String oMemo = cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO));
+            byte[] pPhoto = null;
 
-
-//            fixme 미리보기 추가
             Cursor photoCursor = db.query(TABLE_PHOTO, null, COLUMN_ONO + " = " + oNo, null,
                     null, null, COLUMN_PNO + " ASC");
             if (photoCursor.moveToFirst()) {
@@ -204,13 +200,11 @@ public class DBHelper extends SQLiteOpenHelper {
             }
             photoCursor.close();
 
-
             oneul = new Oneul(oNo, oDate, oStart, oEnd, oTitle, oMemo, pPhoto);
             adapter.addItem(oneul);
-            r_oneul.setAdapter(adapter);
         }
 
-        adapter.notifyDataSetChanged();
+        r_oneul.setAdapter(adapter);
         cursor.close();
         db.close();
     }

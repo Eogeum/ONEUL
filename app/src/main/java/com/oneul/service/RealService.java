@@ -86,7 +86,8 @@ public class RealService extends Service {
                     .setSubText("진행 중")
                     .setContentText(dbHelper.getStartOneul().getoStart())
                     .addAction(editMemoAction)
-                    .addAction(0, "사진", addPhotoIntent)
+//                    fixme 상다바 호환
+//                    .addAction(0, "사진", addPhotoIntent)
                     .addAction(0, "STOP", stopOneulIntent);
         } else {
             RemoteInput.Builder remoteInput = new RemoteInput.Builder("KEY_OTITLE")

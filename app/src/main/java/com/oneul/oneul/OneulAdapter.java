@@ -84,6 +84,12 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
 
 //            fixme 사진 눌렀을 때 자세히보기 추가
+            oneulHolder.rl_oPhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
     }
 

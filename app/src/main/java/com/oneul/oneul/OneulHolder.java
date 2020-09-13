@@ -35,6 +35,7 @@ public class OneulHolder extends RecyclerView.ViewHolder {
         t_oMore = itemView.findViewById(R.id.t_oMore);
         t_oPhotoCount = itemView.findViewById(R.id.t_oPhotoCount);
         i_oPhoto = itemView.findViewById(R.id.i_oPhoto);
+        t_oPhotoCount = itemView.findViewById(R.id.t_oPhotoCount);
         rl_oPhoto = itemView.findViewById(R.id.rl_oPhoto);
 
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -86,7 +87,11 @@ public class OneulHolder extends RecyclerView.ViewHolder {
         t_oTitle.setText(oneul.oTitle);
         t_oMemo.setText(oneul.oMemo);
         if (oneul.pPhoto != null) {
-            i_oPhoto.setImageBitmap(BitmapChanger.getBitmap(oneul.pPhoto));
+            i_oPhoto.setImageBitmap(BitmapChanger.bytesToBitmap(oneul.pPhoto));
+//            fixme 사진 카운팅 추가
+            t_oPhotoCount.setVisibility(View.GONE);
+        } else {
+            rl_oPhoto.setVisibility(View.GONE);
         }
     }
 }

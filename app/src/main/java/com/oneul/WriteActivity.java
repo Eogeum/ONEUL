@@ -5,8 +5,13 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.media.ExifInterface;
+import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -23,7 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.oneul.calendar.OneulDecorator;
+import com.oneul.extra.BitmapChanger;
 import com.oneul.extra.DBHelper;
 import com.oneul.fragment.DialogFragment;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -34,6 +39,7 @@ import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class WriteActivity extends AppCompatActivity {
@@ -196,7 +202,6 @@ public class WriteActivity extends AppCompatActivity {
                     } else {
                         dbHelper.addOneul(t_oDate.getText().toString(), timeStart.getText().toString(), timeEnd.getText().toString(),
                                 editTitle.getText().toString(), editMemo.getText().toString(), 1);
-
                         Toast.makeText(getApplicationContext(), t_oDate.getText() + "\n일과를 저장했습니다.",
                                 Toast.LENGTH_SHORT).show();
 
@@ -284,6 +289,55 @@ public class WriteActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//        fixme 메인 액티비티 복붙
+//        todo 메인 액티비티 복붙
+        if (resultCode == RESULT_OK) {
+            Bitmap bitmap = null;
+
+            switch (requestCode) {
+                case DialogFragment.CAMERA_REQUEST_CODE:
+//                    미디어 스캔
+                    MediaScannerConnection.scanFile(this, new String[]{DialogFragment.currentPhotoPath},
+                            null, null);
+
+                    bitmap = BitmapFactory.decodeFile(DialogFragment.currentPhotoPath);
+                    try {
+                        ExifInterface ei = new ExifInterface(DialogFragment.currentPhotoPath);
+
+                        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                                ExifInterface.ORIENTATION_UNDEFINED);
+
+                        switch(orientation) {
+                            case ExifInterface.ORIENTATION_ROTATE_90:
+                                bitmap = rotateImage(bitmap, 90);
+                                break;
+
+                            case ExifInterface.ORIENTATION_ROTATE_180:
+                                bitmap = rotateImage(bitmap, 180);
+                                break;
+
+                            case ExifInterface.ORIENTATION_ROTATE_270:
+                                bitmap = rotateImage(bitmap, 270);
+                                break;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+
+                case DialogFragment.GALLERY_REQUEST_CODE:
+                    bitmap = BitmapChanger.getBitmap(data.getData(), this);
+                    break;
+            }
+
+            bitmap = BitmapChanger.checkAndResize(bitmap);
+            dbHelper.addPhoto(dbHelper.getStartOneul().getoNo(), BitmapChanger.bitmapToBytes(bitmap));
+        }
+    }
+
+    public Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
     }
 }

@@ -153,6 +153,7 @@ public class HomeFragment extends Fragment {
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 MainActivity.showDay = widget.getSelectedDate().getDate().toString();
                 dateChange();
+                calendarDialog.dismiss();
             }
         });
 
@@ -165,7 +166,6 @@ public class HomeFragment extends Fragment {
                 if (calendarDialog == null) {
                     calendarDialog = DialogFragment.calendarDialog(getActivity(), calendarView);
                 }
-
                 widget.removeDecorators();
                 widget.addDecorators(new OneulDecorator(dbHelper.getOneulDates()));
                 widget.setSelectedDate(LocalDate.parse(MainActivity.showDay));
@@ -385,12 +385,5 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        dateChange();
     }
 }

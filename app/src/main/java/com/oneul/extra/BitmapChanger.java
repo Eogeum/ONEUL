@@ -12,15 +12,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class BitmapChanger {
-    public static byte[] getBytes(Bitmap bitmap) {
+    public static byte[] bitmapToBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
         return stream.toByteArray();
     }
 
-    public static Bitmap getBitmap(byte[] image) {
-        return BitmapFactory.decodeByteArray(image, 0, image.length);
+    public static Bitmap bytesToBitmap(byte[] bytes) {
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
     public static Bitmap getBitmap(Uri uri, Context context) {
@@ -38,6 +38,21 @@ public class BitmapChanger {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        return bitmap;
+    }
+
+    public static Bitmap checkAndResize(Bitmap bitmap) {
+        byte[] bytes = BitmapChanger.bitmapToBytes(bitmap);
+
+        if (bytes.length > 1000 * 1024) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            options.inSampleSize = 4;
+            options.inJustDecodeBounds = false;
+
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
         }
 
         return bitmap;
