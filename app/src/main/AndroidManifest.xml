@@ -47,6 +47,9 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".CameraActivity"
+            android:theme="@style/Theme.Transparent" />
         <activity android:name=".WriteActivity" />
         <activity
             android:name=".MainActivity"

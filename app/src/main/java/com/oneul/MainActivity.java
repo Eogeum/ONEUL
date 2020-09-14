@@ -3,12 +3,7 @@ package com.oneul;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.media.ExifInterface;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,15 +24,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.oneul.extra.BitmapChanger;
-import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
 import com.oneul.fragment.DialogFragment;
 import com.oneul.fragment.HomeFragment;
 import com.oneul.fragment.SettingFragment;
 import com.oneul.fragment.StatFragment;
 import com.oneul.service.RealService;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     //    ㄴㄴ 데이터
@@ -48,16 +40,10 @@ public class MainActivity extends AppCompatActivity {
     //    ㄴㄴ 뷰
     BottomNavigationView bot_menu;
 
-    //    ㄴㄴ 디비
-    DBHelper dbHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //    ㄴㄴ 디비
-        dbHelper = DBHelper.getDB(this);
 
 //        ㄴㄴ 서비스
 //        전원 설정
@@ -179,61 +165,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            Bitmap bitmap = null;
-
-            switch (requestCode) {
-                case DialogFragment.CAMERA_REQUEST_CODE:
-//                    미디어 스캔
-                    MediaScannerConnection.scanFile(this, new String[]{DialogFragment.currentPhotoPath},
-                            null, null);
-
-                    bitmap = BitmapFactory.decodeFile(DialogFragment.currentPhotoPath);
-                    try {
-                        ExifInterface ei = new ExifInterface(DialogFragment.currentPhotoPath);
-
-                        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                                ExifInterface.ORIENTATION_UNDEFINED);
-
-                        switch(orientation) {
-                            case ExifInterface.ORIENTATION_ROTATE_90:
-                                bitmap = rotateImage(bitmap, 90);
-                                break;
-
-                            case ExifInterface.ORIENTATION_ROTATE_180:
-                                bitmap = rotateImage(bitmap, 180);
-                                break;
-
-                            case ExifInterface.ORIENTATION_ROTATE_270:
-                                bitmap = rotateImage(bitmap, 270);
-                                break;
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-
-                case DialogFragment.GALLERY_REQUEST_CODE:
-                    bitmap = BitmapChanger.getBitmap(data.getData(), this);
-                    break;
-            }
-
-            bitmap = BitmapChanger.checkAndResize(bitmap);
-            dbHelper.addPhoto(dbHelper.getStartOneul().getoNo(), BitmapChanger.bitmapToBytes(bitmap));
-        }
-    }
-
-    public Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
@@ -243,6 +174,13 @@ public class MainActivity extends AppCompatActivity {
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
             DialogFragment.selectorDialog(this);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        BitmapChanger.resultToDB(this, requestCode, resultCode, data);
     }
 }
 

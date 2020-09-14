@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
+import com.oneul.CameraActivity;
 import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.extra.DBHelper;
@@ -78,16 +79,15 @@ public class RealService extends Service {
             PendingIntent stopOneulIntent = PendingIntent.getBroadcast(context, 2, mintent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
-            mintent.putExtra("requestCode", 3);
-            PendingIntent addPhotoIntent = PendingIntent.getBroadcast(context, 3, mintent,
+            mintent = new Intent(context, CameraActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent addPhotoIntent = PendingIntent.getActivity(context, 3, mintent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
             builder.setContentTitle(dbHelper.getStartOneul().getoTitle())
                     .setSubText("진행 중")
                     .setContentText(dbHelper.getStartOneul().getoStart())
                     .addAction(editMemoAction)
-//                    fixme 상다바 호환
-//                    .addAction(0, "사진", addPhotoIntent)
+                    .addAction(0, "사진", addPhotoIntent)
                     .addAction(0, "STOP", stopOneulIntent);
         } else {
             RemoteInput.Builder remoteInput = new RemoteInput.Builder("KEY_OTITLE")

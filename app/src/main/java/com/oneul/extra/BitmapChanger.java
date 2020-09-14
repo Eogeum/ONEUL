@@ -1,12 +1,21 @@
 package com.oneul.extra;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+
+import androidx.annotation.Nullable;
+
+import com.oneul.fragment.DialogFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -57,4 +66,57 @@ public class BitmapChanger {
 
         return bitmap;
     }
+
+    public static Bitmap rotateBitmap(Bitmap bitmap, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
+    public static void resultToDB(Activity activity, int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            Bitmap bitmap = null;
+
+            switch (requestCode) {
+                case DialogFragment.CAMERA_REQUEST_CODE:
+//                    미디어 스캔
+                    MediaScannerConnection.scanFile(activity, new String[]{DialogFragment.photoPath},
+                            null, null);
+
+                    bitmap = BitmapFactory.decodeFile(DialogFragment.photoPath);
+                    try {
+                        ExifInterface ei = new ExifInterface(DialogFragment.photoPath);
+                        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                                ExifInterface.ORIENTATION_UNDEFINED);
+
+                        switch (orientation) {
+                            case ExifInterface.ORIENTATION_ROTATE_90:
+                                bitmap = rotateBitmap(bitmap, 90);
+                                break;
+
+                            case ExifInterface.ORIENTATION_ROTATE_180:
+                                bitmap = rotateBitmap(bitmap, 180);
+                                break;
+
+                            case ExifInterface.ORIENTATION_ROTATE_270:
+                                bitmap = rotateBitmap(bitmap, 270);
+                                break;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+
+                case DialogFragment.GALLERY_REQUEST_CODE:
+                    bitmap = getBitmap(data.getData(), activity);
+                    break;
+            }
+
+            bitmap = checkAndResize(bitmap);
+            DBHelper dbHelper = DBHelper.getDB(activity);
+            dbHelper.addPhoto(dbHelper.getStartOneul().getoNo(), bitmapToBytes(bitmap));
+        }
+    }
+
 }

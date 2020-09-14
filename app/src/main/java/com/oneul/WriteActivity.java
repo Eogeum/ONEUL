@@ -1,5 +1,7 @@
 package com.oneul;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -8,7 +10,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.media.MediaScannerConnection;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.oneul.extra.BitmapChanger;
 import com.oneul.extra.DBHelper;
@@ -45,6 +47,7 @@ import java.util.Objects;
 public class WriteActivity extends AppCompatActivity {
     //    ㄴㄴ 데이터
     int startHour, startMinute, endHour, endMinute;
+    byte[] bytes;
 
     //    ㄴㄴ 뷰
     Button btnOk, timeStart, timeEnd, btnImg;
@@ -70,7 +73,7 @@ public class WriteActivity extends AppCompatActivity {
         editMemo = findViewById(R.id.editMemo);
         t_oDate = findViewById(R.id.t_oDate);
 
-        //        ㄴㄴ 디비
+//        ㄴㄴ 디비
         dbHelper = DBHelper.getDB(this);
 
 //        ㄴㄴ 캘린더
@@ -201,7 +204,7 @@ public class WriteActivity extends AppCompatActivity {
                         checkBlankTitle();
                     } else {
                         dbHelper.addOneul(t_oDate.getText().toString(), timeStart.getText().toString(), timeEnd.getText().toString(),
-                                editTitle.getText().toString(), editMemo.getText().toString(), 1);
+                                editTitle.getText().toString(), editMemo.getText().toString(), bytes,1);
                         Toast.makeText(getApplicationContext(), t_oDate.getText() + "\n일과를 저장했습니다.",
                                 Toast.LENGTH_SHORT).show();
 
@@ -289,34 +292,34 @@ public class WriteActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//        todo 메인 액티비티 복붙
-        if (resultCode == RESULT_OK) {
+        bytes = null;
+
+        if (resultCode == Activity.RESULT_OK) {
             Bitmap bitmap = null;
 
             switch (requestCode) {
                 case DialogFragment.CAMERA_REQUEST_CODE:
 //                    미디어 스캔
-                    MediaScannerConnection.scanFile(this, new String[]{DialogFragment.currentPhotoPath},
+                    MediaScannerConnection.scanFile(this, new String[]{DialogFragment.photoPath},
                             null, null);
 
-                    bitmap = BitmapFactory.decodeFile(DialogFragment.currentPhotoPath);
+                    bitmap = BitmapFactory.decodeFile(DialogFragment.photoPath);
                     try {
-                        ExifInterface ei = new ExifInterface(DialogFragment.currentPhotoPath);
-
+                        ExifInterface ei = new ExifInterface(DialogFragment.photoPath);
                         int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                                 ExifInterface.ORIENTATION_UNDEFINED);
 
-                        switch(orientation) {
+                        switch (orientation) {
                             case ExifInterface.ORIENTATION_ROTATE_90:
-                                bitmap = rotateImage(bitmap, 90);
+                                bitmap = BitmapChanger.rotateBitmap(bitmap, 90);
                                 break;
 
                             case ExifInterface.ORIENTATION_ROTATE_180:
-                                bitmap = rotateImage(bitmap, 180);
+                                bitmap = BitmapChanger.rotateBitmap(bitmap, 180);
                                 break;
 
                             case ExifInterface.ORIENTATION_ROTATE_270:
-                                bitmap = rotateImage(bitmap, 270);
+                                bitmap = BitmapChanger.rotateBitmap(bitmap, 270);
                                 break;
                         }
                     } catch (IOException e) {
@@ -330,14 +333,19 @@ public class WriteActivity extends AppCompatActivity {
             }
 
             bitmap = BitmapChanger.checkAndResize(bitmap);
-            dbHelper.addPhoto(dbHelper.getStartOneul().getoNo(), BitmapChanger.bitmapToBytes(bitmap));
+            bytes = BitmapChanger.bitmapToBytes(bitmap);
         }
     }
 
-    public Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+//        todo 효율적인 퍼미션 체크로 변경
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == 0 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
+            DialogFragment.selectorDialog(this);
+        }
     }
 }

@@ -26,7 +26,7 @@ public class OneulReceiver extends BroadcastReceiver {
 
                 if (bundle != null) {
                     dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null,
-                            bundle.getCharSequence("KEY_OTITLE").toString(), null, 0);
+                            bundle.getCharSequence("KEY_OTITLE").toString(), null, null, 0);
                 }
                 break;
 
@@ -56,11 +56,6 @@ public class OneulReceiver extends BroadcastReceiver {
 
                 dbHelper.endOneul(oNo, DateTime.nowTime());
                 Toast.makeText(context, MainActivity.showDay + "\n일과를 저장했습니다.", Toast.LENGTH_LONG).show();
-                break;
-
-            case 3:
-//                fixme 상단바 호환
-//                DialogFragment.UploadImageDialog((Activity) context);
                 break;
         }
 

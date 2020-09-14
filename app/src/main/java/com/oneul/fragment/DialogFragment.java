@@ -21,7 +21,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 
 public class DialogFragment {
-    public static String currentPhotoPath;
+    public static String photoPath;
     public static final int CAMERA_REQUEST_CODE = 101;
     public static final int GALLERY_REQUEST_CODE = 202;
 
@@ -91,20 +91,7 @@ public class DialogFragment {
 //            권한 있다면
         } else {
             selectorDialog(activity);
-
-            //            fixme 상단바 호환 처리
-//            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//
-//            Intent galleryIntent = new Intent(Intent.ACTION_PICK)
-//                    .setType("image/*")
-//                    .setType(MediaStore.Images.Media.CONTENT_TYPE);
-//
-//            Intent intent = new Intent().createChooser(new Intent(), "null");
-//            intent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{cameraIntent, galleryIntent});
-//
-//            activity.startActivity(intent);
         }
-
     }
 
     public static void selectorDialog(final Activity activity) {
@@ -113,26 +100,32 @@ public class DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (i) {
-//                                카메라 선택 시
+//                            카메라 선택 시
                             case 0:
+//                                임시 파일 만들기
+                                String fileName = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")
+                                        .format(System.currentTimeMillis()) + ".jpg";
+                                File fileDir = new File(Environment.getExternalStorageDirectory() +
+                                        "/DCIM", "O:NEUL");
+                                if (!fileDir.exists()) {
+                                    fileDir.mkdirs();
+                                }
+                                File file = new File(fileDir, fileName);
+                                photoPath = file.getAbsolutePath();
+
+//                                카메라 인텐트
                                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                                 if (cameraIntent.resolveActivity(activity.getPackageManager()) != null) {
-                                    File photoFile = null;
-                                    photoFile = createImageFile();
-
-//                                        촬영한 사진이 있다면
-                                    if (photoFile != null) {
-                                        Uri photoURI = FileProvider.getUriForFile(activity,
-                                                "com.oneul.fileprovider", photoFile);
-                                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-
-                                        activity.startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-                                    }
+                                    Uri photoURI = FileProvider.getUriForFile(activity,
+                                            "com.oneul.fileprovider", file);
+                                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                                 }
+
+                                activity.startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
                                 break;
 
-//                                갤러리 선택 시
+//                            갤러리 선택 시
                             case 1:
                                 Intent galleryIntent = new Intent(Intent.ACTION_PICK)
                                         .setType("image/*")
@@ -145,19 +138,5 @@ public class DialogFragment {
                 })
                 .create()
                 .show();
-    }
-
-    private static File createImageFile() {
-        String imageFileName = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(System.currentTimeMillis()) + ".jpg";
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/DCIM", "O:NEUL");
-//        폴더 없으면 생성
-        if (!storageDir.exists()) {
-            storageDir.mkdirs();
-        }
-
-        File imageFile = new File(storageDir, imageFileName);
-        currentPhotoPath = imageFile.getAbsolutePath();
-
-        return imageFile;
     }
 }

@@ -189,8 +189,8 @@ public class HomeFragment extends Fragment {
                     } else {
 //                        기록중인 일과가 없으면 기록 시작
                         if (dbHelper.getStartOneul() == null) {
-                            dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null, et_oTitle.getText().toString(),
-                                    null, 0);
+                            dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null,
+                                    et_oTitle.getText().toString(), null, null, 0);
                         }
 
 //                       새로고침 및 투데이박스 값 초기화
@@ -380,6 +380,13 @@ public class HomeFragment extends Fragment {
             t_oDate.setText(MainActivity.showDay);
             dbHelper.getOneul(MainActivity.showDay, r_oneul, adapter, "ASC");
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        dateChange();
     }
 
     @Override

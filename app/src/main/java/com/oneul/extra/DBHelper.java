@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oneul.oneul.Oneul;
@@ -75,7 +76,8 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //    일과 추가
-    public void addOneul(String oDate, String oStart, String oEnd, String oTitle, String oMemo, int oDone) {
+    public void addOneul(String oDate, String oStart, String oEnd, String oTitle, String oMemo,
+                         @Nullable byte[] pPhoto, int oDone) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_ODATE, oDate);
         values.put(DBHelper.COLUMN_OSTART, oStart);
@@ -87,6 +89,21 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_ONEUL, null, values);
         db.close();
+
+        if (pPhoto != null) {
+            db = this.getReadableDatabase();
+            Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODONE + " = 1",
+                    null, null, null, null);
+
+            if (cursor.moveToLast()) {
+                int oNo = cursor.getInt(cursor.getColumnIndex(COLUMN_ONO));
+
+                cursor.close();
+                db.close();
+
+                addPhoto(oNo, pPhoto);
+            }
+        }
     }
 
     //    기록중인 일과 불러오기
