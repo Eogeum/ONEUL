@@ -48,7 +48,7 @@ public class RealService extends Service {
         DBHelper dbHelper = DBHelper.getDB(context);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "101")
-                .setSmallIcon(R.drawable.ic_home)
+                .setSmallIcon(R.drawable.ic_main)
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setShowWhen(false)
                 .setOnlyAlertOnce(true)
