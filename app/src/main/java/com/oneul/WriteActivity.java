@@ -334,6 +334,7 @@ public class WriteActivity extends AppCompatActivity {
 
             bitmap = BitmapChanger.checkAndResize(bitmap);
             bytes = BitmapChanger.bitmapToBytes(bitmap);
+            Toast.makeText(this, "사진을 추가했습니다.", Toast.LENGTH_SHORT).show();
         }
     }
 

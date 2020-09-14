@@ -12,6 +12,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -116,7 +117,7 @@ public class BitmapChanger {
             bitmap = checkAndResize(bitmap);
             DBHelper dbHelper = DBHelper.getDB(activity);
             dbHelper.addPhoto(dbHelper.getStartOneul().getoNo(), bitmapToBytes(bitmap));
+            Toast.makeText(activity, "사진을 추가했습니다.", Toast.LENGTH_SHORT).show();
         }
     }
-
 }
