@@ -79,7 +79,7 @@ public class RealService extends Service {
             PendingIntent stopOneulIntent = PendingIntent.getBroadcast(context, 2, mintent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
-            mintent = new Intent(context, CameraActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mintent = new Intent(context, CameraActivity.class);
             PendingIntent addPhotoIntent = PendingIntent.getActivity(context, 3, mintent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 

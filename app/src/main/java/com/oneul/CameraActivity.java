@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,7 +25,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 
 public class CameraActivity extends AppCompatActivity {
-    public static String photoPath;
     public static final int CAMERA_REQUEST_CODE = 101;
     public static final int GALLERY_REQUEST_CODE = 202;
 
@@ -77,7 +77,7 @@ public class CameraActivity extends AppCompatActivity {
                                         fileDir.mkdirs();
                                     }
                                     File file = new File(fileDir, fileName);
-                                    photoPath = file.getAbsolutePath();
+                                    DialogFragment.photoPath = file.getAbsolutePath();
 
 //                                카메라 인텐트
                                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -102,9 +102,9 @@ public class CameraActivity extends AppCompatActivity {
                             }
                         }
                     })
-                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
-                        public void onDismiss(DialogInterface dialog) {
+                        public void onCancel(DialogInterface dialog) {
                             finish();
                         }
                     })
@@ -118,7 +118,7 @@ public class CameraActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         BitmapChanger.resultToDB(this, requestCode, resultCode, data);
-        finish();
+        Toast.makeText(this, "사진을 추가했습니다.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
