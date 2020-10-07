@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:focusable="true"
-    android:id="@+id/tessss"
     android:focusableInTouchMode="true"
     tools:context=".fragment.HomeFragment"
     tools:ignore="HardcodedText, RelativeOverlap">
@@ -43,12 +42,8 @@
                     android:layout_marginStart="6dp"
                     android:text="2020.08.31"
                     android:textColor="@color/darkGray"
-                    android:textSize="24sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_expand" />
+                    android:textSize="24sp"
+                    app:drawableEndCompat="@drawable/ic_expand" />
             </LinearLayout>
         </LinearLayout>
 
@@ -198,6 +193,21 @@
                             android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
+
+                <HorizontalScrollView
+                    android:id="@+id/hs_imagePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="4dp"
+                    android:scrollbars="none"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/ll_imagePreview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

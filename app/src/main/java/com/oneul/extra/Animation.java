@@ -19,14 +19,14 @@ public class Animation {
 
     //    메모박스 축소
     public static void collapse(final LinearLayout linearLayout) {
-        ValueAnimator mAnimator = slideAnimator(linearLayout, linearLayout.getHeight(), 0);
-        mAnimator.addListener(new AnimatorListenerAdapter() {
+        ValueAnimator animator = slideAnimator(linearLayout, linearLayout.getHeight(), 0);
+        animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 linearLayout.setVisibility(View.GONE);
             }
         });
-        mAnimator.start();
+        animator.start();
     }
 
     public static ValueAnimator slideAnimator(final LinearLayout linearLayout, int start, int end) {

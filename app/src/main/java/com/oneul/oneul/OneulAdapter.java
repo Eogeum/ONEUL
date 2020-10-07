@@ -28,8 +28,6 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_recycler, parent, false);
-
         if (viewType == 1) {
             LinearLayout linearLayout = new LinearLayout(parent.getContext());
             linearLayout.setLayoutParams(new ViewGroup.LayoutParams(0, 200));
@@ -38,7 +36,8 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             };
         }
 
-        return new OneulHolder(view);
+        return new OneulHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.home_recycler,
+                parent, false));
     }
 
     @Override
@@ -80,14 +79,6 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         oneulHolder.t_oMemo.setEllipsize(TextUtils.TruncateAt.END);
                         oneulHolder.t_oMore.setText("더보기");
                     }
-                }
-            });
-
-//            fixme 사진 눌렀을 때 자세히보기 추가
-            oneulHolder.rl_oPhoto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
                 }
             });
         }

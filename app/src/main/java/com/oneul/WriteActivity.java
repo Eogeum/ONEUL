@@ -1,18 +1,11 @@
 package com.oneul;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Rect;
-import android.media.ExifInterface;
-import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -26,11 +19,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
-import com.oneul.extra.BitmapChanger;
 import com.oneul.extra.DBHelper;
 import com.oneul.fragment.DialogFragment;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -41,7 +31,6 @@ import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public class WriteActivity extends AppCompatActivity {
@@ -157,7 +146,7 @@ public class WriteActivity extends AppCompatActivity {
         btnImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment.UploadImageDialog(WriteActivity.this);
+                startActivity(new Intent(WriteActivity.this, CameraActivity.class));
             }
         });
 
@@ -183,8 +172,9 @@ public class WriteActivity extends AppCompatActivity {
                     if (TextUtils.isEmpty(editTitle.getText().toString())) {
                         checkBlankTitle();
                     } else {
-                        dbHelper.editOneul(Integer.parseInt(strings[0]), t_oDate.getText().toString(), timeStart.getText().toString(),
-                                timeEnd.getText().toString(), editTitle.getText().toString(), editMemo.getText().toString());
+                        dbHelper.editOneul(Integer.parseInt(strings[0]), t_oDate.getText().toString(),
+                                timeStart.getText().toString(), timeEnd.getText().toString(),
+                                editTitle.getText().toString(), editMemo.getText().toString());
 
                         Toast.makeText(getApplicationContext(), t_oDate.getText() + "\n일과를 수정했습니다.",
                                 Toast.LENGTH_SHORT).show();
@@ -203,8 +193,10 @@ public class WriteActivity extends AppCompatActivity {
                     if (TextUtils.isEmpty(editTitle.getText().toString())) {
                         checkBlankTitle();
                     } else {
-                        dbHelper.addOneul(t_oDate.getText().toString(), timeStart.getText().toString(), timeEnd.getText().toString(),
-                                editTitle.getText().toString(), editMemo.getText().toString(), bytes,1);
+                        dbHelper.addOneul(t_oDate.getText().toString(), timeStart.getText().toString(),
+                                timeEnd.getText().toString(), editTitle.getText().toString(),
+                                editMemo.getText().toString(), bytes, 1);
+
                         Toast.makeText(getApplicationContext(), t_oDate.getText() + "\n일과를 저장했습니다.",
                                 Toast.LENGTH_SHORT).show();
 
@@ -232,24 +224,7 @@ public class WriteActivity extends AppCompatActivity {
     //    에딧텍스트 언포커스
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-
-            if (v instanceof EditText) {
-                Rect outRect = new Rect();
-                v.getGlobalVisibleRect(outRect);
-
-                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
-                    v.clearFocus();
-                    if (v.hasFocus()) {
-                        v.getRootView().requestFocus();
-                    }
-
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        }
+        MainActivity.resetFocus(this, ev);
 
         return super.dispatchTouchEvent(ev);
     }
@@ -286,67 +261,5 @@ public class WriteActivity extends AppCompatActivity {
         }
 
         dialog.show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        bytes = null;
-
-        if (resultCode == Activity.RESULT_OK) {
-            Bitmap bitmap = null;
-
-            switch (requestCode) {
-                case DialogFragment.CAMERA_REQUEST_CODE:
-//                    미디어 스캔
-                    MediaScannerConnection.scanFile(this, new String[]{DialogFragment.photoPath},
-                            null, null);
-
-                    bitmap = BitmapFactory.decodeFile(DialogFragment.photoPath);
-                    try {
-                        ExifInterface ei = new ExifInterface(DialogFragment.photoPath);
-                        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                                ExifInterface.ORIENTATION_UNDEFINED);
-
-                        switch (orientation) {
-                            case ExifInterface.ORIENTATION_ROTATE_90:
-                                bitmap = BitmapChanger.rotateBitmap(bitmap, 90);
-                                break;
-
-                            case ExifInterface.ORIENTATION_ROTATE_180:
-                                bitmap = BitmapChanger.rotateBitmap(bitmap, 180);
-                                break;
-
-                            case ExifInterface.ORIENTATION_ROTATE_270:
-                                bitmap = BitmapChanger.rotateBitmap(bitmap, 270);
-                                break;
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-
-                case DialogFragment.GALLERY_REQUEST_CODE:
-                    bitmap = BitmapChanger.getBitmap(data.getData(), this);
-                    break;
-            }
-
-            bitmap = BitmapChanger.checkAndResize(bitmap);
-            bytes = BitmapChanger.bitmapToBytes(bitmap);
-            Toast.makeText(this, "사진을 추가했습니다.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-//        todo 효율적인 퍼미션 체크로 변경
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == 0 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
-            DialogFragment.selectorDialog(this);
-        }
     }
 }

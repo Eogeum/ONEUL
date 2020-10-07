@@ -62,7 +62,7 @@ public class DialogFragment {
         return dialog;
     }
 
-    public static void UploadImageDialog(final Activity activity) {
+    public static void checkPermissionDialog(final Activity activity) {
 //        권한 없다면
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != 0 ||
                 ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != 0 ||
@@ -86,16 +86,22 @@ public class DialogFragment {
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#E88346"));
                 }
             });
+            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    activity.finish();
+                }
+            });
             dialog.show();
 
 //            권한 있다면
         } else {
-            selectorDialog(activity);
+            addPhotoDialog(activity);
         }
     }
 
-    public static void selectorDialog(final Activity activity) {
-        new AlertDialog.Builder(activity)
+    public static void addPhotoDialog(final Activity activity) {
+        dialog = new AlertDialog.Builder(activity)
                 .setItems(new CharSequence[]{"카메라", "갤러리"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -129,6 +135,7 @@ public class DialogFragment {
                             case 1:
                                 Intent galleryIntent = new Intent(Intent.ACTION_PICK)
                                         .setType("image/*")
+                                        .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                                         .setType(MediaStore.Images.Media.CONTENT_TYPE);
 
                                 activity.startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
@@ -136,7 +143,77 @@ public class DialogFragment {
                         }
                     }
                 })
-                .create()
-                .show();
+                .create();
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                activity.finish();
+            }
+        });
+        dialog.show();
     }
+
+//    fixme 사진 수정 기능
+//    public static StfalconImageViewer<Bitmap> imageViewer(Context context, final DBHelper dbHelper) {
+//        View viewer = View.inflate(context, R.layout.view_overlay, null);
+//        ImageView i_delete = viewer.findViewById(R.id.i_delete);
+//        i_delete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dbHelper.deletePhoto(integers.get(0));
+//            }
+//        });
+//
+//        List<Integer> integers;
+//        List<Bitmap> bitmaps;
+//        integers = dbHelper.getpNos(oNo);
+//
+//        StfalconImageViewer<Bitmap> imageViewer = new StfalconImageViewer.Builder<>(context, bitmaps, new ImageLoader<Bitmap>() {
+//            @Override
+//            public void loadImage(ImageView imageView, Bitmap image) {
+//                imageView.setImageBitmap(image);
+//            }
+//        })
+//                .withOverlayView(viewer)
+//                .withImageChangeListener(new OnImageChangeListener() {
+//                    @Override
+//                    public void onImageChange(final int position) {
+//                        i_delete.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//
+//                            }
+//
+//                        });
+//                    }
+//                })
+//                .show();
+//
+//        AlertDialog dialog = new AlertDialog.Builder(context)
+//                .setMessage("사진을 삭제합니다.")
+//                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        dbHelper.deletePhoto(integers.get(position));
+//                        imageViewer.updateImages();
+//                        Toast.makeText(context, "삭제 되었습니다.", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                    }
+//                })
+//                .create();
+//        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+//            @Override
+//            public void onShow(DialogInterface dialogInterface) {
+//                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
+//                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#E88346"));
+//            }
+//        });
+//        dialog.show();
+//
+//        return null;
+//    }
 }
+
+//fixme 최적화

@@ -25,7 +25,12 @@ public class OneulHolder extends RecyclerView.ViewHolder {
     ImageView i_oPhoto;
     RelativeLayout rl_oPhoto;
 
-    public OneulHolder(View itemView) {
+    Context context;
+    DBHelper dbHelper;
+
+    int oNo;
+
+    public OneulHolder(final View itemView) {
         super(itemView);
 
         t_oNo = itemView.findViewById(R.id.t_oNo);
@@ -33,18 +38,18 @@ public class OneulHolder extends RecyclerView.ViewHolder {
         t_oTitle = itemView.findViewById(R.id.t_oTitle);
         t_oMemo = itemView.findViewById(R.id.t_oMemo);
         t_oMore = itemView.findViewById(R.id.t_oMore);
-        t_oPhotoCount = itemView.findViewById(R.id.t_oPhotoCount);
         i_oPhoto = itemView.findViewById(R.id.i_oPhoto);
         t_oPhotoCount = itemView.findViewById(R.id.t_oPhotoCount);
         rl_oPhoto = itemView.findViewById(R.id.rl_oPhoto);
 
+        context = itemView.getContext();
+        dbHelper = DBHelper.getDB(context);
+
+        oNo = Integer.parseInt(t_oNo.getText().toString());
+
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                final Context context = v.getContext();
-                final DBHelper dbHelper = DBHelper.getDB(context);
-                final Intent intent = new Intent(context, WriteActivity.class);
-
                 new AlertDialog.Builder(context)
                         .setItems(new CharSequence[]{"수정", "삭제"}, new DialogInterface.OnClickListener() {
                             @Override
@@ -52,21 +57,22 @@ public class OneulHolder extends RecyclerView.ViewHolder {
                                 switch (i) {
 //                            수정
                                     case 0:
-                                        String[] strings = dbHelper.getEditOneul(
-                                                Integer.parseInt(t_oNo.getText().toString()));
-                                        intent.putExtra("editOneul", strings);
+                                        Intent intent = new Intent(context, WriteActivity.class);
+                                        intent.putExtra("editOneul", dbHelper.getEditOneul(oNo));
                                         context.startActivity(intent);
                                         break;
 //                            삭제
                                     case 1:
-                                        dbHelper.deleteOneul(Integer.parseInt(t_oNo.getText().toString()));
+                                        dbHelper.deleteOneul(oNo);
                                         //        오늘이면
                                         if (TextUtils.equals(MainActivity.showDay, DateTime.today())) {
-                                            dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul, HomeFragment.adapter, "DESC");
+                                            dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul,
+                                                    HomeFragment.adapter, "DESC");
 
 //                                            오늘이 아니면
                                         } else {
-                                            dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul, HomeFragment.adapter, "ASC");
+                                            dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul,
+                                                    HomeFragment.adapter, "ASC");
                                         }
                                         break;
                                 }
@@ -74,6 +80,25 @@ public class OneulHolder extends RecyclerView.ViewHolder {
                         })
                         .create()
                         .show();
+
+                return true;
+            }
+        });
+
+        rl_oPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+//                fixme 사진뷰어 추가
+//                if (viewer.getParent() != null) {
+//                    ((ViewGroup) viewer.getParent()).removeView(viewer);
+//                }
+            }
+        });
+
+        rl_oPhoto.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                itemView.performLongClick();
 
                 return true;
             }
@@ -88,10 +113,16 @@ public class OneulHolder extends RecyclerView.ViewHolder {
         t_oMemo.setText(oneul.oMemo);
         if (oneul.pPhoto != null) {
             i_oPhoto.setImageBitmap(BitmapChanger.bytesToBitmap(oneul.pPhoto));
-//            fixme 사진 카운팅 추가
             t_oPhotoCount.setVisibility(View.GONE);
+
+            if (dbHelper.getPhotoCount(oneul.oNo) > 0) {
+                String photoCount = "+" + dbHelper.getPhotoCount(oneul.oNo);
+                t_oPhotoCount.setText(photoCount);
+                t_oPhotoCount.setVisibility(View.VISIBLE);
+            }
         } else {
             rl_oPhoto.setVisibility(View.GONE);
         }
     }
 }
+//fixme 최적화

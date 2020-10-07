@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import com.oneul.R;
 
 public class StatFragment extends Fragment {
-
     public StatFragment() {
     }
 

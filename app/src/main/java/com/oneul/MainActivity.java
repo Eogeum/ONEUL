@@ -1,6 +1,6 @@
 package com.oneul;
 
-import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -16,14 +16,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.oneul.extra.BitmapChanger;
 import com.oneul.extra.DateTime;
 import com.oneul.fragment.DialogFragment;
 import com.oneul.fragment.HomeFragment;
@@ -89,10 +86,11 @@ public class MainActivity extends AppCompatActivity {
                             openFragment(SettingFragment.newInstance(""));
 
                             return true;
+
+                        default:
+                            return false;
                     }
                 }
-
-                return false;
             }
         });
 
@@ -112,15 +110,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        transaction.replace(R.id.container, fragment);
-        transaction.commit();
+        transaction.replace(R.id.container, fragment).commit();
     }
 
-    //    에딧텍스트 언포커스
+    //    포커스 초기화
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        resetFocus(this, ev);
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+    public static void resetFocus(Activity activity, MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
+            View v = activity.getCurrentFocus();
 
             if (v instanceof EditText) {
                 Rect outRect = new Rect();
@@ -132,13 +135,11 @@ public class MainActivity extends AppCompatActivity {
                         v.getRootView().requestFocus();
                     }
 
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
             }
         }
-
-        return super.dispatchTouchEvent(ev);
     }
 
     //    뒤로가기 종료
@@ -162,25 +163,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, 2000);
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-//        todo 효율적인 퍼미션 체크로 변경
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == 0 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
-            DialogFragment.selectorDialog(this);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        BitmapChanger.resultToDB(this, requestCode, resultCode, data);
     }
 }
 

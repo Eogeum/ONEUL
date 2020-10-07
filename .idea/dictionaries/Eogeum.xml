@@ -1,11 +1,13 @@
 <component name="ProjectDictionaryState">
   <dictionary name="Eogeum">
     <words>
+      <w>barun</w>
       <w>dcim</w>
       <w>fileprovider</w>
       <w>geto</w>
       <w>getp</w>
       <w>mintent</w>
+      <w>nanum</w>
       <w>neul</w>
       <w>nosensor</w>
       <w>odate</w>
@@ -16,6 +18,7 @@
       <w>ostart</w>
       <w>otitle</w>
       <w>pphoto</w>
+      <w>todaybox</w>
     </words>
   </dictionary>
 </component>

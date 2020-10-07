@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.oneul.CameraActivity;
 import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.WriteActivity;
@@ -40,15 +43,20 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
+import com.stfalcon.imageviewer.StfalconImageViewer;
+import com.stfalcon.imageviewer.loader.ImageLoader;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.util.List;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment {
     //    ㄴㄴ 뷰
-    LinearLayout ll_todayBox, ll_goCalendar, ll_memoBox, ll_picMemo, ll_cancelMemo, ll_saveMemo;
+    HorizontalScrollView hs_imagePreview;
+    LinearLayout ll_todayBox, ll_goCalendar, ll_memoBox, ll_picMemo, ll_cancelMemo, ll_saveMemo,
+            ll_imagePreview;
     Button btn_ok, btn_stop;
     EditText et_oTitle, et_oMemo;
     FrameLayout fl_startBox;
@@ -98,6 +106,8 @@ public class HomeFragment extends Fragment {
         t_oTime = homeView.findViewById(R.id.t_oTime);
 //        스타트박스 메모
         ll_memoBox = homeView.findViewById(R.id.ll_memoBox);
+        ll_imagePreview = homeView.findViewById(R.id.ll_imagePreview);
+        hs_imagePreview = homeView.findViewById(R.id.hs_imagePreview);
 
 //        ㄴㄴ 키보드
         imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -252,7 +262,7 @@ public class HomeFragment extends Fragment {
         ll_picMemo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment.UploadImageDialog(getActivity());
+                startActivity(new Intent(getActivity(), CameraActivity.class));
             }
         });
 
@@ -361,6 +371,41 @@ public class HomeFragment extends Fragment {
                 t_oTime.setText(startOneul.getoStart());
                 t_oTitle.setText(startOneul.getoTitle());
                 et_oMemo.setText(startOneul.getoMemo());
+
+//                디비에서 사진 불러오기
+                if (dbHelper.getPhoto(startOneul.getoNo()).size() > 0) {
+                    final List<Bitmap> startPicture = dbHelper.getPhoto(startOneul.getoNo());
+
+                    hs_imagePreview.setVisibility(View.VISIBLE);
+                    ll_imagePreview.removeAllViews();
+
+                    for (int i = 0; i < startPicture.size(); i++) {
+                        final int index = i;
+
+                        ImageView imageView = new ImageView(getActivity());
+                        imageView.setImageBitmap(startPicture.get(i));
+                        imageView.setAdjustViewBounds(true);
+                        imageView.setPadding(0, 0, 15, 0);
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new StfalconImageViewer.Builder<>(getActivity(), startPicture,
+                                        new ImageLoader<Bitmap>() {
+                                            @Override
+                                            public void loadImage(ImageView imageView, Bitmap image) {
+                                                imageView.setImageBitmap(image);
+                                            }
+                                        })
+                                        .withStartPosition(index)
+                                        .show();
+                            }
+                        });
+
+                        ll_imagePreview.addView(imageView);
+                    }
+                } else {
+                    hs_imagePreview.setVisibility(View.GONE);
+                }
             } else {
 //                투데이박스 표시
                 ll_todayBox.setVisibility(View.VISIBLE);
@@ -394,3 +439,5 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 }
+
+//fixme 최적화
