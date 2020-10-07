@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        imageView = findViewById(R.id.imageView);
     }
 
     //    뒤로가기 종료

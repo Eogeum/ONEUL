@@ -23,8 +23,4 @@
         app:itemTextColor="@color/bot_menu"
         app:menu="@menu/bot_menu" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
 </LinearLayout>

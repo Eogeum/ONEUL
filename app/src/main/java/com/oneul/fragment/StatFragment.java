@@ -1,22 +1,24 @@
 package com.oneul.fragment;
 
-import android.content.ClipData;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieEntry;
 import com.oneul.R;
+import com.oneul.extra.StatAdapter;
+import com.oneul.extra.StatItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,10 +32,10 @@ public class StatFragment extends Fragment {
     TextView statYear, statMonth;
     PieChart pieChart;
 
-    RecyclerView statRecycler;
-    Adapter statAdapter;
-    RecyclerView.LayoutManager statLayoutManager;
-    ArrayList<ClipData.Item> items = new ArrayList<>();
+    private RecyclerView statRecycler;
+    private StatAdapter adapter;
+    private RecyclerView.LayoutManager statLayoutManager;
+    private ArrayList<StatItem> items;
 
     public StatFragment() {
     }
@@ -45,8 +47,7 @@ public class StatFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        인플레이터
-        final View statView = inflater.inflate(R.layout.fragment_stat, container, false);
-
+        View statView = inflater.inflate(R.layout.fragment_stat, container, false);
 
         //년,월 표시
         statLeft = statView.findViewById(R.id.statLeft);
@@ -80,21 +81,41 @@ public class StatFragment extends Fragment {
 
         ArrayList<PieEntry> pValues = new ArrayList<PieEntry>();
 
-        pValues.add(new PieEntry(1, "공부"));
+        pValues.add(new PieEntry(1, "강의"));
         pValues.add(new PieEntry(2, "운동"));
-        pValues.add(new PieEntry(3, "친구"));
-        pValues.add(new PieEntry(4, "TV"));
-        pValues.add(new PieEntry(5, "과제"));
+        pValues.add(new PieEntry(3, "여가"));
+        pValues.add(new PieEntry(4, "독서"));
+        pValues.add(new PieEntry(5, "코딩"));
 
 
         //일과별 리스트
+        items = new ArrayList<>();
+        items.clear();
+        items.add(new StatItem("코딩", "31시간"));
+        items.add(new StatItem("강의", "24시간"));
+        items.add(new StatItem("여가", "15시간"));
+        items.add(new StatItem("운동", "11시간"));
+        items.add(new StatItem("독서", "8시간"));
+
+        Context context = statView.getContext();
+        RecyclerView recyclerView = statView.findViewById(R.id.statRecycler);
+        recyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+
         statRecycler = statView.findViewById(R.id.statRecycler);
         statRecycler.setHasFixedSize(true);
         statLayoutManager = new LinearLayoutManager(getActivity());
         statRecycler.setLayoutManager(statLayoutManager);
         statRecycler.scrollToPosition(0);
+        adapter = new StatAdapter(context, items);
+        statRecycler.setAdapter(adapter);
+        statRecycler.setItemAnimator(new DefaultItemAnimator());
 
         return statView;
+
     }
 
     @Override
@@ -102,3 +123,4 @@ public class StatFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 }
+
