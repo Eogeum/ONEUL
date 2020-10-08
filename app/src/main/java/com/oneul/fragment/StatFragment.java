@@ -56,8 +56,6 @@ public class StatFragment extends Fragment {
 
 
         //년,월 표시
-        statLeft = statView.findViewById(R.id.statLeft);
-        statRight = statView.findViewById(R.id.statRight);
         statYear = statView.findViewById(R.id.statYear);
         statMonth = statView.findViewById(R.id.statMonth);
 
@@ -85,6 +83,7 @@ public class StatFragment extends Fragment {
         PieDataSet dataSet = new PieDataSet(pieValue, "일과 카테고리");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
+        dataSet.setColor(R.color.mainColor);
 
         PieData data = new PieData((dataSet));
         data.setValueTextSize(10f);

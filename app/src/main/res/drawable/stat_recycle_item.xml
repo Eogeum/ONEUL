@@ -7,16 +7,73 @@
                 android:bottom="2dp"
                 android:left="2dp"
                 android:right="2dp"
-                android:top="2dp"/>
-            <corners android:radius="16dp"/>
-            <solid android:color="#00CCCCCC"/>
+                android:top="2dp" />
+
+            <solid android:color="#00CCCCCC" />
+
+            <corners android:radius="3dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="1dp" />
+
+            <solid android:color="#10CCCCCC" />
+
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="1dp"/>
+
+            <solid android:color="#20CCCCCC" />
+
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="1dp"/>
+
+            <solid android:color="#30CCCCCC" />
+
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp" />
+
+            <solid android:color="#50CCCCCC" />
+
+            <corners android:radius="10dp" />
         </shape>
     </item>
 
+    <!-- Background -->
     <item>
         <shape>
-            <solid android:color="@color/white"/>
+            <solid android:color="@android:color/white" />
+
+            <corners android:radius="10dp" />
         </shape>
     </item>
+
 
 </layer-list>
