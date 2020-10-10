@@ -14,19 +14,22 @@ import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
 import com.oneul.oneul.Oneul;
 
+import java.util.Objects;
+
 public class OneulReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         DBHelper dbHelper = DBHelper.getDB(context);
         Bundle bundle;
 
-        switch (intent.getExtras().getInt("requestCode")) {
+        switch (Objects.requireNonNull(intent.getExtras()).getInt("requestCode")) {
             case 0:
                 bundle = RemoteInput.getResultsFromIntent(intent);
 
                 if (bundle != null) {
                     dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null,
-                            bundle.getCharSequence("KEY_OTITLE").toString(), null, null, 0);
+                            Objects.requireNonNull(bundle.getCharSequence("KEY_OTITLE")).toString(),
+                            null, null, 0);
                 }
                 break;
 

@@ -20,9 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    //    디비
-    private static DBHelper dbHelper;
-
     //    일과 테이블 정보
     public static final String TABLE_ONEUL = "Oneul";
     public static final String COLUMN_ONO = "oNo";
@@ -51,13 +48,15 @@ public class DBHelper extends SQLiteOpenHelper {
             COLUMN_OTITLE + " TEXT NOT NULL, " +
             COLUMN_OMEMO + " TEXT, " +
             COLUMN_ODONE + " INTEGER NOT NULL);";
-
     private static final String CREATE_PHOTO = "CREATE TABLE " + TABLE_PHOTO + "(" +
             COLUMN_PNO + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_PPHOTO + " BLOB, " +
             COLUMN_ONO + " INTEGER, " +
 
             "CONSTRAINT p_o_oNo FOREIGN KEY(" + COLUMN_ONO + ") REFERENCES " + TABLE_ONEUL + "(" + COLUMN_ONO + "));";
+
+    //    디비
+    private static DBHelper dbHelper;
 
     //    디비 생성자
     private DBHelper(Context context) {
@@ -88,21 +87,20 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert(TABLE_ONEUL, null, values);
         db.close();
 
-//        fixme 작성 페이지 사진 기능 완료되면 최적화
-        if (pPhoto != null) {
-            db = this.getReadableDatabase();
-            Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODONE + " = 1",
-                    null, null, null, null);
-
-            if (cursor.moveToLast()) {
-                int oNo = cursor.getInt(cursor.getColumnIndex(COLUMN_ONO));
-
-                cursor.close();
-                db.close();
-
-                addPhoto(oNo, pPhoto);
-            }
-        }
+//        fixme 작성 페이지 사진 기능 완료되면 다중 추가 최적화
+//        if (pPhoto != null) {
+//            db = this.getReadableDatabase();
+//            Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODONE + " = 1",
+//                    null, null, null, null);
+//
+//            if (cursor.moveToLast()) {
+//                int oNo = cursor.getInt(cursor.getColumnIndex(COLUMN_ONO));
+//                addPhoto(oNo, pPhoto);
+//
+//                cursor.close();
+//                db.close();
+//            }
+//        }
     }
 
     //    기록중인 일과 불러오기
@@ -138,7 +136,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 null, null, null, null);
 
         while (cursor.moveToNext()) {
-            bitmaps.add(BitmapChanger.bytesToBitmap(cursor.getBlob(cursor.getColumnIndex(COLUMN_PPHOTO))));
+            bitmaps.add(BitmapRefactor.bytesToBitmap(cursor.getBlob(cursor.getColumnIndex(COLUMN_PPHOTO))));
         }
 
         cursor.close();

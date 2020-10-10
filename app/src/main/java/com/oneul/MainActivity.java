@@ -37,6 +37,27 @@ public class MainActivity extends AppCompatActivity {
     //    ㄴㄴ 뷰
     BottomNavigationView bot_menu;
 
+    public static void focusClear(Activity activity, MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = activity.getCurrentFocus();
+
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+
+                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
+                    v.clearFocus();
+                    if (v.hasFocus()) {
+                        v.getRootView().requestFocus();
+                    }
+
+                    InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 //                메모 작성중일 시
                 if (useEditMemo) {
-                    DialogFragment.editMemoDialog(MainActivity.this, item.getItemId());
+                    DialogFragment.checkMemoDialog(MainActivity.this, item.getItemId());
 
                     return false;
                 } else {
@@ -116,30 +137,9 @@ public class MainActivity extends AppCompatActivity {
     //    포커스 초기화
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        resetFocus(this, ev);
+        focusClear(this, ev);
 
         return super.dispatchTouchEvent(ev);
-    }
-
-    public static void resetFocus(Activity activity, MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = activity.getCurrentFocus();
-
-            if (v instanceof EditText) {
-                Rect outRect = new Rect();
-                v.getGlobalVisibleRect(outRect);
-
-                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
-                    v.clearFocus();
-                    if (v.hasFocus()) {
-                        v.getRootView().requestFocus();
-                    }
-
-                    InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        }
     }
 
     //    뒤로가기 종료
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 //        메모 작성중일 시
         if (useEditMemo) {
-            DialogFragment.editMemoDialog(MainActivity.this, 0);
+            DialogFragment.checkMemoDialog(MainActivity.this, 0);
         } else {
             if (doubleBackToExitPressedOnce) {
                 finish();

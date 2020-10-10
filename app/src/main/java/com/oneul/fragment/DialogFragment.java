@@ -1,33 +1,39 @@
 package com.oneul.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.oneul.R;
+import com.oneul.extra.DBHelper;
+import com.stfalcon.imageviewer.StfalconImageViewer;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 
 public class DialogFragment {
-    public static String photoPath;
     public static final int CAMERA_REQUEST_CODE = 101;
     public static final int GALLERY_REQUEST_CODE = 202;
 
+    public static String photoPath;
     private static AlertDialog dialog;
 
-    public static void editMemoDialog(final Activity activity, final int bottomButtonId) {
+    public static void checkMemoDialog(final Activity activity, final int bottomButtonId) {
         dialog = new AlertDialog.Builder(activity)
                 .setMessage("메모 작성을 취소합니다.")
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -100,6 +106,7 @@ public class DialogFragment {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static void addPhotoDialog(final Activity activity) {
         dialog = new AlertDialog.Builder(activity)
                 .setItems(new CharSequence[]{"카메라", "갤러리"}, new DialogInterface.OnClickListener() {
@@ -153,67 +160,31 @@ public class DialogFragment {
         dialog.show();
     }
 
-//    fixme 사진 수정 기능
-//    public static StfalconImageViewer<Bitmap> imageViewer(Context context, final DBHelper dbHelper) {
-//        View viewer = View.inflate(context, R.layout.view_overlay, null);
-//        ImageView i_delete = viewer.findViewById(R.id.i_delete);
-//        i_delete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dbHelper.deletePhoto(integers.get(0));
-//            }
-//        });
-//
-//        List<Integer> integers;
-//        List<Bitmap> bitmaps;
-//        integers = dbHelper.getpNos(oNo);
-//
-//        StfalconImageViewer<Bitmap> imageViewer = new StfalconImageViewer.Builder<>(context, bitmaps, new ImageLoader<Bitmap>() {
-//            @Override
-//            public void loadImage(ImageView imageView, Bitmap image) {
-//                imageView.setImageBitmap(image);
-//            }
-//        })
-//                .withOverlayView(viewer)
-//                .withImageChangeListener(new OnImageChangeListener() {
-//                    @Override
-//                    public void onImageChange(final int position) {
-//                        i_delete.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//
-//                            }
-//
-//                        });
-//                    }
-//                })
-//                .show();
-//
-//        AlertDialog dialog = new AlertDialog.Builder(context)
-//                .setMessage("사진을 삭제합니다.")
-//                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        dbHelper.deletePhoto(integers.get(position));
-//                        imageViewer.updateImages();
-//                        Toast.makeText(context, "삭제 되었습니다.", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                    }
-//                })
-//                .create();
-//        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-//            @Override
-//            public void onShow(DialogInterface dialogInterface) {
-//                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
-//                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#E88346"));
-//            }
-//        });
-//        dialog.show();
-//
-//        return null;
-//    }
-}
+    public static void deletePhotoDialog(final Context context, final StfalconImageViewer<Bitmap> viewer,
+                                         final int oNo, final int pNo) {
+        dialog = new AlertDialog.Builder(context)
+                .setMessage("사진을 삭제합니다.")
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        DBHelper dbHelper = DBHelper.getDB(context);
+                        dbHelper.deletePhoto(pNo);
+                        viewer.updateImages(dbHelper.getPhoto(oNo));
 
-//fixme 최적화
+                        Toast.makeText(context, "삭제 되었습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                })
+                .create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#E88346"));
+            }
+        });
+        dialog.show();
+    }
+}

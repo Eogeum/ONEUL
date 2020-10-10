@@ -26,24 +26,6 @@ public class RealService extends Service {
     public RealService() {
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        serviceIntent = intent;
-
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        //        오레오 이상이면 채널 만들기
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel("101", "고정",
-                    NotificationManager.IMPORTANCE_NONE);
-            notificationChannel.setShowBadge(false);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-        startForeground(101, createNotification(this));
-
-        return START_REDELIVER_INTENT;
-    }
-
     public static Notification createNotification(Context context) {
         DBHelper dbHelper = DBHelper.getDB(context);
 
@@ -107,6 +89,24 @@ public class RealService extends Service {
         }
 
         return builder.build();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        serviceIntent = intent;
+
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        //        오레오 이상이면 채널 만들기
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel("101", "고정",
+                    NotificationManager.IMPORTANCE_NONE);
+            notificationChannel.setShowBadge(false);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        startForeground(101, createNotification(this));
+
+        return START_REDELIVER_INTENT;
     }
 
     @Override

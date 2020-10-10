@@ -1,5 +1,6 @@
 package com.oneul.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -53,10 +54,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment {
+    //    ㄴㄴ 리사이클
+    public static RecyclerView r_oneul;
+    public static OneulAdapter adapter = new OneulAdapter();
+
     //    ㄴㄴ 뷰
     HorizontalScrollView hs_imagePreview;
-    LinearLayout ll_todayBox, ll_goCalendar, ll_memoBox, ll_picMemo, ll_cancelMemo, ll_saveMemo,
-            ll_imagePreview;
+    LinearLayout ll_todayBox, ll_goCalendar, ll_memoBox, ll_picMemo, ll_cancelMemo, ll_saveMemo, ll_imagePreview;
     Button btn_ok, btn_stop;
     EditText et_oTitle, et_oMemo;
     FrameLayout fl_startBox;
@@ -69,10 +73,6 @@ public class HomeFragment extends Fragment {
 
     //    ㄴㄴ 디비
     DBHelper dbHelper;
-    public static OneulAdapter adapter = new OneulAdapter();
-
-    //    ㄴㄴ 리사이클
-    public static RecyclerView r_oneul;
 
     //    ㄴㄴ fab
     FloatingActionButton fab_goWrite;
@@ -89,6 +89,7 @@ public class HomeFragment extends Fragment {
         return new HomeFragment();
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        ㄴㄴ 인플레이터
@@ -161,7 +162,7 @@ public class HomeFragment extends Fragment {
         widget.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                MainActivity.showDay = widget.getSelectedDate().getDate().toString();
+                MainActivity.showDay = Objects.requireNonNull(widget.getSelectedDate()).getDate().toString();
                 dateChange();
                 calendarDialog.dismiss();
             }
@@ -207,7 +208,7 @@ public class HomeFragment extends Fragment {
                         dateChange();
                         et_oTitle.getText().clear();
 //                       알림 새로고침
-                        getActivity().getSystemService(NotificationManager.class).notify(101,
+                        Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class).notify(101,
                                 RealService.createNotification(getActivity()));
                     }
                 } else {
@@ -215,7 +216,7 @@ public class HomeFragment extends Fragment {
                     dateChange();
                     et_oTitle.getText().clear();
 //                   알림 새로고침
-                    getActivity().getSystemService(NotificationManager.class).notify(101,
+                    Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class).notify(101,
                             RealService.createNotification(getActivity()));
                 }
             }
@@ -234,7 +235,7 @@ public class HomeFragment extends Fragment {
 
                     case View.VISIBLE:
                         if (MainActivity.useEditMemo) {
-                            DialogFragment.editMemoDialog(getActivity(), 0);
+                            DialogFragment.checkMemoDialog(getActivity(), 0);
                         } else {
                             Animation.collapse(ll_memoBox);
                             i_memoBox.setImageResource(R.drawable.ic_expand);
@@ -321,7 +322,7 @@ public class HomeFragment extends Fragment {
                 if (dbHelper.getStartOneul() != null) {
                     //                메모 작성중일 시
                     if (MainActivity.useEditMemo) {
-                        DialogFragment.editMemoDialog(getActivity(), 0);
+                        DialogFragment.checkMemoDialog(getActivity(), 0);
                     } else {
 //                    쇼데이 변경
                         MainActivity.showDay = dbHelper.getStartOneul().getoDate();
@@ -336,7 +337,7 @@ public class HomeFragment extends Fragment {
                         i_memoBox.setImageResource(R.drawable.ic_expand);
                         Animation.collapse(ll_memoBox);
 //                       알림 새로고침
-                        getActivity().getSystemService(NotificationManager.class).notify(101,
+                        Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class).notify(101,
                                 RealService.createNotification(getActivity()));
                     }
                 } else {
@@ -344,7 +345,7 @@ public class HomeFragment extends Fragment {
                     Animation.collapse(ll_memoBox);
                     dateChange();
 //                   알림 새로고침
-                    getActivity().getSystemService(NotificationManager.class).notify(101,
+                    Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class).notify(101,
                             RealService.createNotification(getActivity()));
                 }
             }
@@ -439,5 +440,3 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 }
-
-//fixme 최적화

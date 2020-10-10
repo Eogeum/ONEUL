@@ -42,5 +42,3 @@ public class SettingFragment extends Fragment {
         }
     }
 }
-
-//fixme 최적화

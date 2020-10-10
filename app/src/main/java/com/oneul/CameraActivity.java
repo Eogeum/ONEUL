@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.exifinterface.media.ExifInterface;
 
-import com.oneul.extra.BitmapChanger;
+import com.oneul.extra.BitmapRefactor;
 import com.oneul.fragment.DialogFragment;
 
 import java.io.IOException;
@@ -49,22 +50,22 @@ public class CameraActivity extends AppCompatActivity {
 
                         switch (orientation) {
                             case ExifInterface.ORIENTATION_ROTATE_90:
-                                bitmap = BitmapChanger.rotateBitmap(bitmap, 90);
+                                bitmap = BitmapRefactor.rotateBitmap(bitmap, 90);
                                 break;
 
                             case ExifInterface.ORIENTATION_ROTATE_180:
-                                bitmap = BitmapChanger.rotateBitmap(bitmap, 180);
+                                bitmap = BitmapRefactor.rotateBitmap(bitmap, 180);
                                 break;
 
                             case ExifInterface.ORIENTATION_ROTATE_270:
-                                bitmap = BitmapChanger.rotateBitmap(bitmap, 270);
+                                bitmap = BitmapRefactor.rotateBitmap(bitmap, 270);
                                 break;
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    BitmapChanger.bitmapToDB(this, bitmap);
+                    BitmapRefactor.bitmapToDB(this, bitmap);
                     break;
 
                 case DialogFragment.GALLERY_REQUEST_CODE:
@@ -73,16 +74,18 @@ public class CameraActivity extends AppCompatActivity {
                             ClipData clipData = data.getClipData();
 
                             for (int i = 0; i < clipData.getItemCount(); i++) {
-                                bitmap = BitmapChanger.getBitmap(this, clipData.getItemAt(i).getUri());
-                                BitmapChanger.bitmapToDB(this, bitmap);
+                                bitmap = BitmapRefactor.uriToBitmap(this, clipData.getItemAt(i).getUri());
+                                BitmapRefactor.bitmapToDB(this, bitmap);
                             }
                         } else {
-                            bitmap = BitmapChanger.getBitmap(this, data.getData());
-                            BitmapChanger.bitmapToDB(this, bitmap);
+                            bitmap = BitmapRefactor.uriToBitmap(this, data.getData());
+                            BitmapRefactor.bitmapToDB(this, bitmap);
                         }
                     }
                     break;
             }
+
+            Toast.makeText(this, "사진을 추가했습니다.", Toast.LENGTH_SHORT).show();
         }
 
         finish();

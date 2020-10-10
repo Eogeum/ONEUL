@@ -9,12 +9,11 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class BitmapChanger {
+public class BitmapRefactor {
     public static byte[] bitmapToBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -26,7 +25,7 @@ public class BitmapChanger {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
-    public static Bitmap getBitmap(Context context, Uri uri) {
+    public static Bitmap uriToBitmap(Context context, Uri uri) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             try {
                 return MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
@@ -44,21 +43,6 @@ public class BitmapChanger {
         return null;
     }
 
-    public static Bitmap checkAndResize(Bitmap bitmap) {
-        byte[] bytes = BitmapChanger.bitmapToBytes(bitmap);
-
-        if (bytes.length > 1000 * 1024) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            options.inSampleSize = 4;
-            options.inJustDecodeBounds = false;
-
-            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
-        }
-
-        return bitmap;
-    }
-
     public static Bitmap rotateBitmap(Bitmap bitmap, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
@@ -67,10 +51,18 @@ public class BitmapChanger {
     }
 
     public static void bitmapToDB(Activity activity, Bitmap bitmap) {
-        bitmap = checkAndResize(bitmap);
+        byte[] bytes = BitmapRefactor.bitmapToBytes(bitmap);
+
+        if (bytes.length > 1000 * 1024) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            options.inSampleSize = 4;
+            options.inJustDecodeBounds = false;
+
+            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+        }
+
         DBHelper dbHelper = DBHelper.getDB(activity);
         dbHelper.addPhoto(dbHelper.getStartOneul().getoNo(), bitmapToBytes(bitmap));
-
-        Toast.makeText(activity, "사진을 추가했습니다.", Toast.LENGTH_SHORT).show();
     }
 }

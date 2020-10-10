@@ -1,5 +1,6 @@
 package com.oneul;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -52,6 +53,8 @@ public class WriteActivity extends AppCompatActivity {
     MaterialCalendarView widget;
     AlertDialog calendarDialog;
 
+
+    @SuppressLint({"InflateParams", "DefaultLocale"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +86,7 @@ public class WriteActivity extends AppCompatActivity {
         widget.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                t_oDate.setText(widget.getSelectedDate().getDate().toString());
+                t_oDate.setText(Objects.requireNonNull(widget.getSelectedDate()).getDate().toString());
                 calendarDialog.dismiss();
             }
         });
@@ -155,7 +158,7 @@ public class WriteActivity extends AppCompatActivity {
 //        불러온 일과 있으면
         if (getIntent().getExtras() != null) {
             final String[] strings = getIntent().getExtras().getStringArray("editOneul");
-            timeStart.setText(strings[2]);
+            timeStart.setText(Objects.requireNonNull(strings)[2]);
             timeEnd.setText(strings[3]);
             editTitle.setText(strings[4]);
             editMemo.setText(strings[5]);
@@ -224,7 +227,7 @@ public class WriteActivity extends AppCompatActivity {
     //    에딧텍스트 언포커스
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        MainActivity.resetFocus(this, ev);
+        MainActivity.focusClear(this, ev);
 
         return super.dispatchTouchEvent(ev);
     }
