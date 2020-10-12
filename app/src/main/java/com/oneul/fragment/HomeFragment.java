@@ -117,9 +117,8 @@ public class HomeFragment extends Fragment {
         dbHelper = DBHelper.getDB(getActivity());
 
 //        ㄴㄴ 리사이클
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         r_oneul = homeView.findViewById(R.id.r_oneul);
-        r_oneul.setLayoutManager(linearLayoutManager);
+        r_oneul.setLayoutManager(new LinearLayoutManager(getActivity()));
         r_oneul.setAdapter(adapter);
         r_oneul.setHasFixedSize(true);
         r_oneul.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -156,7 +155,7 @@ public class HomeFragment extends Fragment {
         widget.setTitleFormatter(new TitleFormatter() {
             @Override
             public CharSequence format(CalendarDay day) {
-                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy. MM"));
+                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월"));
             }
         });
         widget.setOnDateChangedListener(new OnDateSelectedListener() {

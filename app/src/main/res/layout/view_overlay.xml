@@ -1,31 +1,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom|center_horizontal">
+    android:gravity="bottom|center_horizontal"
+    android:layout_marginBottom="12dp"
+    tools:ignore="HardcodedText, UseCompoundDrawables, ContentDescription">
 
-    <ImageView
-        android:id="@+id/i_delete"
+    <LinearLayout
+        android:id="@+id/ll_deletePhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="8dp"
-        android:src="@drawable/ic_delete" />
-
-    <ImageView
-        android:id="@+id/i_download"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="-4dp"
         android:layout_weight="1"
-        android:padding="8dp"
-        android:src="@drawable/ic_delete" />
+        android:gravity="center"
+        android:padding="6dp">
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/t_pNo"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="1"-->
-    <!--        android:visibility="gone" />-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete" />
 
-    <!--    &lt;!&ndash;    fixme 레이아웃 수정&ndash;&gt;-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="삭제"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_downloadPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="-4dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="6dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_download" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="다운로드"
+            android:textColor="@color/white" />
+    </LinearLayout>
 </LinearLayout>

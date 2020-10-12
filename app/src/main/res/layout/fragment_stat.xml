@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,87 +14,43 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="통계"
-            android:textSize="18sp"
             android:layout_gravity="center_vertical"
             android:layout_margin="10sp"
-            />
-
+            android:text="통계"
+            android:textSize="18sp" />
     </LinearLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:scrollbarFadeDuration="0"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:verticalScrollbarPosition="right"
-        android:scrollbarThumbVertical="@color/mainColor"
-        android:scrollbarStyle="insideInset">
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_height="wrap_content"
             android:background="@color/white"
-            >
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/statDay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                >
-
-                <TextView
-                    android:id="@+id/statYear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0000"
-                    android:textSize="18sp"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="년 "
-                    android:textSize="18sp"
-                    />
-
-                <TextView
-                    android:id="@+id/statMonth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="00"
-                    android:textSize="18sp"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="월  "
-                    android:textSize="18sp"
-                    />
-
-            </LinearLayout>
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="2020년 10월"
+                android:textSize="18sp" />
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pieChart"
                 android:layout_width="match_parent"
                 android:layout_height="270dp"
-                android:layout_margin="20dp"
-                />
+                android:layout_margin="20dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/statRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-
+                android:layout_height="wrap_content" />
         </LinearLayout>
-
-    </ScrollView>
-
-
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

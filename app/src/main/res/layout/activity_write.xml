@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:ignore="HardcodedText">
+    tools:ignore="HardcodedText, UseCompoundDrawables, ContentDescription">
 
     <RelativeLayout
         android:layout_width="match_parent"

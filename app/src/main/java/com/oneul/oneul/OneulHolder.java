@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,8 +29,9 @@ import com.stfalcon.imageviewer.loader.ImageLoader;
 
 public class OneulHolder extends RecyclerView.ViewHolder {
     TextView t_oNo, t_oTitle, t_oTime, t_oMemo, t_oMore, t_oPhotoCount;
-    ImageView i_oPhoto, i_delete;
+    ImageView i_oPhoto;
     RelativeLayout rl_oPhoto;
+    LinearLayout ll_deletePhoto, ll_downloadPhoto;
     StfalconImageViewer<Bitmap> viewer;
 
     Context context;
@@ -97,10 +99,19 @@ public class OneulHolder extends RecyclerView.ViewHolder {
                 });
 
                 View overlay = View.inflate(context, R.layout.view_overlay, null);
-                i_delete = overlay.findViewById(R.id.i_delete);
-                i_delete.setOnClickListener(new View.OnClickListener() {
+                ll_deletePhoto = overlay.findViewById(R.id.ll_deletePhoto);
+                ll_deletePhoto.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        DialogFragment.deletePhotoDialog(context, viewer, oNo, dbHelper.getpNos(oNo).get(0));
+                    }
+                });
+
+                ll_downloadPhoto = overlay.findViewById(R.id.ll_downloadPhoto);
+                ll_downloadPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        FIXME 사진 추가기능 구현
                         DialogFragment.deletePhotoDialog(context, viewer, oNo, dbHelper.getpNos(oNo).get(0));
                     }
                 });
@@ -109,7 +120,7 @@ public class OneulHolder extends RecyclerView.ViewHolder {
                         .withImageChangeListener(new OnImageChangeListener() {
                             @Override
                             public void onImageChange(final int position) {
-                                i_delete.setOnClickListener(new View.OnClickListener() {
+                                ll_deletePhoto.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         DialogFragment.deletePhotoDialog(context, viewer, oNo,

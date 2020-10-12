@@ -1,52 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="@color/white"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="5dp"
-    >
+    android:background="@color/white"
+    android:baselineAligned="false"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        android:orientation="horizontal"
-        android:layout_weight="5"
-        android:background="@drawable/stat_recycle_item"
+        android:background="@drawable/home_todaybox_cl"
         android:gravity="center"
-        >
+        android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/stat_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            />
+<!--        todo 필요? AppCompat으로 대체 가능 -->
+<!--        <ImageView-->
+<!--            android:id="@+id/stat_img"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:layout_weight="1" />-->
 
         <TextView
             android:id="@+id/stat_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="일과 제목"
-            android:textSize="20sp"
             android:layout_gravity="center_vertical"
-            android:layout_weight="3"
             android:layout_margin="10dp"
-            />
+            android:layout_weight="3"
+            android:text="일과 제목"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/stat_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="총 00시간"
-            android:textSize="18sp"
             android:layout_gravity="center_vertical"
-            android:gravity="center"
-            android:layout_weight="1"
             android:layout_margin="10dp"
-            />
-
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="총 00시간"
+            android:textSize="18sp" />
     </LinearLayout>
-
 </LinearLayout>

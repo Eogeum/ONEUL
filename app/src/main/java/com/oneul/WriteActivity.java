@@ -80,7 +80,7 @@ public class WriteActivity extends AppCompatActivity {
         widget.setTitleFormatter(new TitleFormatter() {
             @Override
             public CharSequence format(CalendarDay day) {
-                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy. MM"));
+                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월"));
             }
         });
         widget.setOnDateChangedListener(new OnDateSelectedListener() {

@@ -190,4 +190,4 @@ public class MainActivity extends AppCompatActivity {
 }
 
 //todo 슬라드 날짜 변경
-//todo : 1일날 시작한 일과를 2일에 완료하면 화면에 일과 시간을 어떻게 표시할 지
+//todo 1일날 시작한 일과를 2일에 완료하면 화면에 일과 시간을 어떻게 표시할 지
