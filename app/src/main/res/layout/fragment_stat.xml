@@ -1,6 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:background="@drawable/write_sh">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="통계"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10sp"
+            />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:scrollbarFadeDuration="0"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:verticalScrollbarPosition="right"
+        android:scrollbarThumbVertical="@color/mainColor"
+        android:scrollbarStyle="insideInset">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/white"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                >
+
+                <TextView
+                    android:id="@+id/statYear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0000"
+                    android:textSize="18sp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="년 "
+                    android:textSize="18sp"
+                    />
+
+                <TextView
+                    android:id="@+id/statMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00"
+                    android:textSize="18sp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="월  "
+                    android:textSize="18sp"
+                    />
+
+            </LinearLayout>
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                android:layout_margin="20dp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/statRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </LinearLayout>
