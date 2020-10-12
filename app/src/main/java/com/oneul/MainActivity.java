@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.oneul.extra.DateTime;
@@ -33,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
     public static String showDay = DateTime.today();
     public static boolean useEditMemo = false;
     boolean doubleBackToExitPressedOnce = false;
+
+    //    ㄴㄴ 프래그먼트
+    FragmentManager manager = getSupportFragmentManager();
+    Fragment f_home, f_stat, f_setting;
 
     //    ㄴㄴ 뷰
     BottomNavigationView bot_menu;
@@ -94,17 +99,49 @@ public class MainActivity extends AppCompatActivity {
 //                선택한 화면으로 전환
                     switch (item.getItemId()) {
                         case R.id.bot_menu_home:
-                            openFragment(HomeFragment.newInstance());
+//                            프래그먼트 없으면 생성, 있으면 보이기
+                            if (f_home == null) {
+                                f_home = HomeFragment.newInstance();
+                                manager.beginTransaction().add(R.id.container, f_home).commit();
+                            }
+
+                            if (f_home.isVisible() && !TextUtils.equals(showDay, DateTime.today())) {
+                                showDay = DateTime.today();
+                                manager.beginTransaction().detach(f_home).attach(f_home).commit();
+
+                                return true;
+                            } else {
+                                manager.beginTransaction().show(f_home).commit();
+                            }
+
+                            if (f_stat != null) manager.beginTransaction().hide(f_stat).commit();
+                            if (f_setting != null) manager.beginTransaction().hide(f_setting).commit();
 
                             return true;
 
-                        case R.id.bot_menu_write:
-                            openFragment(StatFragment.newInstance());
+                        case R.id.bot_menu_stat:
+//                            프래그먼트 없으면 생성, 있으면 보이기
+                            if (f_stat == null) {
+                                f_stat = StatFragment.newInstance();
+                                manager.beginTransaction().add(R.id.container, f_stat).commit();
+                            }
+
+                            manager.beginTransaction().show(f_stat).commit();
+                            if (f_home != null) manager.beginTransaction().hide(f_home).commit();
+                            if (f_setting != null) manager.beginTransaction().hide(f_setting).commit();
 
                             return true;
 
                         case R.id.bot_menu_setting:
-                            openFragment(SettingFragment.newInstance(""));
+//                프            래그먼트 없으면 생성, 있으면 보이기
+                            if (f_setting == null) {
+                                f_setting = SettingFragment.newInstance("");
+                                manager.beginTransaction().add(R.id.container, f_setting).commit();
+                            }
+
+                            manager.beginTransaction().show(f_setting).commit();
+                            if (f_home != null) manager.beginTransaction().hide(f_home).commit();
+                            if (f_stat != null) manager.beginTransaction().hide(f_stat).commit();
 
                             return true;
 
@@ -116,22 +153,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 //        시작 시 홈화면 불러오기
-        openFragment(HomeFragment.newInstance());
-    }
-
-    //    화면 전환
-    public void openFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-        Fragment fragmentId = getSupportFragmentManager().findFragmentById(R.id.container);
-//        같은 탭을 누를 시 쇼데이 초기화
-        if (fragmentId != null) {
-            if (fragment.getClass() == fragmentId.getClass()) {
-                showDay = DateTime.today();
-            }
-        }
-
-        transaction.replace(R.id.container, fragment).commit();
+        f_home = HomeFragment.newInstance();
+        manager.beginTransaction().replace(R.id.container, f_home).commit();
     }
 
     //    포커스 초기화

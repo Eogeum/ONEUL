@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_home"
         android:title="홈" />
     <item
-        android:id="@+id/bot_menu_write"
+        android:id="@+id/bot_menu_stat"
         android:icon="@drawable/ic_stat"
         android:title="통계" />
     <item
