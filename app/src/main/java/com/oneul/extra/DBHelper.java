@@ -6,10 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.oneul.MainActivity;
+import com.oneul.fragment.HomeFragment;
 import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -72,9 +75,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return dbHelper;
     }
 
-    //    일과 추가
-    public void addOneul(String oDate, String oStart, String oEnd, String oTitle, String oMemo,
-                         @Nullable byte[] pPhoto, int oDone) {
+    //    ㄴㄴ 일과
+    //    일과 시작
+    public void startOneul(String oDate, String oStart, String oEnd, String oTitle, String oMemo,
+                           @Nullable List<Bitmap> pPhotos, int oDone) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_ODATE, oDate);
         values.put(DBHelper.COLUMN_OSTART, oStart);
@@ -87,20 +91,22 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert(TABLE_ONEUL, null, values);
         db.close();
 
-//        fixme 작성 페이지 사진 기능 완료되면 다중 추가 최적화
-//        if (pPhoto != null) {
-//            db = this.getReadableDatabase();
-//            Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODONE + " = 1",
-//                    null, null, null, null);
-//
-//            if (cursor.moveToLast()) {
-//                int oNo = cursor.getInt(cursor.getColumnIndex(COLUMN_ONO));
-//                addPhoto(oNo, pPhoto);
-//
-//                cursor.close();
-//                db.close();
-//            }
-//        }
+        if (pPhotos != null) {
+            db = this.getReadableDatabase();
+            Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ODONE + " = 1",
+                    null, null, null, COLUMN_ONO + " DESC");
+
+            if (cursor.moveToFirst()) {
+                int oNo = cursor.getInt(cursor.getColumnIndex(COLUMN_ONO));
+
+                for (int i = 0; i < pPhotos.size(); i++) {
+                    addPhoto(oNo, pPhotos.get(i));
+                }
+
+                cursor.close();
+                db.close();
+            }
+        }
     }
 
     //    기록중인 일과 불러오기
@@ -127,119 +133,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return oneul;
     }
 
-    //    일과 사진 가져오기
-    public List<Bitmap> getPhoto(int oNo) {
-        List<Bitmap> bitmaps = new ArrayList<>();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_PHOTO, new String[]{COLUMN_PPHOTO}, COLUMN_ONO + " = " + oNo,
-                null, null, null, null);
-
-        while (cursor.moveToNext()) {
-            bitmaps.add(BitmapRefactor.bytesToBitmap(cursor.getBlob(cursor.getColumnIndex(COLUMN_PPHOTO))));
-        }
-
-        cursor.close();
-        db.close();
-
-        return bitmaps;
-    }
-
-    //    일과 사진 번호 가져오기
-    public List<Integer> getpNos(int oNo) {
-        List<Integer> integers = new ArrayList<>();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_PHOTO, new String[]{COLUMN_PNO}, COLUMN_ONO + " = " + oNo,
-                null, null, null, null);
-
-        while (cursor.moveToNext()) {
-            integers.add(cursor.getInt(cursor.getColumnIndex(COLUMN_PNO)));
-        }
-
-        cursor.close();
-        db.close();
-
-        return integers;
-    }
-
-    public int getPhotoCount(int oNo) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_PHOTO, new String[]{COLUMN_PPHOTO}, COLUMN_ONO + " = " + oNo,
-                null, null, null, null);
-
-        int photoCount = cursor.getCount() - 1;
-
-        cursor.close();
-        db.close();
-
-        return photoCount;
-    }
-
-    //    일과 사진 추가
-    public void addPhoto(int oNo, byte[] pPhoto) {
-        ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_ONO, oNo);
-        values.put(DBHelper.COLUMN_PPHOTO, pPhoto);
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_PHOTO, null, values);
-        db.close();
-    }
-
-    //    일과 사진 삭제
-    public void deletePhoto(int pNo) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_PHOTO, COLUMN_PNO + " = " + pNo, null);
-        db.close();
-    }
-
-    //    일과 메모 수정
-    public void editMemo(int oNo, String oMemo) {
-        ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_OMEMO, oMemo);
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.update(TABLE_ONEUL, values, COLUMN_ONO + " = " + oNo, null);
-        db.close();
-    }
-
-    //    일과 기록 종료 및 저장
-    public void endOneul(int oNo, String oEnd) {
-        ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_OEND, oEnd);
-        values.put(DBHelper.COLUMN_ODONE, 1);
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.update(TABLE_ONEUL, values, COLUMN_ONO + " = " + oNo, null);
-        db.close();
-    }
-
-    //   수정할 일과 불러오기
-    public String[] getEditOneul(int oNo) {
-        String[] strings = null;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ONO + " = " + oNo,
-                null, null, null, null);
-
-        while (cursor.moveToNext()) {
-            String oDate = cursor.getString(cursor.getColumnIndex((COLUMN_ODATE)));
-            String oStart = cursor.getString(cursor.getColumnIndex(COLUMN_OSTART));
-            String oEnd = cursor.getString(cursor.getColumnIndex(COLUMN_OEND));
-            String oTitle = cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE));
-            String oMemo = cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO));
-
-            strings = new String[]{String.valueOf(oNo), oDate, oStart, oEnd, oTitle, oMemo};
-        }
-
-        cursor.close();
-        db.close();
-
-        return strings;
-    }
-
-    //    완료일과 불러오기
+    //    완료 일과 불러오기
     public void getOneul(String oDate, RecyclerView r_oneul, OneulAdapter adapter, String sort) {
         adapter.clear();
         sort = " " + sort;
@@ -276,6 +170,173 @@ public class DBHelper extends SQLiteOpenHelper {
         r_oneul.setAdapter(adapter);
     }
 
+
+    //   수정할 일과 불러오기
+    public String[] getOneul(int oNo) {
+        String[] strings = null;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_ONEUL, null, COLUMN_ONO + " = " + oNo,
+                null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            String oDate = cursor.getString(cursor.getColumnIndex((COLUMN_ODATE)));
+            String oStart = cursor.getString(cursor.getColumnIndex(COLUMN_OSTART));
+            String oEnd = cursor.getString(cursor.getColumnIndex(COLUMN_OEND));
+            String oTitle = cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE));
+            String oMemo = cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO));
+
+            strings = new String[]{String.valueOf(oNo), oDate, oStart, oEnd, oTitle, oMemo};
+        }
+
+        cursor.close();
+        db.close();
+
+        return strings;
+    }
+
+    //    일과 수정
+    public void editOneul(int oNo, String oDate, String oStart, String oEnd, String oTitle, String oMemo) {
+        ContentValues values = new ContentValues();
+        values.put(DBHelper.COLUMN_ODATE, oDate);
+        values.put(DBHelper.COLUMN_OSTART, oStart);
+        values.put(DBHelper.COLUMN_OEND, oEnd);
+        values.put(DBHelper.COLUMN_OTITLE, oTitle);
+        values.put(DBHelper.COLUMN_OMEMO, oMemo);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.update(TABLE_ONEUL, values, COLUMN_ONO + " = " + oNo, null);
+        db.close();
+    }
+
+    //    일과 기록 종료
+    public void endOneul(int oNo, String oEnd) {
+        ContentValues values = new ContentValues();
+        values.put(DBHelper.COLUMN_OEND, oEnd);
+        values.put(DBHelper.COLUMN_ODONE, 1);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.update(TABLE_ONEUL, values, COLUMN_ONO + " = " + oNo, null);
+        db.close();
+    }
+
+    //    일과 삭제
+    public void deleteOneul(int oNo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_PHOTO, COLUMN_ONO + " = " + oNo, null);
+        db.delete(TABLE_ONEUL, COLUMN_ONO + " = " + oNo, null);
+        db.close();
+    }
+
+    public void refreshRecyclerView() {
+//        오늘이면
+        if (TextUtils.equals(MainActivity.showDay, DateTime.today())) {
+            getOneul(MainActivity.showDay, HomeFragment.r_oneul, HomeFragment.adapter, "DESC");
+
+//        오늘이 아니면
+        } else {
+            getOneul(MainActivity.showDay, HomeFragment.r_oneul, HomeFragment.adapter, "ASC");
+        }
+    }
+
+    //    ㄴㄴ 사진
+    //    일과 사진 가져오기
+    public byte[] getPhoto(int pNo) {
+        byte[] bytes = null;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_PHOTO, new String[]{COLUMN_PPHOTO}, COLUMN_PNO + " = " + pNo,
+                null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            bytes = cursor.getBlob(cursor.getColumnIndex(COLUMN_PPHOTO));
+        }
+
+        cursor.close();
+        db.close();
+
+        return bytes;
+    }
+
+    //    일과 사진 여러개 가져오기
+    public List<Bitmap> getPhotos(int oNo) {
+        List<Bitmap> bitmaps = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_PHOTO, new String[]{COLUMN_PPHOTO}, COLUMN_ONO + " = " + oNo,
+                null, null, null, COLUMN_PNO);
+
+        while (cursor.moveToNext()) {
+            bitmaps.add(BitmapRefactor.bytesToBitmap(cursor.getBlob(cursor.getColumnIndex(COLUMN_PPHOTO))));
+        }
+
+        cursor.close();
+        db.close();
+
+        return bitmaps;
+    }
+
+    //    일과 사진 번호 여러개 가져오기
+    public List<Integer> getpNos(int oNo) {
+        List<Integer> integers = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_PHOTO, new String[]{COLUMN_PNO}, COLUMN_ONO + " = " + oNo,
+                null, null, null, COLUMN_PNO);
+
+        while (cursor.moveToNext()) {
+            integers.add(cursor.getInt(cursor.getColumnIndex(COLUMN_PNO)));
+        }
+
+        cursor.close();
+        db.close();
+
+        return integers;
+    }
+
+    public int getPhotoCount(int oNo) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_PHOTO, new String[]{COLUMN_PPHOTO}, COLUMN_ONO + " = " + oNo,
+                null, null, null, null);
+
+        int photoCount = cursor.getCount() - 1;
+
+        cursor.close();
+        db.close();
+
+        return photoCount;
+    }
+
+    //    일과 사진 추가
+    public void addPhoto(int oNo, Bitmap pPhoto) {
+        ContentValues values = new ContentValues();
+        values.put(DBHelper.COLUMN_ONO, oNo);
+        values.put(DBHelper.COLUMN_PPHOTO, BitmapRefactor.bitmapToBytes(BitmapRefactor.resizeBitmap(pPhoto)));
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.insert(TABLE_PHOTO, null, values);
+        db.close();
+    }
+
+    //    일과 사진 삭제
+    public void deletePhoto(int pNo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_PHOTO, COLUMN_PNO + " = " + pNo, null);
+        db.close();
+    }
+
+    //    ㄴㄴ 메모
+    //    일과 메모 수정
+    public void editMemo(int oNo, String oMemo) {
+        ContentValues values = new ContentValues();
+        values.put(DBHelper.COLUMN_OMEMO, oMemo);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.update(TABLE_ONEUL, values, COLUMN_ONO + " = " + oNo, null);
+        db.close();
+    }
+
+    //    ㄴㄴ 캘린더
     //    일과 날짜 불러오기
     public List<CalendarDay> getOneulDates() {
         ArrayList<CalendarDay> calendarDays = new ArrayList<>();
@@ -293,28 +354,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         return calendarDays;
-    }
-
-    //    일과 삭제
-    public void deleteOneul(int oNo) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_PHOTO, COLUMN_ONO + " = " + oNo, null);
-        db.delete(TABLE_ONEUL, COLUMN_ONO + " = " + oNo, null);
-        db.close();
-    }
-
-    //    일과 수정
-    public void editOneul(int oNo, String oDate, String oStart, String oEnd, String oTitle, String oMemo) {
-        ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_ODATE, oDate);
-        values.put(DBHelper.COLUMN_OSTART, oStart);
-        values.put(DBHelper.COLUMN_OEND, oEnd);
-        values.put(DBHelper.COLUMN_OTITLE, oTitle);
-        values.put(DBHelper.COLUMN_OMEMO, oMemo);
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.update(TABLE_ONEUL, values, COLUMN_ONO + " = " + oNo, null);
-        db.close();
     }
 
     @Override

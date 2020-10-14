@@ -45,25 +45,27 @@ public class RealService extends Service {
 
         //            기록중인 일과 있으면
         if (dbHelper.getStartOneul() != null) {
-            RemoteInput.Builder remoteInput = new RemoteInput.Builder("KEY_OMEMO")
+            RemoteInput.Builder remoteInput = new RemoteInput
+                    .Builder("KEY_OMEMO")
                     .setLabel("추가할 메모를 입력하세요.");
 
             mintent.putExtra("requestCode", 1);
-            PendingIntent editMemoIntent = PendingIntent.getBroadcast(context, 1, mintent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            NotificationCompat.Action editMemoAction = new NotificationCompat.Action.Builder(null, "메모", editMemoIntent)
+            PendingIntent editMemoIntent = PendingIntent
+                    .getBroadcast(context, 1, mintent, PendingIntent.FLAG_UPDATE_CURRENT);
+            NotificationCompat.Action editMemoAction = new NotificationCompat.Action
+                    .Builder(null, "메모", editMemoIntent)
                     .addRemoteInput(remoteInput.build())
                     .setAllowGeneratedReplies(true)
                     .build();
 
 
             mintent.putExtra("requestCode", 2);
-            PendingIntent stopOneulIntent = PendingIntent.getBroadcast(context, 2, mintent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent stopOneulIntent = PendingIntent
+                    .getBroadcast(context, 2, mintent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             mintent = new Intent(context, CameraActivity.class);
-            PendingIntent addPhotoIntent = PendingIntent.getActivity(context, 3, mintent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent addPhotoIntent = PendingIntent
+                    .getActivity(context, 3, mintent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             builder.setContentTitle(dbHelper.getStartOneul().getoTitle())
                     .setSubText("진행 중")
@@ -79,7 +81,8 @@ public class RealService extends Service {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, mintent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
-            NotificationCompat.Action startOneulAction = new NotificationCompat.Action.Builder(null, "START", pendingIntent)
+            NotificationCompat.Action startOneulAction = new NotificationCompat.Action
+                    .Builder(null, "START", pendingIntent)
                     .addRemoteInput(remoteInput.build())
                     .setAllowGeneratedReplies(true)
                     .build();

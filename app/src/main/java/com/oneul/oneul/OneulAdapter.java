@@ -36,8 +36,8 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             };
         }
 
-        return new OneulHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.home_recycler,
-                parent, false));
+        return new OneulHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.home_recycler, parent, false));
     }
 
     @Override

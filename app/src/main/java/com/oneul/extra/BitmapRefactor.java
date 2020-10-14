@@ -1,6 +1,5 @@
 package com.oneul.extra;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -50,7 +49,7 @@ public class BitmapRefactor {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
-    public static void bitmapToDB(Activity activity, Bitmap bitmap) {
+    public static Bitmap resizeBitmap(Bitmap bitmap) {
         byte[] bytes = BitmapRefactor.bitmapToBytes(bitmap);
 
         if (bytes.length > 1000 * 1024) {
@@ -62,7 +61,6 @@ public class BitmapRefactor {
             bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
         }
 
-        DBHelper dbHelper = DBHelper.getDB(activity);
-        dbHelper.addPhoto(dbHelper.getStartOneul().getoNo(), bitmapToBytes(bitmap));
+        return bitmap;
     }
 }

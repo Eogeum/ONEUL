@@ -1,31 +1,36 @@
 package com.oneul.oneul;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.WriteActivity;
 import com.oneul.extra.BitmapRefactor;
 import com.oneul.extra.DBHelper;
-import com.oneul.extra.DateTime;
 import com.oneul.fragment.DialogFragment;
-import com.oneul.fragment.HomeFragment;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.listeners.OnDismissListener;
 import com.stfalcon.imageviewer.listeners.OnImageChangeListener;
 import com.stfalcon.imageviewer.loader.ImageLoader;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class OneulHolder extends RecyclerView.ViewHolder {
     TextView t_oNo, t_oTitle, t_oTime, t_oMemo, t_oMore, t_oPhotoCount;
@@ -67,13 +72,13 @@ public class OneulHolder extends RecyclerView.ViewHolder {
 //                            수정
                                     case 0:
                                         Intent intent = new Intent(context, WriteActivity.class);
-                                        intent.putExtra("editOneul", dbHelper.getEditOneul(oNo));
+                                        intent.putExtra("editOneul", dbHelper.getOneul(oNo));
                                         context.startActivity(intent);
                                         break;
 //                            삭제
                                     case 1:
                                         dbHelper.deleteOneul(oNo);
-                                        refreshRecyclerView();
+                                        dbHelper.refreshRecyclerView();
                                         break;
                                 }
                             }
@@ -90,8 +95,8 @@ public class OneulHolder extends RecyclerView.ViewHolder {
             public void onClick(final View v) {
                 oNo = Integer.parseInt(t_oNo.getText().toString());
 
-                StfalconImageViewer.Builder<Bitmap> builder = new StfalconImageViewer.Builder<>(context,
-                        dbHelper.getPhoto(oNo), new ImageLoader<Bitmap>() {
+                StfalconImageViewer.Builder<Bitmap> builder = new StfalconImageViewer
+                        .Builder<>(context, dbHelper.getPhotos(oNo), new ImageLoader<Bitmap>() {
                     @Override
                     public void loadImage(ImageView imageView, Bitmap image) {
                         imageView.setImageBitmap(image);
@@ -111,8 +116,27 @@ public class OneulHolder extends RecyclerView.ViewHolder {
                 ll_downloadPhoto.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        FIXME 사진 추가기능 구현
-                        DialogFragment.deletePhotoDialog(context, viewer, oNo, dbHelper.getpNos(oNo).get(0));
+                        //        todo 효율적인 퍼미션 체크로 변경
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
+                                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
+                            FileOutputStream stream = null;
+                            try {
+                                stream = new FileOutputStream(DialogFragment.getFile("/Download"));
+                                stream.write(dbHelper.getPhoto(dbHelper.getpNos(oNo).get(0)));
+                                stream.flush();
+                                stream.close();
+
+                                Toast.makeText(context, "\"/Download\"에 저장했습니다.", Toast.LENGTH_SHORT).show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        } else {
+                            ActivityCompat.requestPermissions((Activity) context, new String[]{
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            }, 1);
+                        }
                     }
                 });
 
@@ -127,12 +151,30 @@ public class OneulHolder extends RecyclerView.ViewHolder {
                                                 dbHelper.getpNos(oNo).get(position));
                                     }
                                 });
+
+                                ll_downloadPhoto.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        File file = DialogFragment.getFile("/Download");
+                                        try {
+                                            FileOutputStream stream = new FileOutputStream(file);
+                                            stream.write(dbHelper.getPhoto(dbHelper.getpNos(oNo).get(position)));
+                                            stream.flush();
+                                            stream.close();
+
+                                            Toast.makeText(context, "\"/Download\"에 저장했습니다.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
                             }
                         })
                         .withDismissListener(new OnDismissListener() {
                             @Override
                             public void onDismiss() {
-                                refreshRecyclerView();
+                                dbHelper.refreshRecyclerView();
                             }
                         })
                         .build();
@@ -147,19 +189,6 @@ public class OneulHolder extends RecyclerView.ViewHolder {
                 return true;
             }
         });
-    }
-
-    private void refreshRecyclerView() {
-//        오늘이면
-        if (TextUtils.equals(MainActivity.showDay, DateTime.today())) {
-            dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul,
-                    HomeFragment.adapter, "DESC");
-
-//        오늘이 아니면
-        } else {
-            dbHelper.getOneul(MainActivity.showDay, HomeFragment.r_oneul,
-                    HomeFragment.adapter, "ASC");
-        }
     }
 
     public void onBind(Oneul oneul) {

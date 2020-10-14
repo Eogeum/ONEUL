@@ -19,18 +19,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.oneul.extra.DBHelper;
-import com.oneul.fragment.DialogFragment;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
-
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.Objects;
 
@@ -49,9 +40,9 @@ public class WriteActivity extends AppCompatActivity {
     DBHelper dbHelper;
 
     //    ㄴㄴ 캘린더
-    View calendarView;
-    MaterialCalendarView widget;
-    AlertDialog calendarDialog;
+//    View calendarView;
+//    MaterialCalendarView widget;
+//    AlertDialog calendarDialog;
 
 
     @SuppressLint({"InflateParams", "DefaultLocale"})
@@ -69,42 +60,42 @@ public class WriteActivity extends AppCompatActivity {
         dbHelper = DBHelper.getDB(this);
 
 //        ㄴㄴ 캘린더
-        calendarView = getLayoutInflater().inflate(R.layout.fragment_calendar, null);
-        widget = calendarView.findViewById(R.id.mc_calendar);
-//        최소 최대 날짜 설정
-        widget.state().edit()
-                .setMinimumDate(CalendarDay.from(2000, 1, 1))
-                .setMaximumDate(CalendarDay.from(2040, 1, 1))
-                .commit();
-//        캘린더 헤더 수정
-        widget.setTitleFormatter(new TitleFormatter() {
-            @Override
-            public CharSequence format(CalendarDay day) {
-                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월"));
-            }
-        });
-        widget.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                t_oDate.setText(Objects.requireNonNull(widget.getSelectedDate()).getDate().toString());
-                calendarDialog.dismiss();
-            }
-        });
-
-//        캘린더 열기
-        ll_goCalendar = findViewById(R.id.ll_goCalendar);
-        ll_goCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                다이얼로그가 널이면
-                if (calendarDialog == null) {
-                    calendarDialog = DialogFragment.calendarDialog(WriteActivity.this, calendarView);
-                }
-
-                widget.setSelectedDate(LocalDate.parse(t_oDate.getText()));
-                calendarDialog.show();
-            }
-        });
+//        calendarView = getLayoutInflater().inflate(R.layout.view_calendar, null);
+//        widget = calendarView.findViewById(R.id.mc_calendar);
+////        최소 최대 날짜 설정
+//        widget.state().edit()
+//                .setMinimumDate(CalendarDay.from(2000, 1, 1))
+//                .setMaximumDate(CalendarDay.from(2040, 1, 1))
+//                .commit();
+////        캘린더 헤더 수정
+//        widget.setTitleFormatter(new TitleFormatter() {
+//            @Override
+//            public CharSequence format(CalendarDay day) {
+//                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월"));
+//            }
+//        });
+//        widget.setOnDateChangedListener(new OnDateSelectedListener() {
+//            @Override
+//            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+//                t_oDate.setText(Objects.requireNonNull(widget.getSelectedDate()).getDate().toString());
+//                calendarDialog.dismiss();
+//            }
+//        });
+//
+////        캘린더 열기
+//        ll_goCalendar = findViewById(R.id.ll_goCalendar);
+//        ll_goCalendar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                다이얼로그가 널이면
+//                if (calendarDialog == null) {
+//                    calendarDialog = DialogFragment.calendarDialog(WriteActivity.this, calendarView);
+//                }
+//
+//                widget.setSelectedDate(LocalDate.parse(t_oDate.getText()));
+//                calendarDialog.show();
+//            }
+//        });
 
 //        시작 시간 입력
         timeStart = findViewById(R.id.timeStart);
@@ -196,9 +187,11 @@ public class WriteActivity extends AppCompatActivity {
                     if (TextUtils.isEmpty(editTitle.getText().toString())) {
                         checkBlankTitle();
                     } else {
-                        dbHelper.addOneul(t_oDate.getText().toString(), timeStart.getText().toString(),
-                                timeEnd.getText().toString(), editTitle.getText().toString(),
-                                editMemo.getText().toString(), bytes, 1);
+
+//                        fixme 사진 다중 추가로 바꾸기
+//                        dbHelper.addOneul(t_oDate.getText().toString(), timeStart.getText().toString(),
+//                                timeEnd.getText().toString(), editTitle.getText().toString(),
+//                                editMemo.getText().toString(), bytes, 1);
 
                         Toast.makeText(getApplicationContext(), t_oDate.getText() + "\n일과를 저장했습니다.",
                                 Toast.LENGTH_SHORT).show();

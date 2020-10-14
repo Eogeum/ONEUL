@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -33,22 +34,14 @@ import com.oneul.CameraActivity;
 import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.WriteActivity;
-import com.oneul.calendar.OneulDecorator;
 import com.oneul.extra.Animation;
 import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
 import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
 import com.oneul.service.RealService;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.loader.ImageLoader;
-
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
 import java.util.Objects;
@@ -78,8 +71,6 @@ public class HomeFragment extends Fragment {
     FloatingActionButton fab_goWrite;
 
     //    ㄴㄴ 캘린더
-    View calendarView;
-    MaterialCalendarView widget;
     AlertDialog calendarDialog;
 
     public HomeFragment() {
@@ -144,41 +135,23 @@ public class HomeFragment extends Fragment {
         });
 
 //        ㄴㄴ 캘린더
-        calendarView = inflater.inflate(R.layout.fragment_calendar, null);
-        widget = calendarView.findViewById(R.id.mc_calendar);
-//        최소 최대 날짜 설정
-        widget.state().edit()
-                .setMinimumDate(CalendarDay.from(2000, 1, 1))
-                .setMaximumDate(CalendarDay.from(2040, 1, 1))
-                .commit();
-//        캘린더 헤더 수정
-        widget.setTitleFormatter(new TitleFormatter() {
-            @Override
-            public CharSequence format(CalendarDay day) {
-                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월"));
-            }
-        });
-        widget.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                MainActivity.showDay = Objects.requireNonNull(widget.getSelectedDate()).getDate().toString();
-                dateChange();
-                calendarDialog.dismiss();
-            }
-        });
+
 
 //        캘린더 열기
         ll_goCalendar = homeView.findViewById(R.id.ll_goCalendar);
         ll_goCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                다이얼로그가 널이면
                 if (calendarDialog == null) {
-                    calendarDialog = DialogFragment.calendarDialog(getActivity(), calendarView);
+                    calendarDialog = DialogFragment.calendarDialog(getActivity());
+                    calendarDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            dateChange();
+                        }
+                    });
                 }
-                widget.removeDecorators();
-                widget.addDecorators(new OneulDecorator(dbHelper.getOneulDates()));
-                widget.setSelectedDate(LocalDate.parse(MainActivity.showDay));
+
                 calendarDialog.show();
             }
         });
@@ -190,7 +163,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 if (dbHelper.getStartOneul() == null) {
 //                    일과 제목이 없으면
-                    if (TextUtils.isEmpty(et_oTitle.getText().toString())) {
+                    if (TextUtils.isEmpty(et_oTitle.getText().toString().trim())) {
                         Toast.makeText(getActivity(), "일과 제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
 
 //                        투데이박스 포커스, 키보드 올리기
@@ -199,7 +172,7 @@ public class HomeFragment extends Fragment {
                     } else {
 //                        기록중인 일과가 없으면 기록 시작
                         if (dbHelper.getStartOneul() == null) {
-                            dbHelper.addOneul(DateTime.today(), DateTime.nowTime(), null,
+                            dbHelper.startOneul(DateTime.today(), DateTime.nowTime(), null,
                                     et_oTitle.getText().toString(), null, null, 0);
                         }
 
@@ -207,16 +180,18 @@ public class HomeFragment extends Fragment {
                         dateChange();
                         et_oTitle.getText().clear();
 //                       알림 새로고침
-                        Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class).notify(101,
-                                RealService.createNotification(getActivity()));
+                        Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class)
+                                .notify(101, RealService.createNotification(getActivity()));
                     }
                 } else {
 //                    새로고침 및 투데이박스 값 초기화
+                    Toast.makeText(getActivity(), "이미 기록중인 일과가 있습니다.", Toast.LENGTH_SHORT).show();
+
                     dateChange();
                     et_oTitle.getText().clear();
 //                   알림 새로고침
-                    Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class).notify(101,
-                            RealService.createNotification(getActivity()));
+                    Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class)
+                            .notify(101, RealService.createNotification(getActivity()));
                 }
             }
         });
@@ -319,33 +294,33 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (dbHelper.getStartOneul() != null) {
-                    //                메모 작성중일 시
+//                    메모 작성중일 시
                     if (MainActivity.useEditMemo) {
                         DialogFragment.checkMemoDialog(getActivity(), 0);
                     } else {
-//                    쇼데이 변경
+//                        쇼데이 변경
                         MainActivity.showDay = dbHelper.getStartOneul().getoDate();
 
-//                    기록 종료 및 새로고침
+//                        기록 종료 및 새로고침
                         dbHelper.endOneul(dbHelper.getStartOneul().getoNo(), DateTime.nowTime());
                         Toast.makeText(getActivity(), MainActivity.showDay + "\n일과를 저장했습니다.",
                                 Toast.LENGTH_LONG).show();
                         dateChange();
 
-//                    메모박스 초기화
+//                        메모박스 초기화
                         i_memoBox.setImageResource(R.drawable.ic_expand);
                         Animation.collapse(ll_memoBox);
-//                       알림 새로고침
-                        Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class).notify(101,
-                                RealService.createNotification(getActivity()));
+//                        알림 새로고침
+                        Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class)
+                                .notify(101, RealService.createNotification(getActivity()));
                     }
                 } else {
                     i_memoBox.setImageResource(R.drawable.ic_expand);
                     Animation.collapse(ll_memoBox);
                     dateChange();
 //                   알림 새로고침
-                    Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class).notify(101,
-                            RealService.createNotification(getActivity()));
+                    Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class)
+                            .notify(101, RealService.createNotification(getActivity()));
                 }
             }
         });
@@ -372,9 +347,10 @@ public class HomeFragment extends Fragment {
                 t_oTitle.setText(startOneul.getoTitle());
                 et_oMemo.setText(startOneul.getoMemo());
 
+//                fixme 다운 삭제 있는걸로 교체
 //                디비에서 사진 불러오기
-                if (dbHelper.getPhoto(startOneul.getoNo()).size() > 0) {
-                    final List<Bitmap> startPicture = dbHelper.getPhoto(startOneul.getoNo());
+                if (dbHelper.getPhotos(startOneul.getoNo()).size() > 0) {
+                    final List<Bitmap> startPicture = dbHelper.getPhotos(startOneul.getoNo());
 
                     hs_imagePreview.setVisibility(View.VISIBLE);
                     ll_imagePreview.removeAllViews();
