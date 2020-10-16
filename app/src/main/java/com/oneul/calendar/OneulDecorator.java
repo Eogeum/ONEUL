@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class OneulDecorator implements DayViewDecorator {
-    private HashSet<CalendarDay> dates;
+    private final HashSet<CalendarDay> dates;
 
     public OneulDecorator(Collection<CalendarDay> dates) {
         this.dates = new HashSet<>(dates);

@@ -15,12 +15,10 @@ import java.util.ArrayList;
 
 public class StatAdapter extends RecyclerView.Adapter<StatAdapter.ViewHolder> {
 
-    private ArrayList<StatItem> items;
-    private LayoutInflater mInflater;
-    private Context mContext;
+    private final ArrayList<Stat> items;
+    private final LayoutInflater mInflater;
 
-    public StatAdapter(Context context, ArrayList<StatItem> items) {
-        this.mContext = context;
+    public StatAdapter(Context context, ArrayList<Stat> items) {
         this.mInflater = LayoutInflater.from(context);
         this.items = items;
     }
@@ -29,8 +27,7 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.stat_recycler, parent, false);
-        ViewHolder vh = new ViewHolder(view);
-        return vh;
+        return new ViewHolder(view);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {

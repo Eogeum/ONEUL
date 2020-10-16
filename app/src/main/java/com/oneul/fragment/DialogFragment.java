@@ -11,28 +11,16 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
-import com.oneul.MainActivity;
 import com.oneul.R;
-import com.oneul.calendar.OneulDecorator;
 import com.oneul.extra.DBHelper;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import com.stfalcon.imageviewer.StfalconImageViewer;
-
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Objects;
 
 public class DialogFragment {
     public static final int CAMERA_REQUEST_CODE = 101;
@@ -68,51 +56,63 @@ public class DialogFragment {
         dialog.show();
     }
 
-    public static AlertDialog calendarDialog(final Activity activity) {
-        final View view = View.inflate(activity, R.layout.view_calendar, null);
-        final MaterialCalendarView mc_calendar = view.findViewById(R.id.mc_calendar);
-
-        final DBHelper dbHelper = DBHelper.getDB(activity);
-
-//        최소 최대 날짜 설정
-        mc_calendar.state().edit()
-                .setMinimumDate(CalendarDay.from(2000, 1, 1))
-                .setMaximumDate(CalendarDay.from(2040, 1, 1))
-                .commit();
-//        캘린더 헤더 수정
-        mc_calendar.setTitleFormatter(new TitleFormatter() {
-            @Override
-            public CharSequence format(CalendarDay day) {
-                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월"));
-            }
-        });
-        mc_calendar.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                MainActivity.showDay = Objects.requireNonNull(widget.getSelectedDate()).getDate().toString();
-                dialog.cancel();
-            }
-        });
-
-        dialog = new AlertDialog.Builder(activity)
-                .setView(view)
-                .create();
-
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                mc_calendar.removeDecorators();
-                mc_calendar.addDecorators(new OneulDecorator(dbHelper.getOneulDates()));
-                mc_calendar.setSelectedDate(LocalDate.parse(MainActivity.showDay));
-            }
-        });
-
-        return dialog;
-    }
-
-//    fixme 다중
-//    public static View imageViewer(final Context context, final StfalconImageViewer<Bitmap> viewer,
-//                                   final int oNo, final int pNo) {
+//    fixme 홀더랑 같이 수정해야함 삭제 안됨
+//    public static StfalconImageViewer<Bitmap> imageViewerDialog(final Context context,
+//                                                                final StfalconImageViewer<Bitmap> viewer,
+//                                                                final int oNo) {
+//        final DBHelper dbHelper = DBHelper.getDB(context);
+//
+//        StfalconImageViewer.Builder<Bitmap> builder = new StfalconImageViewer
+//                .Builder<>(context, dbHelper.getPhotos(oNo), new ImageLoader<Bitmap>() {
+//            @Override
+//            public void loadImage(ImageView imageView, Bitmap image) {
+//                imageView.setImageBitmap(image);
+//            }
+//        });
+//        final View overlay = DialogFragment.newOverlay(context, viewer, oNo);
+//
+//        return builder
+//                .withOverlayView(overlay)
+//                .withImageChangeListener(new OnImageChangeListener() {
+//                    @Override
+//                    public void onImageChange(final int position) {
+//                        overlay.findViewById(R.id.ll_deletePhoto).setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                DialogFragment.deletePhotoDialog(context, viewer, oNo,
+//                                        dbHelper.getpNos(oNo).get(position));
+//                            }
+//                        });
+//
+//                        overlay.findViewById(R.id.ll_downloadPhoto).setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                File file = DialogFragment.getFile("/Download");
+//                                try {
+//                                    FileOutputStream stream = new FileOutputStream(file);
+//                                    stream.write(dbHelper.getPhoto(dbHelper.getpNos(oNo).get(position)));
+//                                    stream.flush();
+//                                    stream.close();
+//
+//                                    Toast.makeText(context, "\"/Download\"에 저장했습니다.",
+//                                            Toast.LENGTH_SHORT).show();
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        });
+//                    }
+//                })
+//                .withDismissListener(new OnDismissListener() {
+//                    @Override
+//                    public void onDismiss() {
+//                        dbHelper.refreshRecyclerView();
+//                    }
+//                })
+//                .build();
+//    }
+//
+//    public static View newOverlay(final Context context, final StfalconImageViewer<Bitmap> view, final int oNo) {
 //        final DBHelper dbHelper = DBHelper.getDB(context);
 //
 //        View overlay = View.inflate(context, R.layout.view_overlay, null);
@@ -120,7 +120,7 @@ public class DialogFragment {
 //        ll_deletePhoto.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                deletePhotoDialog(context, viewer, oNo, dbHelper.getpNos(oNo).get(0));
+//                DialogFragment.deletePhotoDialog(context, view, oNo, dbHelper.getpNos(oNo).get(0));
 //            }
 //        });
 //
@@ -131,9 +131,8 @@ public class DialogFragment {
 //                //        todo 효율적인 퍼미션 체크로 변경
 //                if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
 //                        ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
-//                    FileOutputStream stream = null;
 //                    try {
-//                        stream = new FileOutputStream(DialogFragment.getFile("/Download"));
+//                        FileOutputStream stream = new FileOutputStream(DialogFragment.getFile("/Download"));
 //                        stream.write(dbHelper.getPhoto(dbHelper.getpNos(oNo).get(0)));
 //                        stream.flush();
 //                        stream.close();
@@ -152,7 +151,7 @@ public class DialogFragment {
 //            }
 //        });
 //
-//        return null;
+//        return overlay;
 //    }
 
     public static void addPhotoDialog(final Activity activity) {

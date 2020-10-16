@@ -1,7 +1,6 @@
 package com.oneul.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,20 +17,18 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.oneul.R;
+import com.oneul.stat.Stat;
 import com.oneul.stat.StatAdapter;
-import com.oneul.stat.StatItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class StatFragment extends Fragment {
-    TextView statDay;
     PieChart pieChart;
 
     //    ㄴㄴ 리사이클
     RecyclerView statRecycler;
-    StatAdapter adapter;
-    ArrayList<StatItem> items;
+    ArrayList<Stat> items;
 
     public StatFragment() {
     }
@@ -47,8 +44,9 @@ public class StatFragment extends Fragment {
         View statView = inflater.inflate(R.layout.fragment_stat, container, false);
 
         //년,월 표시
-        statDay = statView.findViewById(R.id.statDay);
-        statDay.setText(new SimpleDateFormat("yyyy년 MM월").format(System.currentTimeMillis()));
+//        todo 홈에서 날짜 바구면 바뀌게
+        ((TextView) statView.findViewById(R.id.statDay))
+                .setText(new SimpleDateFormat("yyyy년 MM월").format(System.currentTimeMillis()));
 
         //파이차트 (그래프형식)
         ArrayList<PieEntry> pieValue = new ArrayList<>();
@@ -72,19 +70,16 @@ public class StatFragment extends Fragment {
         //임시 데이터
         items = new ArrayList<>();
         items.clear();
-        items.add(new StatItem("코딩", "31시간"));
-        items.add(new StatItem("강의", "24시간"));
-        items.add(new StatItem("여가", "15시간"));
-        items.add(new StatItem("운동", "11시간"));
-        items.add(new StatItem("독서", "8시간"));
-
-        Context context = statView.getContext();
-        adapter = new StatAdapter(context, items);
+        items.add(new Stat("코딩", "31시간"));
+        items.add(new Stat("강의", "24시간"));
+        items.add(new Stat("여가", "15시간"));
+        items.add(new Stat("운동", "11시간"));
+        items.add(new Stat("독서", "8시간"));
 
 //        ㄴㄴ 리사이클
         statRecycler = statView.findViewById(R.id.statRecycler);
         statRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        statRecycler.setAdapter(adapter);
+        statRecycler.setAdapter(new StatAdapter(statView.getContext(), items));
         statRecycler.setHasFixedSize(false);
         statRecycler.setNestedScrollingEnabled(false);
 

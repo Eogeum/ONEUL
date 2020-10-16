@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,14 +32,22 @@ import com.oneul.CameraActivity;
 import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.WriteActivity;
+import com.oneul.calendar.OneulDecorator;
 import com.oneul.extra.Animation;
 import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
 import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
 import com.oneul.service.RealService;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.loader.ImageLoader;
+
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
 import java.util.Objects;
@@ -53,11 +59,9 @@ public class HomeFragment extends Fragment {
 
     //    ㄴㄴ 뷰
     HorizontalScrollView hs_imagePreview;
-    LinearLayout ll_todayBox, ll_goCalendar, ll_memoBox, ll_picMemo, ll_cancelMemo, ll_saveMemo, ll_imagePreview;
-    Button btn_ok, btn_stop;
+    LinearLayout ll_todayBox, ll_memoBox, ll_picMemo, ll_cancelMemo, ll_saveMemo, ll_imagePreview;
     EditText et_oTitle, et_oMemo;
     FrameLayout fl_startBox;
-    ConstraintLayout cl_startBox;
     TextView t_oTitle, t_oTime, t_oDate;
     ImageView i_memoBox;
 
@@ -71,6 +75,7 @@ public class HomeFragment extends Fragment {
     FloatingActionButton fab_goWrite;
 
     //    ㄴㄴ 캘린더
+    MaterialCalendarView mc_calendar;
     AlertDialog calendarDialog;
 
     public HomeFragment() {
@@ -135,30 +140,56 @@ public class HomeFragment extends Fragment {
         });
 
 //        ㄴㄴ 캘린더
+        View v_calendar = View.inflate(getContext(), R.layout.view_calendar, null);
+        mc_calendar = v_calendar.findViewById(R.id.mc_calendar);
+//        최소 최대 날짜 설정
+        mc_calendar.state().edit()
+                .setMinimumDate(CalendarDay.from(2000, 1, 1))
+                .setMaximumDate(CalendarDay.from(2040, 1, 1))
+                .commit();
+//        캘린더 헤더 수정
+        mc_calendar.setTitleFormatter(new TitleFormatter() {
+            @Override
+            public CharSequence format(CalendarDay day) {
+                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월"));
+            }
+        });
+        mc_calendar.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                MainActivity.showDay = Objects.requireNonNull(widget.getSelectedDate()).getDate().toString();
+                calendarDialog.cancel();
+            }
+        });
 
+        calendarDialog = new AlertDialog.Builder(getContext())
+                .setView(v_calendar)
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        dateChange();
+                    }
+                })
+                .create();
+        calendarDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                mc_calendar.removeDecorators();
+                mc_calendar.addDecorators(new OneulDecorator(dbHelper.getOneulDates()));
+                mc_calendar.setSelectedDate(LocalDate.parse(MainActivity.showDay));
+            }
+        });
 
 //        캘린더 열기
-        ll_goCalendar = homeView.findViewById(R.id.ll_goCalendar);
-        ll_goCalendar.setOnClickListener(new View.OnClickListener() {
+        homeView.findViewById(R.id.ll_goCalendar).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (calendarDialog == null) {
-                    calendarDialog = DialogFragment.calendarDialog(getActivity());
-                    calendarDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            dateChange();
-                        }
-                    });
-                }
-
                 calendarDialog.show();
             }
         });
 
 //        투데이박스 입력 완료
-        btn_ok = homeView.findViewById(R.id.btn_ok);
-        btn_ok.setOnClickListener(new View.OnClickListener() {
+        homeView.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (dbHelper.getStartOneul() == null) {
@@ -197,8 +228,7 @@ public class HomeFragment extends Fragment {
         });
 
 //        메모박스 확장 축소
-        cl_startBox = homeView.findViewById(R.id.cl_startBox);
-        cl_startBox.setOnClickListener(new View.OnClickListener() {
+        homeView.findViewById(R.id.cl_startBox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (ll_memoBox.getVisibility()) {
@@ -289,8 +319,7 @@ public class HomeFragment extends Fragment {
         });
 
 //        스타트박스 기록 완료
-        btn_stop = homeView.findViewById(R.id.btn_stop);
-        btn_stop.setOnClickListener(new View.OnClickListener() {
+        homeView.findViewById(R.id.btn_stop).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (dbHelper.getStartOneul() != null) {

@@ -1,7 +1,5 @@
 package com.oneul.oneul;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,34 +7,21 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oneul.R;
 import com.oneul.WriteActivity;
 import com.oneul.extra.BitmapRefactor;
 import com.oneul.extra.DBHelper;
-import com.oneul.fragment.DialogFragment;
 import com.stfalcon.imageviewer.StfalconImageViewer;
-import com.stfalcon.imageviewer.listeners.OnDismissListener;
-import com.stfalcon.imageviewer.listeners.OnImageChangeListener;
-import com.stfalcon.imageviewer.loader.ImageLoader;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class OneulHolder extends RecyclerView.ViewHolder {
     TextView t_oNo, t_oTitle, t_oTime, t_oMemo, t_oMore, t_oPhotoCount;
     ImageView i_oPhoto;
     RelativeLayout rl_oPhoto;
-    LinearLayout ll_deletePhoto, ll_downloadPhoto;
     StfalconImageViewer<Bitmap> viewer;
 
     Context context;
@@ -90,97 +75,18 @@ public class OneulHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        rl_oPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                oNo = Integer.parseInt(t_oNo.getText().toString());
-
-                StfalconImageViewer.Builder<Bitmap> builder = new StfalconImageViewer
-                        .Builder<>(context, dbHelper.getPhotos(oNo), new ImageLoader<Bitmap>() {
-                    @Override
-                    public void loadImage(ImageView imageView, Bitmap image) {
-                        imageView.setImageBitmap(image);
-                    }
-                });
-
-                View overlay = View.inflate(context, R.layout.view_overlay, null);
-                ll_deletePhoto = overlay.findViewById(R.id.ll_deletePhoto);
-                ll_deletePhoto.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DialogFragment.deletePhotoDialog(context, viewer, oNo, dbHelper.getpNos(oNo).get(0));
-                    }
-                });
-
-                ll_downloadPhoto = overlay.findViewById(R.id.ll_downloadPhoto);
-                ll_downloadPhoto.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //        todo 효율적인 퍼미션 체크로 변경
-                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
-                                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
-                            FileOutputStream stream = null;
-                            try {
-                                stream = new FileOutputStream(DialogFragment.getFile("/Download"));
-                                stream.write(dbHelper.getPhoto(dbHelper.getpNos(oNo).get(0)));
-                                stream.flush();
-                                stream.close();
-
-                                Toast.makeText(context, "\"/Download\"에 저장했습니다.", Toast.LENGTH_SHORT).show();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        } else {
-                            ActivityCompat.requestPermissions((Activity) context, new String[]{
-                                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                            }, 1);
-                        }
-                    }
-                });
-
-                viewer = builder.withOverlayView(overlay)
-                        .withImageChangeListener(new OnImageChangeListener() {
-                            @Override
-                            public void onImageChange(final int position) {
-                                ll_deletePhoto.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        DialogFragment.deletePhotoDialog(context, viewer, oNo,
-                                                dbHelper.getpNos(oNo).get(position));
-                                    }
-                                });
-
-                                ll_downloadPhoto.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        File file = DialogFragment.getFile("/Download");
-                                        try {
-                                            FileOutputStream stream = new FileOutputStream(file);
-                                            stream.write(dbHelper.getPhoto(dbHelper.getpNos(oNo).get(position)));
-                                            stream.flush();
-                                            stream.close();
-
-                                            Toast.makeText(context, "\"/Download\"에 저장했습니다.",
-                                                    Toast.LENGTH_SHORT).show();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-                            }
-                        })
-                        .withDismissListener(new OnDismissListener() {
-                            @Override
-                            public void onDismiss() {
-                                dbHelper.refreshRecyclerView();
-                            }
-                        })
-                        .build();
-                viewer.show();
-            }
-        });
+//        fixme 다이얼로그랑 같이 수정해야함 삭제 안됨
+//        rl_oPhoto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(final View v) {
+//                if (viewer == null) {
+//                    oNo = Integer.parseInt(t_oNo.getText().toString());
+//                    viewer = DialogFragment.imageViewerDialog(context, viewer, oNo);
+//                }
+//
+//                viewer.show();
+//            }
+//        });
         rl_oPhoto.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

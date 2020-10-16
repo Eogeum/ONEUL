@@ -15,7 +15,7 @@ import com.oneul.R;
 import java.util.ArrayList;
 
 public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<Oneul> oneul = new ArrayList<>();
+    private final ArrayList<Oneul> oneul = new ArrayList<>();
 
     public void addItem(Oneul oneul) {
         this.oneul.add(oneul);
