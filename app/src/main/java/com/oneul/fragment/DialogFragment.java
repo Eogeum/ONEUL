@@ -1,5 +1,6 @@
 package com.oneul.fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,11 +9,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.oneul.R;
@@ -20,6 +24,8 @@ import com.oneul.extra.DBHelper;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class DialogFragment {
@@ -55,104 +61,6 @@ public class DialogFragment {
         });
         dialog.show();
     }
-
-//    fixme 홀더랑 같이 수정해야함 삭제 안됨
-//    public static StfalconImageViewer<Bitmap> imageViewerDialog(final Context context,
-//                                                                final StfalconImageViewer<Bitmap> viewer,
-//                                                                final int oNo) {
-//        final DBHelper dbHelper = DBHelper.getDB(context);
-//
-//        StfalconImageViewer.Builder<Bitmap> builder = new StfalconImageViewer
-//                .Builder<>(context, dbHelper.getPhotos(oNo), new ImageLoader<Bitmap>() {
-//            @Override
-//            public void loadImage(ImageView imageView, Bitmap image) {
-//                imageView.setImageBitmap(image);
-//            }
-//        });
-//        final View overlay = DialogFragment.newOverlay(context, viewer, oNo);
-//
-//        return builder
-//                .withOverlayView(overlay)
-//                .withImageChangeListener(new OnImageChangeListener() {
-//                    @Override
-//                    public void onImageChange(final int position) {
-//                        overlay.findViewById(R.id.ll_deletePhoto).setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                DialogFragment.deletePhotoDialog(context, viewer, oNo,
-//                                        dbHelper.getpNos(oNo).get(position));
-//                            }
-//                        });
-//
-//                        overlay.findViewById(R.id.ll_downloadPhoto).setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                File file = DialogFragment.getFile("/Download");
-//                                try {
-//                                    FileOutputStream stream = new FileOutputStream(file);
-//                                    stream.write(dbHelper.getPhoto(dbHelper.getpNos(oNo).get(position)));
-//                                    stream.flush();
-//                                    stream.close();
-//
-//                                    Toast.makeText(context, "\"/Download\"에 저장했습니다.",
-//                                            Toast.LENGTH_SHORT).show();
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        });
-//                    }
-//                })
-//                .withDismissListener(new OnDismissListener() {
-//                    @Override
-//                    public void onDismiss() {
-//                        dbHelper.refreshRecyclerView();
-//                    }
-//                })
-//                .build();
-//    }
-//
-//    public static View newOverlay(final Context context, final StfalconImageViewer<Bitmap> view, final int oNo) {
-//        final DBHelper dbHelper = DBHelper.getDB(context);
-//
-//        View overlay = View.inflate(context, R.layout.view_overlay, null);
-//        LinearLayout ll_deletePhoto = overlay.findViewById(R.id.ll_deletePhoto);
-//        ll_deletePhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                DialogFragment.deletePhotoDialog(context, view, oNo, dbHelper.getpNos(oNo).get(0));
-//            }
-//        });
-//
-//        LinearLayout ll_downloadPhoto = overlay.findViewById(R.id.ll_downloadPhoto);
-//        ll_downloadPhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //        todo 효율적인 퍼미션 체크로 변경
-//                if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
-//                        ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
-//                    try {
-//                        FileOutputStream stream = new FileOutputStream(DialogFragment.getFile("/Download"));
-//                        stream.write(dbHelper.getPhoto(dbHelper.getpNos(oNo).get(0)));
-//                        stream.flush();
-//                        stream.close();
-//
-//                        Toast.makeText(context, "\"/Download\"에 저장했습니다.", Toast.LENGTH_SHORT).show();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                } else {
-//                    ActivityCompat.requestPermissions((Activity) context, new String[]{
-//                            Manifest.permission.READ_EXTERNAL_STORAGE,
-//                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-//                    }, 1);
-//                }
-//            }
-//        });
-//
-//        return overlay;
-//    }
 
     public static void addPhotoDialog(final Activity activity) {
         dialog = new AlertDialog.Builder(activity)
@@ -227,6 +135,36 @@ public class DialogFragment {
             }
         });
         dialog.show();
+    }
+
+    public static void downloadPhoto(Context context, int pNo) {
+        //        todo 퍼미션 체크 최적화
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
+                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
+            try {
+                DBHelper dbHelper = DBHelper.getDB(context);
+                File file = getFile("/Download");
+                FileOutputStream stream = new FileOutputStream(file);
+                stream.write(dbHelper.getPhoto(pNo));
+                stream.flush();
+                stream.close();
+
+//                todo 미디어 스캔 최적화
+                MediaScannerConnection.scanFile(context, new String[]{file.getAbsolutePath()},
+                        null, null);
+
+//                todo 알림으로 바꾸기
+                Toast.makeText(context, "\"/Download\"에 저장했습니다.", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            ActivityCompat.requestPermissions((Activity) context, new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, 1);
+        }
     }
 
 

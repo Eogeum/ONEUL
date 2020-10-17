@@ -246,7 +246,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_PHOTO, new String[]{COLUMN_PPHOTO}, COLUMN_PNO + " = " + pNo,
-                null, null, null, null);
+                null, null, null, COLUMN_PNO + " ASC");
 
         if (cursor.moveToFirst()) {
             bytes = cursor.getBlob(cursor.getColumnIndex(COLUMN_PPHOTO));
@@ -264,7 +264,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_PHOTO, new String[]{COLUMN_PPHOTO}, COLUMN_ONO + " = " + oNo,
-                null, null, null, COLUMN_PNO);
+                null, null, null, COLUMN_PNO + " ASC");
 
         while (cursor.moveToNext()) {
             bitmaps.add(BitmapRefactor.bytesToBitmap(cursor.getBlob(cursor.getColumnIndex(COLUMN_PPHOTO))));
@@ -282,7 +282,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_PHOTO, new String[]{COLUMN_PNO}, COLUMN_ONO + " = " + oNo,
-                null, null, null, COLUMN_PNO);
+                null, null, null, COLUMN_PNO + " ASC");
 
         while (cursor.moveToNext()) {
             integers.add(cursor.getInt(cursor.getColumnIndex(COLUMN_PNO)));

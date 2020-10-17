@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,18 +17,25 @@ import com.oneul.R;
 import com.oneul.WriteActivity;
 import com.oneul.extra.BitmapRefactor;
 import com.oneul.extra.DBHelper;
+import com.oneul.fragment.DialogFragment;
 import com.stfalcon.imageviewer.StfalconImageViewer;
+import com.stfalcon.imageviewer.listeners.OnDismissListener;
+import com.stfalcon.imageviewer.loader.ImageLoader;
 
 public class OneulHolder extends RecyclerView.ViewHolder {
+    //    ㄴㄴ 뷰
     TextView t_oNo, t_oTitle, t_oTime, t_oMemo, t_oMore, t_oPhotoCount;
     ImageView i_oPhoto;
     RelativeLayout rl_oPhoto;
-    StfalconImageViewer<Bitmap> viewer;
 
+    //    ㄴㄴ 기타
     Context context;
     DBHelper dbHelper;
-
     int oNo;
+
+    //    ㄴㄴ 이미지뷰어
+    LinearLayout ll_deletePhoto, ll_downloadPhoto;
+    StfalconImageViewer<Bitmap> viewer;
 
     public OneulHolder(final View itemView) {
         super(itemView);
@@ -75,18 +83,50 @@ public class OneulHolder extends RecyclerView.ViewHolder {
             }
         });
 
-//        fixme 다이얼로그랑 같이 수정해야함 삭제 안됨
-//        rl_oPhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(final View v) {
-//                if (viewer == null) {
-//                    oNo = Integer.parseInt(t_oNo.getText().toString());
-//                    viewer = DialogFragment.imageViewerDialog(context, viewer, oNo);
-//                }
-//
-//                viewer.show();
-//            }
-//        });
+        //    ㄴㄴ 이미지뷰어
+        rl_oPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                oNo = Integer.parseInt(t_oNo.getText().toString());
+
+                View view = View.inflate(context, R.layout.view_overlay, null);
+
+                ll_deletePhoto = view.findViewById(R.id.ll_deletePhoto);
+                ll_deletePhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DialogFragment.deletePhotoDialog(context, viewer, oNo,
+                                dbHelper.getpNos(oNo).get(viewer.currentPosition()));
+                    }
+                });
+
+                ll_downloadPhoto = view.findViewById(R.id.ll_downloadPhoto);
+                ll_downloadPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DialogFragment.downloadPhoto(context, dbHelper.getpNos(oNo).get(viewer.currentPosition()));
+                    }
+                });
+
+                viewer = new StfalconImageViewer.Builder<>(context, dbHelper.getPhotos(oNo),
+                        new ImageLoader<Bitmap>() {
+                            @Override
+                            public void loadImage(ImageView imageView, Bitmap image) {
+                                imageView.setImageBitmap(image);
+                            }
+                        })
+                        .withOverlayView(view)
+                        .withDismissListener(new OnDismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                dbHelper.refreshRecyclerView();
+                            }
+                        })
+                        .build();
+
+                viewer.show();
+            }
+        });
         rl_oPhoto.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

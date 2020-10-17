@@ -28,7 +28,7 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //        todo 효율적인 퍼미션 체크로 변경
+        //        todo 퍼미션 체크 최적화
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == 0 &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
@@ -52,7 +52,7 @@ public class CameraActivity extends AppCompatActivity {
 
             switch (requestCode) {
                 case DialogFragment.CAMERA_REQUEST_CODE:
-//                    todo 효율적인 미디어 스캔 클래스 만들기
+//                    todo 미디어 스캔 최적화
                     MediaScannerConnection.scanFile(this, new String[]{DialogFragment.photoPath},
                             null, null);
 
@@ -110,7 +110,7 @@ public class CameraActivity extends AppCompatActivity {
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-//        todo 효율적인 퍼미션 체크로 변경
+//        todo 퍼미션 체크 최적화
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == 0 &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {

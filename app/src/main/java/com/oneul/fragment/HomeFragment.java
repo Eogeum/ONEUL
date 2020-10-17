@@ -44,12 +44,12 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import com.stfalcon.imageviewer.StfalconImageViewer;
+import com.stfalcon.imageviewer.listeners.OnDismissListener;
 import com.stfalcon.imageviewer.loader.ImageLoader;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.util.List;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment {
@@ -57,26 +57,36 @@ public class HomeFragment extends Fragment {
     public static RecyclerView r_oneul;
     public static OneulAdapter adapter = new OneulAdapter();
 
-    //    ㄴㄴ 뷰
-    HorizontalScrollView hs_imagePreview;
-    LinearLayout ll_todayBox, ll_memoBox, ll_picMemo, ll_cancelMemo, ll_saveMemo, ll_imagePreview;
-    EditText et_oTitle, et_oMemo;
-    FrameLayout fl_startBox;
-    TextView t_oTitle, t_oTime, t_oDate;
-    ImageView i_memoBox;
-
-    //    ㄴㄴ 키보드
+    //    ㄴㄴ 기타
+    DBHelper dbHelper;
     InputMethodManager imm;
 
-    //    ㄴㄴ 디비
-    DBHelper dbHelper;
-
-    //    ㄴㄴ fab
-    FloatingActionButton fab_goWrite;
+    //    ㄴㄴ 뷰
+    //    투데이박스
+    LinearLayout ll_todayBox;
+    EditText et_oTitle;
+    //    스타트박스
+    FrameLayout fl_startBox;
+    ImageView i_memoBox;
+    TextView t_oTitle, t_oTime;
+    //    스타트박스 메모
+    LinearLayout ll_memoBox, ll_picMemo, ll_saveMemo, ll_cancelMemo;
+    EditText et_oMemo;
+    //    기타
+    TextView t_oDate;
+    HorizontalScrollView hs_imagePreview;
+    LinearLayout ll_imagePreview;
 
     //    ㄴㄴ 캘린더
     MaterialCalendarView mc_calendar;
     AlertDialog calendarDialog;
+
+    //    ㄴㄴ 플로팅 버튼
+    FloatingActionButton fab_goWrite;
+
+    //    ㄴㄴ 이미지뷰어
+    StfalconImageViewer<Bitmap> viewer;
+    LinearLayout ll_deletePhoto, ll_downloadPhoto;
 
     public HomeFragment() {
     }
@@ -88,29 +98,7 @@ public class HomeFragment extends Fragment {
     @SuppressLint("InflateParams")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        ㄴㄴ 인플레이터
-        final View homeView = inflater.inflate(R.layout.fragment_home, container, false);
-
-//        ㄴㄴ 뷰
-        t_oDate = homeView.findViewById(R.id.t_oDate);
-//        투데이박스
-        ll_todayBox = homeView.findViewById(R.id.ll_todayBox);
-        et_oTitle = homeView.findViewById(R.id.et_oTitle);
-//        스타트박스
-        fl_startBox = homeView.findViewById(R.id.fl_startBox);
-        i_memoBox = homeView.findViewById(R.id.i_memoBox);
-        t_oTitle = homeView.findViewById(R.id.t_oTitle);
-        t_oTime = homeView.findViewById(R.id.t_oTime);
-//        스타트박스 메모
-        ll_memoBox = homeView.findViewById(R.id.ll_memoBox);
-        ll_imagePreview = homeView.findViewById(R.id.ll_imagePreview);
-        hs_imagePreview = homeView.findViewById(R.id.hs_imagePreview);
-
-//        ㄴㄴ 키보드
-        imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
-
-//        ㄴㄴ 디비
-        dbHelper = DBHelper.getDB(getActivity());
+        View homeView = inflater.inflate(R.layout.fragment_home, container, false);
 
 //        ㄴㄴ 리사이클
         r_oneul = homeView.findViewById(R.id.r_oneul);
@@ -130,14 +118,25 @@ public class HomeFragment extends Fragment {
             }
         });
 
-//        ㄴㄴ fab
-        fab_goWrite = homeView.findViewById(R.id.fab_goWrite);
-        fab_goWrite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), WriteActivity.class));
-            }
-        });
+//        ㄴㄴ 기타
+        dbHelper = DBHelper.getDB(getActivity());
+        imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
+
+//        ㄴㄴ 뷰
+//        투데이박스
+        ll_todayBox = homeView.findViewById(R.id.ll_todayBox);
+        et_oTitle = homeView.findViewById(R.id.et_oTitle);
+//        스타트박스
+        fl_startBox = homeView.findViewById(R.id.fl_startBox);
+        i_memoBox = homeView.findViewById(R.id.i_memoBox);
+        t_oTitle = homeView.findViewById(R.id.t_oTitle);
+        t_oTime = homeView.findViewById(R.id.t_oTime);
+//        스타트박스 메모
+        ll_memoBox = homeView.findViewById(R.id.ll_memoBox);
+//        기타
+        t_oDate = homeView.findViewById(R.id.t_oDate);
+        ll_imagePreview = homeView.findViewById(R.id.ll_imagePreview);
+        hs_imagePreview = homeView.findViewById(R.id.hs_imagePreview);
 
 //        ㄴㄴ 캘린더
         View v_calendar = View.inflate(getContext(), R.layout.view_calendar, null);
@@ -185,6 +184,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 calendarDialog.show();
+            }
+        });
+
+//        ㄴㄴ 플로팅 버튼
+        fab_goWrite = homeView.findViewById(R.id.fab_goWrite);
+        fab_goWrite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), WriteActivity.class));
             }
         });
 
@@ -376,35 +384,69 @@ public class HomeFragment extends Fragment {
                 t_oTitle.setText(startOneul.getoTitle());
                 et_oMemo.setText(startOneul.getoMemo());
 
-//                fixme 다운 삭제 있는걸로 교체
 //                디비에서 사진 불러오기
-                if (dbHelper.getPhotos(startOneul.getoNo()).size() > 0) {
-                    final List<Bitmap> startPicture = dbHelper.getPhotos(startOneul.getoNo());
+                final int oNo = startOneul.getoNo();
 
+                if (dbHelper.getPhotos(oNo).size() > 0) {
                     hs_imagePreview.setVisibility(View.VISIBLE);
                     ll_imagePreview.removeAllViews();
 
-                    for (int i = 0; i < startPicture.size(); i++) {
-                        final int index = i;
-
-                        ImageView imageView = new ImageView(getActivity());
-                        imageView.setImageBitmap(startPicture.get(i));
+                    for (int i = 0; i < dbHelper.getPhotos(oNo).size(); i++) {
+                        final ImageView imageView = new ImageView(getActivity());
+                        imageView.setImageBitmap(dbHelper.getPhotos(oNo).get(i));
                         imageView.setAdjustViewBounds(true);
-                        imageView.setPadding(0, 0, 15, 0);
+                        imageView.setPadding(0, 0, 16, 0);
                         imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                new StfalconImageViewer.Builder<>(getActivity(), startPicture,
+                                final View view = View.inflate(getContext(), R.layout.view_overlay, null);
+
+                                ll_deletePhoto = view.findViewById(R.id.ll_deletePhoto);
+                                ll_deletePhoto.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        DialogFragment.deletePhotoDialog(getContext(), viewer, oNo,
+                                                dbHelper.getpNos(oNo).get(viewer.currentPosition()));
+
+                                        ll_imagePreview.removeViewAt(viewer.currentPosition());
+                                    }
+                                });
+
+                                ll_downloadPhoto = view.findViewById(R.id.ll_downloadPhoto);
+                                ll_downloadPhoto.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        DialogFragment.downloadPhoto(getContext(),
+                                                dbHelper.getpNos(oNo).get(viewer.currentPosition()));
+                                    }
+                                });
+
+                                viewer = new StfalconImageViewer.Builder<>(getContext(), dbHelper.getPhotos(oNo),
                                         new ImageLoader<Bitmap>() {
                                             @Override
                                             public void loadImage(ImageView imageView, Bitmap image) {
                                                 imageView.setImageBitmap(image);
                                             }
                                         })
-                                        .withStartPosition(index)
-                                        .show();
+                                        .withStartPosition(ll_imagePreview.indexOfChild(imageView))
+                                        .withOverlayView(view)
+                                        .withDismissListener(new OnDismissListener() {
+                                            @Override
+                                            public void onDismiss() {
+                                                if (dbHelper.getPhotos(oNo).size() == 0) {
+                                                    hs_imagePreview.setVisibility(View.GONE);
+                                                }
+                                            }
+                                        })
+                                        .build();
+
+                                viewer.show();
                             }
                         });
+
+                        if (i == dbHelper.getPhotos(oNo).size() - 1) {
+                            imageView.setPadding(0, 0, 0, 0);
+                        }
 
                         ll_imagePreview.addView(imageView);
                     }
