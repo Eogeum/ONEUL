@@ -14,7 +14,6 @@ import com.oneul.R;
 import java.util.ArrayList;
 
 public class StatAdapter extends RecyclerView.Adapter<StatAdapter.ViewHolder> {
-
     private final ArrayList<Stat> items;
     private final LayoutInflater mInflater;
 
@@ -27,6 +26,7 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.stat_recycler, parent, false);
+
         return new ViewHolder(view);
     }
 

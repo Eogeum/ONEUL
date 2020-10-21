@@ -32,23 +32,15 @@ import com.oneul.CameraActivity;
 import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.WriteActivity;
-import com.oneul.calendar.OneulDecorator;
 import com.oneul.extra.Animation;
 import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
 import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
 import com.oneul.service.RealService;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.listeners.OnDismissListener;
 import com.stfalcon.imageviewer.loader.ImageLoader;
-
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.Objects;
 
@@ -56,10 +48,6 @@ public class HomeFragment extends Fragment {
     //    ㄴㄴ 리사이클
     public static RecyclerView r_oneul;
     public static OneulAdapter adapter = new OneulAdapter();
-
-    //    ㄴㄴ 기타
-    DBHelper dbHelper;
-    InputMethodManager imm;
 
     //    ㄴㄴ 뷰
     //    투데이박스
@@ -74,17 +62,18 @@ public class HomeFragment extends Fragment {
     EditText et_oMemo;
     //    기타
     TextView t_oDate;
-    HorizontalScrollView hs_imagePreview;
-    LinearLayout ll_imagePreview;
 
-    //    ㄴㄴ 캘린더
-    MaterialCalendarView mc_calendar;
+    //    ㄴㄴ 기타
+    DBHelper dbHelper;
+    InputMethodManager imm;
     AlertDialog calendarDialog;
 
     //    ㄴㄴ 플로팅 버튼
     FloatingActionButton fab_goWrite;
 
     //    ㄴㄴ 이미지뷰어
+    HorizontalScrollView hs_imagePreview;
+    LinearLayout ll_imagePreview;
     StfalconImageViewer<Bitmap> viewer;
     LinearLayout ll_deletePhoto, ll_downloadPhoto;
 
@@ -118,10 +107,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-//        ㄴㄴ 기타
-        dbHelper = DBHelper.getDB(getActivity());
-        imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
-
 //        ㄴㄴ 뷰
 //        투데이박스
         ll_todayBox = homeView.findViewById(R.id.ll_todayBox);
@@ -138,52 +123,25 @@ public class HomeFragment extends Fragment {
         ll_imagePreview = homeView.findViewById(R.id.ll_imagePreview);
         hs_imagePreview = homeView.findViewById(R.id.hs_imagePreview);
 
-//        ㄴㄴ 캘린더
-        View v_calendar = View.inflate(getContext(), R.layout.view_calendar, null);
-        mc_calendar = v_calendar.findViewById(R.id.mc_calendar);
-//        최소 최대 날짜 설정
-        mc_calendar.state().edit()
-                .setMinimumDate(CalendarDay.from(2000, 1, 1))
-                .setMaximumDate(CalendarDay.from(2040, 1, 1))
-                .commit();
-//        캘린더 헤더 수정
-        mc_calendar.setTitleFormatter(new TitleFormatter() {
-            @Override
-            public CharSequence format(CalendarDay day) {
-                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월"));
-            }
-        });
-        mc_calendar.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                MainActivity.showDay = Objects.requireNonNull(widget.getSelectedDate()).getDate().toString();
-                calendarDialog.cancel();
-            }
-        });
+//        ㄴㄴ 기타
+        dbHelper = DBHelper.getDB(getActivity());
+        imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        calendarDialog = new AlertDialog.Builder(getContext())
-                .setView(v_calendar)
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        dateChange();
-                    }
-                })
-                .create();
-        calendarDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+        calendarDialog = DialogFragment.calendarDialog(getContext(), t_oDate, dbHelper.getOneulDates());
+        calendarDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onShow(DialogInterface dialog) {
-                mc_calendar.removeDecorators();
-                mc_calendar.addDecorators(new OneulDecorator(dbHelper.getOneulDates()));
-                mc_calendar.setSelectedDate(LocalDate.parse(MainActivity.showDay));
+            public void onCancel(DialogInterface dialog) {
+                dateChange();
             }
         });
-
-//        캘린더 열기
         homeView.findViewById(R.id.ll_goCalendar).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendarDialog.show();
+                if (MainActivity.useEditMemo) {
+                    DialogFragment.checkMemoDialog(getActivity(), 0);
+                } else {
+                    calendarDialog.show();
+                }
             }
         });
 
@@ -362,9 +320,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-//        시작 시
-        dateChange();
-
         return homeView;
     }
 
@@ -386,12 +341,13 @@ public class HomeFragment extends Fragment {
 
 //                디비에서 사진 불러오기
                 final int oNo = startOneul.getoNo();
+                final int photoCount = dbHelper.getPhotoCount(oNo) + 1;
 
-                if (dbHelper.getPhotos(oNo).size() > 0) {
+                if (photoCount > 0) {
                     hs_imagePreview.setVisibility(View.VISIBLE);
                     ll_imagePreview.removeAllViews();
 
-                    for (int i = 0; i < dbHelper.getPhotos(oNo).size(); i++) {
+                    for (int i = 0; i < photoCount; i++) {
                         final ImageView imageView = new ImageView(getActivity());
                         imageView.setImageBitmap(dbHelper.getPhotos(oNo).get(i));
                         imageView.setAdjustViewBounds(true);
@@ -433,7 +389,7 @@ public class HomeFragment extends Fragment {
                                         .withDismissListener(new OnDismissListener() {
                                             @Override
                                             public void onDismiss() {
-                                                if (dbHelper.getPhotos(oNo).size() == 0) {
+                                                if (photoCount == 0) {
                                                     hs_imagePreview.setVisibility(View.GONE);
                                                 }
                                             }
@@ -444,7 +400,7 @@ public class HomeFragment extends Fragment {
                             }
                         });
 
-                        if (i == dbHelper.getPhotos(oNo).size() - 1) {
+                        if (i == photoCount - 1) {
                             imageView.setPadding(0, 0, 0, 0);
                         }
 
@@ -486,3 +442,5 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 }
+
+//fixme 노티 감지해서 새로고침

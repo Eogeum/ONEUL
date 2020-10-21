@@ -13,20 +13,35 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.oneul.CameraActivity;
+import com.oneul.MainActivity;
 import com.oneul.R;
+import com.oneul.calendar.OneulDecorator;
 import com.oneul.extra.DBHelper;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import com.stfalcon.imageviewer.StfalconImageViewer;
+
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Objects;
 
 public class DialogFragment {
     public static final int CAMERA_REQUEST_CODE = 101;
@@ -34,6 +49,52 @@ public class DialogFragment {
 
     public static String photoPath;
     private static AlertDialog dialog;
+
+    public static AlertDialog calendarDialog(final Context context, final TextView t_oDate, final Collection<CalendarDay> days) {
+        View v_calendar = View.inflate(context, R.layout.view_calendar, null);
+
+        final AlertDialog calendarDialog = new AlertDialog.Builder(context)
+                .setView(v_calendar)
+                .create();
+
+        final MaterialCalendarView mc_calendar = v_calendar.findViewById(R.id.mc_calendar);
+//        최소 최대 날짜 설정
+        mc_calendar.state().edit()
+                .setMinimumDate(CalendarDay.from(2000, 1, 1))
+                .setMaximumDate(CalendarDay.from(2040, 1, 1))
+                .commit();
+//        캘린더 헤더 수정
+        mc_calendar.setTitleFormatter(new TitleFormatter() {
+            @Override
+            public CharSequence format(CalendarDay day) {
+                return day.getDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월"));
+            }
+        });
+        mc_calendar
+                .setOnDateChangedListener(new OnDateSelectedListener() {
+                    @Override
+                    public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                        if (context instanceof MainActivity) {
+                            MainActivity.showDay = Objects.requireNonNull(widget.getSelectedDate()).getDate().toString();
+                        } else {
+                            t_oDate.setText(Objects.requireNonNull(widget.getSelectedDate()).getDate().toString());
+                        }
+
+                        calendarDialog.cancel();
+                    }
+                });
+
+        calendarDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                mc_calendar.removeDecorators();
+                mc_calendar.addDecorators(new OneulDecorator(days));
+                mc_calendar.setSelectedDate(LocalDate.parse(t_oDate.getText()));
+            }
+        });
+
+        return calendarDialog;
+    }
 
     public static void checkMemoDialog(final Activity activity, final int bottomButtonId) {
         dialog = new AlertDialog.Builder(activity)
@@ -100,12 +161,16 @@ public class DialogFragment {
                     }
                 })
                 .create();
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                activity.finish();
-            }
-        });
+
+        if (activity instanceof CameraActivity) {
+            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    activity.finish();
+                }
+            });
+        }
+
         dialog.show();
     }
 
@@ -138,7 +203,7 @@ public class DialogFragment {
     }
 
     public static void downloadPhoto(Context context, int pNo) {
-        //        todo 퍼미션 체크 최적화
+        //        check 퍼미션 체크 최적화
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
             try {
@@ -149,7 +214,7 @@ public class DialogFragment {
                 stream.flush();
                 stream.close();
 
-//                todo 미디어 스캔 최적화
+//                check 미디어 스캔 최적화
                 MediaScannerConnection.scanFile(context, new String[]{file.getAbsolutePath()},
                         null, null);
 
@@ -167,7 +232,7 @@ public class DialogFragment {
         }
     }
 
-
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @SuppressLint("SimpleDateFormat")
     public static File getFile(String folder) {
         String fileName = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(System.currentTimeMillis()) + ".jpg";
@@ -178,5 +243,30 @@ public class DialogFragment {
         }
 
         return new File(fileDir, fileName);
+    }
+
+    public static void permissionCheck(Context context, int oNo) {
+        DBHelper dbHelper = DBHelper.getDB(context);
+
+        if (dbHelper.getPhotoCount(oNo) + 1 >= 5) {
+            Toast.makeText(context, "최대 5장까지만 추가가능합니다.", Toast.LENGTH_SHORT).show();
+
+            if (context instanceof CameraActivity) {
+                ((Activity) context).finish();
+            }
+        } else {
+            //        check 퍼미션 체크 최적화
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == 0 &&
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
+                addPhotoDialog(((Activity) context));
+            } else {
+                ActivityCompat.requestPermissions(((Activity) context), new String[]{
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                }, 1);
+            }
+        }
     }
 }

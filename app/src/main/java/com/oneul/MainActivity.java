@@ -40,9 +40,6 @@ public class MainActivity extends AppCompatActivity {
     FragmentManager manager = getSupportFragmentManager();
     Fragment f_home, f_stat, f_setting;
 
-    //    ㄴㄴ 뷰
-    BottomNavigationView bot_menu;
-
     public static void focusClear(Activity activity, MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             View v = activity.getCurrentFocus();
@@ -76,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
         boolean isWhiteListing = pm.isIgnoringBatteryOptimizations(getApplicationContext().getPackageName());
 
         if (!isWhiteListing) {
-            Intent intent = new Intent();
-            intent.setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-            intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+            Intent intent = new Intent()
+                    .setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                    .setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
             startActivity(intent);
         }
 //        서비스가 없으면
@@ -88,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 //        하단메뉴 클릭 시
-        bot_menu = findViewById(R.id.bot_menu);
-        bot_menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        ((BottomNavigationView) findViewById(R.id.bot_menu)).setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 //                메모 작성중일 시

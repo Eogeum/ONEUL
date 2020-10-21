@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -99,9 +100,10 @@ public class DBHelper extends SQLiteOpenHelper {
             if (cursor.moveToFirst()) {
                 int oNo = cursor.getInt(cursor.getColumnIndex(COLUMN_ONO));
 
-                for (int i = 0; i < pPhotos.size(); i++) {
-                    addPhoto(oNo, pPhotos.get(i));
-                }
+//                fixme 사진 기능 수정 필요
+//                for (int i = 0; i < pPhotos.size(); i++) {
+//                    addPhoto(oNo, pPhotos.get(i));
+//                }
 
                 cursor.close();
                 db.close();
@@ -308,14 +310,37 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //    일과 사진 추가
-    public void addPhoto(int oNo, Bitmap pPhoto) {
+    public void addPhoto(Context context, int oNo, List<Bitmap> pPhotos) {
         ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_ONO, oNo);
-        values.put(DBHelper.COLUMN_PPHOTO, BitmapRefactor.bitmapToBytes(BitmapRefactor.resizeBitmap(pPhoto)));
+        int photoCount;
 
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_PHOTO, null, values);
-        db.close();
+        if (getOneul(oNo) != null) {
+            photoCount = getPhotoCount(oNo) + 1;
+        } else {
+            photoCount = 0;
+        }
+
+        for (int i = 0; i < pPhotos.size(); i++) {
+            if (photoCount >= 5) {
+                Toast.makeText(context, "최대 5장까지만 추가가능합니다.", Toast.LENGTH_SHORT).show();
+                break;
+            } else {
+                values.put(DBHelper.COLUMN_ONO, oNo);
+                values.put(DBHelper.COLUMN_PPHOTO, BitmapRefactor.bitmapToBytes(
+                        BitmapRefactor.resizeBitmap(pPhotos.get(i))));
+
+
+                SQLiteDatabase db = this.getWritableDatabase();
+                db.insert(TABLE_PHOTO, null, values);
+                db.close();
+
+                photoCount++;
+            }
+
+            if (photoCount == 5) {
+                Toast.makeText(context, "사진을 추가했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     //    일과 사진 삭제

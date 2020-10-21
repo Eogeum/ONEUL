@@ -63,13 +63,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
             android:background="@color/white"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:text="TIME"
@@ -79,7 +79,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
@@ -141,7 +140,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="10dp"
                     android:text="TITLE"
                     android:textColor="@color/mainColor"
@@ -151,7 +149,6 @@
                     android:id="@+id/editTitle"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_marginHorizontal="20dp"
                     android:background="@drawable/write_et"
                     android:hint="일과 제목을 입력하세요."
                     android:imeOptions="actionDone"
@@ -172,7 +169,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="10dp"
                     android:text="MEMO"
                     android:textColor="@color/mainColor"
@@ -182,14 +178,12 @@
                     android:id="@+id/editMemo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
                     android:background="@drawable/write_et"
                     android:gravity="top"
-                    android:hint="메모를 입력하세요. (선택) "
+                    android:hint="여기에 메모를 작성하세요. (선택) "
                     android:importantForAutofill="no"
                     android:inputType="textMultiLine|textNoSuggestions"
-                    android:maxLength="100"
-                    android:minHeight="90dp"
+                    android:minHeight="97dp"
                     android:padding="10dp"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -204,18 +198,55 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="10dp"
                     android:text="IMAGE"
                     android:textColor="@color/mainColor"
                     android:textSize="20sp" />
 
-                <!--                fixme 사진 추가 버튼 수정-->
-                <Button
-                    android:id="@+id/btnImg"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginHorizontal="20dp" />
+                <HorizontalScrollView
+                    android:id="@+id/hs_imagePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:layout_marginTop="4dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/ll_pictureMemo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/home_todaybox_et"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="6dp">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="@drawable/ic_add_photo" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="8dp"
+                                android:text="사진 추가"
+                                android:textColor="@color/darkGray"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_imagePreview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal" />
+                    </LinearLayout>
+                </HorizontalScrollView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
