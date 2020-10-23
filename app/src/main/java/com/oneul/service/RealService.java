@@ -58,7 +58,6 @@ public class RealService extends Service {
                     .setAllowGeneratedReplies(true)
                     .build();
 
-
             mintent.putExtra("requestCode", 2);
             PendingIntent stopOneulIntent = PendingIntent
                     .getBroadcast(context, 2, mintent, PendingIntent.FLAG_UPDATE_CURRENT);

@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,7 +78,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //    ㄴㄴ 일과
     //    일과 시작
-    public void startOneul(Context context, String oDate, String oStart, String oEnd, String oTitle,
+    public void startOneul(String oDate, String oStart, String oEnd, String oTitle,
                            String oMemo, @Nullable List<Bitmap> pPhotos, int oDone) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_ODATE, oDate);
@@ -99,7 +98,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             if (cursor.moveToFirst()) {
                 for (int i = 0; i < pPhotos.size(); i++) {
-                    addPhoto(context, cursor.getInt(cursor.getColumnIndex(COLUMN_ONO)),
+                    addPhoto(cursor.getInt(cursor.getColumnIndex(COLUMN_ONO)),
                             Collections.singletonList(pPhotos.get(i)));
                 }
             }
@@ -297,35 +296,22 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //    일과 사진 추가
-    public void addPhoto(Context context, int oNo, List<Bitmap> pPhotos) {
-        int photoCount;
-
-        if (getOneul(oNo) != null) {
-            photoCount = getPhotoCount(oNo) + 1;
-        } else {
-            photoCount = 0;
-        }
-
+    public void addPhoto(int oNo, List<Bitmap> pPhotos) {
         for (int i = 0; i < pPhotos.size(); i++) {
-            if (photoCount >= 5) {
-                Toast.makeText(context, "최대 5장까지만 추가가능합니다.", Toast.LENGTH_SHORT).show();
-                break;
-            } else {
-                ContentValues values = new ContentValues();
-                values.put(DBHelper.COLUMN_ONO, oNo);
-                values.put(DBHelper.COLUMN_PPHOTO, BitmapRefactor.bitmapToBytes(
-                        BitmapRefactor.resizeBitmap(pPhotos.get(i))));
+            ContentValues values = new ContentValues();
+            values.put(DBHelper.COLUMN_ONO, oNo);
+            values.put(DBHelper.COLUMN_PPHOTO, BitmapRefactor.bitmapToBytes(
+                    BitmapRefactor.resizeBitmap(pPhotos.get(i))));
 
-                SQLiteDatabase db = this.getWritableDatabase();
-                db.insert(TABLE_PHOTO, null, values);
-
-                photoCount++;
-            }
-
-            if (photoCount == 5) {
-                Toast.makeText(context, "사진을 추가했습니다.", Toast.LENGTH_SHORT).show();
-            }
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.insert(TABLE_PHOTO, null, values);
         }
+    }
+
+    public void editPhoto(int oNo, List<Bitmap> bitmaps) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_PHOTO, COLUMN_ONO + " = " + oNo, null);
+        addPhoto(oNo, bitmaps);
     }
 
     //    일과 사진 삭제

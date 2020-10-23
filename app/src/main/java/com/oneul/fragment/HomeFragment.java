@@ -42,7 +42,6 @@ import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.listeners.OnDismissListener;
 import com.stfalcon.imageviewer.loader.ImageLoader;
 
-import java.util.List;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment {
@@ -170,7 +169,7 @@ public class HomeFragment extends Fragment {
                     } else {
 //                        기록중인 일과가 없으면 기록 시작
                         if (dbHelper.getStartOneul() == null) {
-                            dbHelper.startOneul(getActivity(), DateTime.today(), DateTime.nowTime(), null,
+                            dbHelper.startOneul(DateTime.today(), DateTime.nowTime(), null,
                                     et_oTitle.getText().toString(), null, null, 0);
                         }
 
@@ -234,7 +233,11 @@ public class HomeFragment extends Fragment {
         ll_picMemo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), CameraActivity.class));
+                if (dbHelper.getPhotoCount(dbHelper.getStartOneul().getoNo()) + 1 < 5) {
+                    startActivity(new Intent(getActivity(), CameraActivity.class));
+                } else {
+                    Toast.makeText(getActivity(), "최대 5장까지만 추가가능합니다.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -245,6 +248,7 @@ public class HomeFragment extends Fragment {
             public void onFocusChange(View v, boolean hasFocus) {
 //                에딧 텍스트 포커싱 시
                 if (hasFocus) {
+                    et_oMemo.setText(dbHelper.getStartOneul().getoMemo());
                     imm.showSoftInput(et_oMemo, InputMethodManager.SHOW_IMPLICIT);
                     ll_picMemo.setVisibility(View.GONE);
                     ll_cancelMemo.setVisibility(View.VISIBLE);
@@ -342,8 +346,6 @@ public class HomeFragment extends Fragment {
 
 //                디비에서 사진 불러오기
                 final int oNo = startOneul.getoNo();
-                final List<Integer> integers = dbHelper.getpNos(oNo);
-                final List<Bitmap> bitmaps = dbHelper.getPhotos(oNo);
                 int photoCount = dbHelper.getPhotoCount(oNo) + 1;
 
                 if (photoCount > 0) {
@@ -352,7 +354,7 @@ public class HomeFragment extends Fragment {
 
                     for (int i = 0; i < photoCount; i++) {
                         final ImageView imageView = new ImageView(getActivity());
-                        imageView.setImageBitmap(bitmaps.get(i));
+                        imageView.setImageBitmap(dbHelper.getPhotos(oNo).get(i));
                         imageView.setAdjustViewBounds(true);
                         imageView.setPadding(0, 0, 16, 0);
                         imageView.setOnClickListener(new View.OnClickListener() {
@@ -365,7 +367,7 @@ public class HomeFragment extends Fragment {
                                     @Override
                                     public void onClick(View v) {
                                         DialogFragment.deletePhotoDialog(getContext(), viewer, oNo,
-                                                integers.get(viewer.currentPosition()));
+                                                dbHelper.getpNos(oNo).get(viewer.currentPosition()));
 
                                         ll_imagePreview.removeViewAt(viewer.currentPosition());
                                     }
@@ -376,11 +378,11 @@ public class HomeFragment extends Fragment {
                                     @Override
                                     public void onClick(View v) {
                                         DialogFragment.downloadPhoto(getContext(),
-                                                dbHelper.getPhoto(integers.get(viewer.currentPosition())));
+                                                dbHelper.getPhoto(dbHelper.getpNos(oNo).get(viewer.currentPosition())));
                                     }
                                 });
 
-                                viewer = new StfalconImageViewer.Builder<>(getContext(), bitmaps,
+                                viewer = new StfalconImageViewer.Builder<>(getContext(), dbHelper.getPhotos(oNo),
                                         new ImageLoader<Bitmap>() {
                                             @Override
                                             public void loadImage(ImageView imageView, Bitmap image) {
@@ -443,5 +445,3 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 }
-
-//fixme 노티 감지해서 새로고침

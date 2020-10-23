@@ -27,7 +27,7 @@ public class OneulReceiver extends BroadcastReceiver {
                 bundle = RemoteInput.getResultsFromIntent(intent);
 
                 if (bundle != null) {
-                    dbHelper.startOneul(context, DateTime.today(), DateTime.nowTime(), null,
+                    dbHelper.startOneul(DateTime.today(), DateTime.nowTime(), null,
                             Objects.requireNonNull(bundle.getCharSequence("KEY_OTITLE")).toString(),
                             null, null, 0);
                 }
@@ -66,3 +66,5 @@ public class OneulReceiver extends BroadcastReceiver {
         context.getSystemService(NotificationManager.class).notify(101, RealService.createNotification(context));
     }
 }
+
+//fixme 노티 감지해서 새로고침 (인탠트 바로 닫아서 새로고침)

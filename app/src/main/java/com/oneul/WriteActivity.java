@@ -45,7 +45,7 @@ import java.util.Objects;
 
 public class WriteActivity extends AppCompatActivity {
     //    ㄴㄴ 데이터
-    boolean isNotEdit;
+    boolean isEditMode;
     int startHour, startMinute, endHour, endMinute;
     int oNo, photoCount;
     List<Bitmap> bitmaps = new ArrayList<>();
@@ -130,9 +130,9 @@ public class WriteActivity extends AppCompatActivity {
             }
         });
 
-//        불러온 일과 있으면
+        //        불러온 일과 있으면
         if (getIntent().getExtras() != null) {
-            isNotEdit = false;
+            isEditMode = true;
 
             final String[] strings = getIntent().getExtras().getStringArray("editOneul");
             timeStart.setText(Objects.requireNonNull(strings)[2]);
@@ -147,64 +147,59 @@ public class WriteActivity extends AppCompatActivity {
 
             oNo = Integer.parseInt(strings[0]);
             photoCount = dbHelper.getPhotoCount(oNo) + 1;
-            refreshImageViewer(dbHelper.getPhotos(oNo));
-
-            btnOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    일과 제목 공백 체크
-                    if (TextUtils.isEmpty(editTitle.getText().toString())) {
-                        checkBlankTitle();
-                    } else {
-                        dbHelper.editOneul(oNo, t_oDate.getText().toString(),
-                                timeStart.getText().toString(), timeEnd.getText().toString(),
-                                editTitle.getText().toString(), editMemo.getText().toString());
-
-                        finish();
-                    }
-                }
-            });
-
-            ll_pictureMemo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogFragment.permissionCheck(WriteActivity.this, oNo);
-                }
-            });
+            bitmaps = dbHelper.getPhotos(oNo);
+            refreshImageViewer();
 
 //            불러온 일과 없으면
         } else {
-            isNotEdit = true;
+            isEditMode = false;
+        }
 
-            btnOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 //                    일과 제목 공백 체크
-                    if (TextUtils.isEmpty(editTitle.getText().toString())) {
-                        checkBlankTitle();
+                if (TextUtils.isEmpty(editTitle.getText().toString())) {
+                    checkBlankTitle();
+                } else {
+//                    불러온 일과가 있으면
+                    if (isEditMode) {
+                        dbHelper.editOneul(oNo, t_oDate.getText().toString(),
+                                timeStart.getText().toString(), timeEnd.getText().toString(),
+                                editTitle.getText().toString(), editMemo.getText().toString());
+                        dbHelper.editPhoto(oNo, bitmaps);
+
+                        Toast.makeText(WriteActivity.this, t_oDate.getText() + "\n일과를 수정했습니다.",
+                                Toast.LENGTH_SHORT).show();
+
+//                    불러온 일과가 없으면
                     } else {
-                        dbHelper.startOneul(WriteActivity.this, t_oDate.getText().toString(), timeStart.getText().toString(),
+                        dbHelper.startOneul(t_oDate.getText().toString(), timeStart.getText().toString(),
                                 timeEnd.getText().toString(), editTitle.getText().toString(),
                                 editMemo.getText().toString(), bitmaps, 1);
 
-                        Toast.makeText(getApplicationContext(), t_oDate.getText() + "\n일과를 저장했습니다.",
+                        Toast.makeText(WriteActivity.this, t_oDate.getText() + "\n일과를 저장했습니다.",
                                 Toast.LENGTH_SHORT).show();
-
-                        finish();
                     }
-                }
-            });
 
-            ll_pictureMemo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogFragment.permissionCheck(WriteActivity.this, -1);
+                    finish();
                 }
-            });
-        }
+            }
+        });
+
+        ll_pictureMemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (photoCount < 5) {
+                    DialogFragment.permissionCheck(WriteActivity.this);
+                } else {
+                    Toast.makeText(WriteActivity.this, "최대 5장까지만 추가가능합니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-    private void refreshImageViewer(final List<Bitmap> bitmaps) {
+    private void refreshImageViewer() {
         if (photoCount > 0) {
             ll_imagePreview.removeAllViews();
 
@@ -221,14 +216,9 @@ public class WriteActivity extends AppCompatActivity {
                         view.findViewById(R.id.ll_deletePhoto).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (isNotEdit) {
-                                    bitmaps.remove(viewer.currentPosition());
-                                    viewer.updateImages(bitmaps);
-                                } else {
-                                    DialogFragment.deletePhotoDialog(WriteActivity.this, viewer, oNo,
-                                            dbHelper.getpNos(oNo).get(viewer.currentPosition()));
-                                }
+                                DialogFragment.deletePhotoDialog(WriteActivity.this, viewer, bitmaps);
 
+                                photoCount = bitmaps.size();
                                 ll_imagePreview.removeViewAt(viewer.currentPosition());
                             }
                         });
@@ -236,13 +226,8 @@ public class WriteActivity extends AppCompatActivity {
                         view.findViewById(R.id.ll_downloadPhoto).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (isNotEdit) {
-                                    DialogFragment.downloadPhoto(WriteActivity.this,
-                                            BitmapRefactor.bitmapToBytes(bitmaps.get(viewer.currentPosition())));
-                                } else {
-                                    DialogFragment.downloadPhoto(WriteActivity.this,
-                                            dbHelper.getPhoto(dbHelper.getpNos(oNo).get(viewer.currentPosition())));
-                                }
+                                DialogFragment.downloadPhoto(WriteActivity.this,
+                                        BitmapRefactor.bitmapToBytes(bitmaps.get(viewer.currentPosition())));
                             }
                         });
 
@@ -308,7 +293,7 @@ public class WriteActivity extends AppCompatActivity {
         });
 
 //        불러온 일과 있으면
-        if (getIntent().getExtras() != null) {
+        if (isEditMode) {
             dialog.setMessage("일과 수정을 취소합니다.\n변경된 내용은 저장되지 않습니다.");
 
 //        불러온 일과 없으면
@@ -361,7 +346,12 @@ public class WriteActivity extends AppCompatActivity {
                             ClipData clipData = data.getClipData();
 
                             for (int i = 0; i < clipData.getItemCount(); i++) {
-                                bitmaps.add(BitmapRefactor.uriToBitmap(this, clipData.getItemAt(i).getUri()));
+                                if (bitmaps.size() < 5) {
+                                    bitmaps.add(BitmapRefactor.uriToBitmap(this, clipData.getItemAt(i).getUri()));
+                                } else {
+                                    Toast.makeText(this, "최대 5장까지만 추가가능합니다.", Toast.LENGTH_SHORT).show();
+                                    break;
+                                }
                             }
                         } else {
                             bitmaps.add(BitmapRefactor.uriToBitmap(this, data.getData()));
@@ -370,14 +360,10 @@ public class WriteActivity extends AppCompatActivity {
                     break;
             }
 
-//            fixme 작성 사진 5개 제한
-            if (isNotEdit) {
-                photoCount = bitmaps.size();
-                refreshImageViewer(bitmaps);
-            } else {
-                dbHelper.addPhoto(this, oNo, bitmaps);
-                refreshImageViewer(dbHelper.getPhotos(oNo));
-            }
+            photoCount = bitmaps.size();
+            refreshImageViewer();
+
+            Toast.makeText(this, "사진을 추가했습니다.", Toast.LENGTH_SHORT).show();
         }
     }
 

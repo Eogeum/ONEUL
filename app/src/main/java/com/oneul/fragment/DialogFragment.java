@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Objects;
 
 public class DialogFragment {
@@ -201,12 +202,38 @@ public class DialogFragment {
         dialog.show();
     }
 
+    public static void deletePhotoDialog(final Context context, final StfalconImageViewer<Bitmap> viewer,
+                                         final List<Bitmap> bitmaps) {
+        dialog = new AlertDialog.Builder(context)
+                .setMessage("사진을 삭제합니다.")
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        bitmaps.remove(viewer.currentPosition());
+                        viewer.updateImages(bitmaps);
+
+                        Toast.makeText(context, "삭제 되었습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                })
+                .create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#E88346"));
+            }
+        });
+        dialog.show();
+    }
+
     public static void downloadPhoto(Context context, byte[] bytes) {
         //        check 퍼미션 체크 최적화
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
             try {
-                DBHelper dbHelper = DBHelper.getDB(context);
                 File file = getFile("/Download");
                 FileOutputStream stream = new FileOutputStream(file);
                 stream.write(bytes);
@@ -244,28 +271,18 @@ public class DialogFragment {
         return new File(fileDir, fileName);
     }
 
-    public static void permissionCheck(Context context, int oNo) {
-        DBHelper dbHelper = DBHelper.getDB(context);
-
-        if (dbHelper.getPhotoCount(oNo) + 1 >= 5) {
-            Toast.makeText(context, "최대 5장까지만 추가가능합니다.", Toast.LENGTH_SHORT).show();
-
-            if (context instanceof CameraActivity) {
-                ((Activity) context).finish();
-            }
+    public static void permissionCheck(Context context) {
+        //        check 퍼미션 체크 최적화
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == 0 &&
+                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
+                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
+            addPhotoDialog(((Activity) context));
         } else {
-            //        check 퍼미션 체크 최적화
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == 0 &&
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
-                addPhotoDialog(((Activity) context));
-            } else {
-                ActivityCompat.requestPermissions(((Activity) context), new String[]{
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                }, 1);
-            }
+            ActivityCompat.requestPermissions(((Activity) context), new String[]{
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, 1);
         }
     }
 }

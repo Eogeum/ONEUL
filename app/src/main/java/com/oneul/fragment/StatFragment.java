@@ -44,7 +44,7 @@ public class StatFragment extends Fragment {
         View statView = inflater.inflate(R.layout.fragment_stat, container, false);
 
         //년,월 표시
-//        todo 홈에서 날짜 바구면 바뀌게
+//        todo 홈에서 날짜 바꿔도 통계는 그대로
         ((TextView) statView.findViewById(R.id.statDay))
                 .setText(new SimpleDateFormat("yyyy년 MM월").format(System.currentTimeMillis()));
 

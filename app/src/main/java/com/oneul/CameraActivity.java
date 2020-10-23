@@ -26,13 +26,22 @@ import java.util.List;
 
 public class CameraActivity extends AppCompatActivity {
     DBHelper dbHelper;
+    int oNo, photoCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         dbHelper = DBHelper.getDB(this);
-        DialogFragment.permissionCheck(this, dbHelper.getStartOneul().getoNo());
+        oNo = dbHelper.getStartOneul().getoNo();
+        photoCount = dbHelper.getPhotoCount(oNo) + 1;
+
+        if (photoCount < 5) {
+            DialogFragment.permissionCheck(this);
+        } else {
+            Toast.makeText(this, "최대 5장까지만 추가가능합니다.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     @Override
@@ -79,7 +88,11 @@ public class CameraActivity extends AppCompatActivity {
                             ClipData clipData = data.getClipData();
 
                             for (int i = 0; i < clipData.getItemCount(); i++) {
-                                bitmaps.add(BitmapRefactor.uriToBitmap(this, clipData.getItemAt(i).getUri()));
+                                if (photoCount + i < 5) {
+                                    bitmaps.add(BitmapRefactor.uriToBitmap(this, clipData.getItemAt(i).getUri()));
+                                } else {
+                                    break;
+                                }
                             }
                         } else {
                             bitmaps.add(BitmapRefactor.uriToBitmap(this, data.getData()));
@@ -88,7 +101,7 @@ public class CameraActivity extends AppCompatActivity {
                     break;
             }
 
-            dbHelper.addPhoto(this, dbHelper.getStartOneul().getoNo(), bitmaps);
+            dbHelper.addPhoto(dbHelper.getStartOneul().getoNo(), bitmaps);
             Toast.makeText(this, "사진을 추가했습니다.", Toast.LENGTH_SHORT).show();
         }
 
@@ -110,3 +123,5 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 }
+
+//todo 사진 추가하는 동안 로딩화면 추가
