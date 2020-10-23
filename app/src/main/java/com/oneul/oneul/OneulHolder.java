@@ -22,6 +22,8 @@ import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.listeners.OnDismissListener;
 import com.stfalcon.imageviewer.loader.ImageLoader;
 
+import java.util.List;
+
 public class OneulHolder extends RecyclerView.ViewHolder {
     //    ㄴㄴ 뷰
     TextView t_oNo, t_oTitle, t_oTime, t_oMemo, t_oMore, t_oPhotoCount;
@@ -88,6 +90,7 @@ public class OneulHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(final View v) {
                 oNo = Integer.parseInt(t_oNo.getText().toString());
+                final List<Integer> integers = dbHelper.getpNos(oNo);
 
                 View view = View.inflate(context, R.layout.view_overlay, null);
 
@@ -96,7 +99,7 @@ public class OneulHolder extends RecyclerView.ViewHolder {
                     @Override
                     public void onClick(View v) {
                         DialogFragment.deletePhotoDialog(context, viewer, oNo,
-                                dbHelper.getpNos(oNo).get(viewer.currentPosition()));
+                                integers.get(viewer.currentPosition()));
                     }
                 });
 
@@ -104,7 +107,8 @@ public class OneulHolder extends RecyclerView.ViewHolder {
                 ll_downloadPhoto.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DialogFragment.downloadPhoto(context, dbHelper.getpNos(oNo).get(viewer.currentPosition()));
+                        DialogFragment.downloadPhoto(context,
+                                dbHelper.getPhoto(integers.get(viewer.currentPosition())));
                     }
                 });
 

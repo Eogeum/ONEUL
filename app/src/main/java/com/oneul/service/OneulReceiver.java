@@ -27,7 +27,7 @@ public class OneulReceiver extends BroadcastReceiver {
                 bundle = RemoteInput.getResultsFromIntent(intent);
 
                 if (bundle != null) {
-                    dbHelper.startOneul(DateTime.today(), DateTime.nowTime(), null,
+                    dbHelper.startOneul(context, DateTime.today(), DateTime.nowTime(), null,
                             Objects.requireNonNull(bundle.getCharSequence("KEY_OTITLE")).toString(),
                             null, null, 0);
                 }

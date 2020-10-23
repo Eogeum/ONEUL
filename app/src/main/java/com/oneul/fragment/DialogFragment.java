@@ -40,7 +40,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Objects;
 
 public class DialogFragment {
@@ -50,7 +49,7 @@ public class DialogFragment {
     public static String photoPath;
     private static AlertDialog dialog;
 
-    public static AlertDialog calendarDialog(final Context context, final TextView t_oDate, final Collection<CalendarDay> days) {
+    public static AlertDialog calendarDialog(final Context context, final TextView t_oDate) {
         View v_calendar = View.inflate(context, R.layout.view_calendar, null);
 
         final AlertDialog calendarDialog = new AlertDialog.Builder(context)
@@ -88,7 +87,7 @@ public class DialogFragment {
             @Override
             public void onShow(DialogInterface dialog) {
                 mc_calendar.removeDecorators();
-                mc_calendar.addDecorators(new OneulDecorator(days));
+                mc_calendar.addDecorators(new OneulDecorator(DBHelper.getDB(context).getOneulDates()));
                 mc_calendar.setSelectedDate(LocalDate.parse(t_oDate.getText()));
             }
         });
@@ -202,7 +201,7 @@ public class DialogFragment {
         dialog.show();
     }
 
-    public static void downloadPhoto(Context context, int pNo) {
+    public static void downloadPhoto(Context context, byte[] bytes) {
         //        check 퍼미션 체크 최적화
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
@@ -210,7 +209,7 @@ public class DialogFragment {
                 DBHelper dbHelper = DBHelper.getDB(context);
                 File file = getFile("/Download");
                 FileOutputStream stream = new FileOutputStream(file);
-                stream.write(dbHelper.getPhoto(pNo));
+                stream.write(bytes);
                 stream.flush();
                 stream.close();
 

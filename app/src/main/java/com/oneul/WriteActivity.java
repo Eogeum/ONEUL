@@ -45,8 +45,10 @@ import java.util.Objects;
 
 public class WriteActivity extends AppCompatActivity {
     //    ㄴㄴ 데이터
+    boolean isNotEdit;
     int startHour, startMinute, endHour, endMinute;
-    List<Bitmap> bitmaps;
+    int oNo, photoCount;
+    List<Bitmap> bitmaps = new ArrayList<>();
 
     //    ㄴㄴ 뷰
     Button btnOk, timeStart, timeEnd;
@@ -82,7 +84,7 @@ public class WriteActivity extends AppCompatActivity {
 
         t_oDate = findViewById(R.id.t_oDate);
         t_oDate.setText(MainActivity.showDay);
-        calendarDialog = DialogFragment.calendarDialog(this, t_oDate, dbHelper.getOneulDates());
+        calendarDialog = DialogFragment.calendarDialog(this, t_oDate);
         findViewById(R.id.ll_goCalendar).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +132,8 @@ public class WriteActivity extends AppCompatActivity {
 
 //        불러온 일과 있으면
         if (getIntent().getExtras() != null) {
+            isNotEdit = false;
+
             final String[] strings = getIntent().getExtras().getStringArray("editOneul");
             timeStart.setText(Objects.requireNonNull(strings)[2]);
             timeEnd.setText(strings[3]);
@@ -141,8 +145,9 @@ public class WriteActivity extends AppCompatActivity {
             endHour = Integer.parseInt(strings[3].substring(0, 2));
             endMinute = Integer.parseInt(strings[3].substring(3, 5));
 
-            final int oNo = Integer.parseInt(strings[0]);
-            int photoCount = dbHelper.getPhotoCount(oNo) + 1;
+            oNo = Integer.parseInt(strings[0]);
+            photoCount = dbHelper.getPhotoCount(oNo) + 1;
+            refreshImageViewer(dbHelper.getPhotos(oNo));
 
             btnOk.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -160,71 +165,17 @@ public class WriteActivity extends AppCompatActivity {
                 }
             });
 
-//            fixme 사진 기능 수정필요
             ll_pictureMemo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DialogFragment.permissionCheck(WriteActivity.this, dbHelper.getStartOneul().getoNo());
+                    DialogFragment.permissionCheck(WriteActivity.this, oNo);
                 }
             });
 
-//            디비에서 사진 불러오기
-            if (photoCount > 0) {
-                ll_imagePreview.removeAllViews();
-
-                for (int i = 0; i < photoCount; i++) {
-                    final ImageView imageView = new ImageView(WriteActivity.this);
-                    imageView.setImageBitmap(dbHelper.getPhotos(oNo).get(i));
-                    imageView.setAdjustViewBounds(true);
-                    imageView.setPadding(0, 0, 16, 0);
-                    imageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final View view = View.inflate(WriteActivity.this, R.layout.view_overlay, null);
-
-                            view.findViewById(R.id.ll_deletePhoto).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    DialogFragment.deletePhotoDialog(WriteActivity.this, viewer, oNo,
-                                            dbHelper.getpNos(oNo).get(viewer.currentPosition()));
-
-                                    ll_imagePreview.removeViewAt(viewer.currentPosition());
-                                }
-                            });
-
-                            view.findViewById(R.id.ll_downloadPhoto).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    DialogFragment.downloadPhoto(WriteActivity.this,
-                                            dbHelper.getpNos(oNo).get(viewer.currentPosition()));
-                                }
-                            });
-
-                            viewer = new StfalconImageViewer.Builder<>(WriteActivity.this, dbHelper.getPhotos(oNo),
-                                    new ImageLoader<Bitmap>() {
-                                        @Override
-                                        public void loadImage(ImageView imageView, Bitmap image) {
-                                            imageView.setImageBitmap(image);
-                                        }
-                                    })
-                                    .withStartPosition(ll_imagePreview.indexOfChild(imageView))
-                                    .withOverlayView(view)
-                                    .build();
-
-                            viewer.show();
-                        }
-                    });
-
-                    if (i == photoCount - 1) {
-                        imageView.setPadding(0, 0, 0, 0);
-                    }
-
-                    ll_imagePreview.addView(imageView);
-                }
-            }
-
 //            불러온 일과 없으면
         } else {
+            isNotEdit = true;
+
             btnOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -232,7 +183,7 @@ public class WriteActivity extends AppCompatActivity {
                     if (TextUtils.isEmpty(editTitle.getText().toString())) {
                         checkBlankTitle();
                     } else {
-                        dbHelper.startOneul(t_oDate.getText().toString(), timeStart.getText().toString(),
+                        dbHelper.startOneul(WriteActivity.this, t_oDate.getText().toString(), timeStart.getText().toString(),
                                 timeEnd.getText().toString(), editTitle.getText().toString(),
                                 editMemo.getText().toString(), bitmaps, 1);
 
@@ -247,9 +198,73 @@ public class WriteActivity extends AppCompatActivity {
             ll_pictureMemo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DialogFragment.permissionCheck(WriteActivity.this, 0);
+                    DialogFragment.permissionCheck(WriteActivity.this, -1);
                 }
             });
+        }
+    }
+
+    private void refreshImageViewer(final List<Bitmap> bitmaps) {
+        if (photoCount > 0) {
+            ll_imagePreview.removeAllViews();
+
+            for (int i = 0; i < photoCount; i++) {
+                final ImageView imageView = new ImageView(WriteActivity.this);
+                imageView.setImageBitmap(bitmaps.get(i));
+                imageView.setAdjustViewBounds(true);
+                imageView.setPadding(0, 0, 16, 0);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final View view = View.inflate(WriteActivity.this, R.layout.view_overlay, null);
+
+                        view.findViewById(R.id.ll_deletePhoto).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (isNotEdit) {
+                                    bitmaps.remove(viewer.currentPosition());
+                                    viewer.updateImages(bitmaps);
+                                } else {
+                                    DialogFragment.deletePhotoDialog(WriteActivity.this, viewer, oNo,
+                                            dbHelper.getpNos(oNo).get(viewer.currentPosition()));
+                                }
+
+                                ll_imagePreview.removeViewAt(viewer.currentPosition());
+                            }
+                        });
+
+                        view.findViewById(R.id.ll_downloadPhoto).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (isNotEdit) {
+                                    DialogFragment.downloadPhoto(WriteActivity.this,
+                                            BitmapRefactor.bitmapToBytes(bitmaps.get(viewer.currentPosition())));
+                                } else {
+                                    DialogFragment.downloadPhoto(WriteActivity.this,
+                                            dbHelper.getPhoto(dbHelper.getpNos(oNo).get(viewer.currentPosition())));
+                                }
+                            }
+                        });
+
+                        viewer = new StfalconImageViewer.Builder<>(WriteActivity.this, bitmaps,
+                                new ImageLoader<Bitmap>() {
+                                    @Override
+                                    public void loadImage(ImageView imageView, Bitmap image) {
+                                        imageView.setImageBitmap(image);
+                                    }
+                                })
+                                .withStartPosition(ll_imagePreview.indexOfChild(imageView))
+                                .withOverlayView(view)
+                                .build();
+
+                        viewer.show();
+                    }
+                });
+
+                ll_imagePreview.addView(imageView);
+            }
+
+            ll_imagePreview.getChildAt(ll_imagePreview.getChildCount() - 1).setPadding(0, 0, 0, 0);
         }
     }
 
@@ -304,14 +319,11 @@ public class WriteActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    //            fixme 사진 기능 수정필요
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-            List<Bitmap> bitmaps = new ArrayList<>();
-
             switch (requestCode) {
                 case DialogFragment.CAMERA_REQUEST_CODE:
 //                    check 미디어 스캔 최적화
@@ -358,8 +370,14 @@ public class WriteActivity extends AppCompatActivity {
                     break;
             }
 
-//            fixme 사진 추가하면 리스트에 넣기
-            dbHelper.addPhoto(this, dbHelper.getStartOneul().getoNo(), bitmaps);
+//            fixme 작성 사진 5개 제한
+            if (isNotEdit) {
+                photoCount = bitmaps.size();
+                refreshImageViewer(bitmaps);
+            } else {
+                dbHelper.addPhoto(this, oNo, bitmaps);
+                refreshImageViewer(dbHelper.getPhotos(oNo));
+            }
         }
     }
 
