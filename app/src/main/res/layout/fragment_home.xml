@@ -8,286 +8,297 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context=".fragment.HomeFragment"
-    tools:ignore="HardcodedText, UseCompoundDrawables, RelativeOverlap, ContentDescription">
+    tools:ignore="HardcodedText, UseCompoundDrawables, UselessParent,
+    RelativeOverlap, ContentDescription">
 
     <LinearLayout
-        android:id="@+id/ll_listHeader"
+        android:id="@+id/ll_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_alignParentTop="true"
-        android:orientation="vertical">
+        android:background="@drawable/write_sh"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/write_sh"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="12dp">
+            android:id="@+id/ll_goCalendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp">
 
-            <LinearLayout
-                android:id="@+id/ll_goCalendar"
+            <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:src="@drawable/ic_calendar" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:src="@drawable/ic_calendar" />
-
-                <TextView
-                    android:id="@+id/t_oDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:text="2020.08.31"
-                    android:textColor="@color/darkGray"
-                    android:textSize="24sp"
-                    app:drawableEndCompat="@drawable/ic_expand" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/t_oDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="2020.08.31"
+                android:textColor="@color/darkGray"
+                android:textSize="24sp"
+                app:drawableEndCompat="@drawable/ic_expand" />
         </LinearLayout>
+    </LinearLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/ns_scroller"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ll_header"
+        android:layout_marginTop="-1dp"
+        android:orientation="vertical"
+        android:scrollbars="vertical">
 
         <LinearLayout
-            android:id="@+id/ll_todayBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/home_todaybox_cl"
-            android:orientation="horizontal"
-            android:padding="12dp">
-
-            <EditText
-                android:id="@+id/et_oTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/home_todaybox_et"
-                android:hint="새로운 일과 제목을 입력하세요."
-                android:imeOptions="actionDone"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:maxLength="20"
-                android:maxLines="1"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="8dp"
-                android:textSize="14sp" />
-
-            <Button
-                android:id="@+id/btn_ok"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:fontFamily="@font/nanum_barun_gothic_bold"
-                android:text="OK"
-                android:textColor="@color/mainColor"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/fl_startBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingHorizontal="12dp"
-            android:paddingTop="12dp">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/ll_memoBox"
+                android:id="@+id/ll_todayBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/home_memobox_ll"
-                android:orientation="vertical"
-                android:paddingHorizontal="16dp"
-                android:paddingTop="80dp"
-                android:paddingBottom="16dp"
-                android:visibility="gone">
-
-                <EditText
-                    android:id="@+id/et_oMemo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/home_startbox_et"
-                    android:hint="여기에 메모를 작성하세요."
-                    android:importantForAutofill="no"
-                    android:inputType="textMultiLine|textNoSuggestions"
-                    android:maxHeight="97dp"
-                    android:padding="8dp"
-                    android:scrollbars="vertical"
-                    android:textColor="@color/darkGray"
-                    android:textSize="14sp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:id="@+id/ll_pictureMemo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="-4dp"
-                        android:gravity="center_vertical"
-                        android:padding="6dp">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_add_photo" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="사진"
-                            android:textColor="@color/darkGray"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_cancelMemo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="-4dp"
-                        android:gravity="center_vertical"
-                        android:padding="6dp"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_cancel" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="취소"
-                            android:textColor="@color/darkGray"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_saveMemo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="-4dp"
-                        android:gravity="center_vertical"
-                        android:padding="6dp"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_save" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="저장"
-                            android:textColor="@color/darkGray"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <HorizontalScrollView
-                    android:id="@+id/hs_imagePreview"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="4dp"
-                    android:scrollbars="none"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:id="@+id/ll_imagePreview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal" />
-                </HorizontalScrollView>
-            </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_startBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/home_todaybox_cl"
+                android:orientation="horizontal"
                 android:padding="12dp">
 
-                <TextView
-                    android:id="@+id/t_oTitle"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/et_oTitle"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:padding="6dp"
-                    android:singleLine="true"
-                    android:text="화상강의"
-                    android:textColor="@color/darkGray"
-                    android:textSize="16sp"
-                    app:layout_constrainedWidth="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/t_oTime"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/t_oTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="01:30"
-                    android:textColor="@color/gray"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/i_memoBox"
-                    app:layout_constraintStart_toEndOf="@id/t_oTitle"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/i_memoBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_expand"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_stop"
-                    app:layout_constraintStart_toEndOf="@id/t_oTime"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/home_todaybox_et"
+                    android:hint="새로운 일과 제목을 입력하세요."
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    android:textSize="14sp" />
 
                 <Button
-                    android:id="@+id/btn_stop"
+                    android:id="@+id/btn_ok"
                     style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="60dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:fontFamily="@font/nanum_barun_gothic_bold"
-                    android:text="STOP"
+                    android:text="OK"
                     android:textColor="@color/mainColor"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </FrameLayout>
-    </LinearLayout>
+                    android:textSize="16sp" />
+            </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/r_oneul"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_listHeader"
-        android:layout_alignParentBottom="true"
-        android:background="#00000000"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:listSelector="@android:color/transparent"
-        android:overScrollMode="never"
-        android:scrollbars="vertical" />
+            <FrameLayout
+                android:id="@+id/fl_startBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingHorizontal="12dp"
+                android:paddingTop="12dp">
+
+                <LinearLayout
+                    android:id="@+id/ll_memoBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/home_memobox_ll"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="80dp"
+                    android:paddingBottom="16dp"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/et_oMemo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/home_startbox_et"
+                        android:hint="여기에 메모를 작성하세요."
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine|textNoSuggestions"
+                        android:maxHeight="97dp"
+                        android:padding="8dp"
+                        android:scrollbars="vertical"
+                        android:textColor="@color/darkGray"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/ll_pictureMemo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="-4dp"
+                            android:gravity="center_vertical"
+                            android:padding="6dp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_add_photo" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="사진"
+                                android:textColor="@color/darkGray"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_cancelMemo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="-4dp"
+                            android:gravity="center_vertical"
+                            android:padding="6dp"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cancel" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="취소"
+                                android:textColor="@color/darkGray"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_saveMemo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="-4dp"
+                            android:gravity="center_vertical"
+                            android:padding="6dp"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_save" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="저장"
+                                android:textColor="@color/darkGray"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <HorizontalScrollView
+                        android:id="@+id/hs_imagePreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="4dp"
+                        android:scrollbars="none"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:id="@+id/ll_imagePreview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal" />
+                    </HorizontalScrollView>
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_startBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/home_todaybox_cl"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/t_oTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:padding="6dp"
+                        android:singleLine="true"
+                        android:text="화상강의"
+                        android:textColor="@color/darkGray"
+                        android:textSize="16sp"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/t_oTime"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/t_oTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="01:30"
+                        android:textColor="@color/gray"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/i_memoBox"
+                        app:layout_constraintStart_toEndOf="@id/t_oTitle"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/i_memoBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_expand"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_stop"
+                        app:layout_constraintStart_toEndOf="@id/t_oTime"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/btn_stop"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:fontFamily="@font/nanum_barun_gothic_bold"
+                        android:text="STOP"
+                        android:textColor="@color/mainColor"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/r_oneul"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:listSelector="@android:color/transparent"
+                android:overScrollMode="never"
+                android:scrollbars="vertical" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_goWrite"

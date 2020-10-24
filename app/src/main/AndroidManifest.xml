@@ -51,6 +51,9 @@
 
         <!--        ㄴㄴ 액티비티-->
         <activity
+            android:name=".RefreshActivity"
+            android:theme="@style/Theme.Transparent" />
+        <activity
             android:name=".CameraActivity"
             android:theme="@style/Theme.Transparent" />
         <activity

@@ -98,10 +98,10 @@ public class DialogFragment {
 
     public static void checkMemoDialog(final Activity activity, final int bottomButtonId) {
         dialog = new AlertDialog.Builder(activity)
-                .setMessage("메모 작성을 취소합니다.")
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                .setMessage("변경된 메모를 저장합니다.")
+                .setPositiveButton("저장", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        activity.findViewById(R.id.ll_cancelMemo).callOnClick();
+                        activity.findViewById(R.id.ll_saveMemo).callOnClick();
 
                         if (bottomButtonId != 0) {
                             activity.findViewById(bottomButtonId).callOnClick();
@@ -116,8 +116,8 @@ public class DialogFragment {
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#E88346"));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#E88346"));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#000000"));
             }
         });
         dialog.show();
@@ -178,7 +178,7 @@ public class DialogFragment {
                                          final int oNo, final int pNo) {
         dialog = new AlertDialog.Builder(context)
                 .setMessage("사진을 삭제합니다.")
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         DBHelper dbHelper = DBHelper.getDB(context);
                         dbHelper.deletePhoto(pNo);
@@ -195,8 +195,8 @@ public class DialogFragment {
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#E88346"));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#E88346"));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#000000"));
             }
         });
         dialog.show();
@@ -206,7 +206,7 @@ public class DialogFragment {
                                          final List<Bitmap> bitmaps) {
         dialog = new AlertDialog.Builder(context)
                 .setMessage("사진을 삭제합니다.")
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         bitmaps.remove(viewer.currentPosition());
                         viewer.updateImages(bitmaps);
@@ -222,8 +222,8 @@ public class DialogFragment {
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#E88346"));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#E88346"));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#000000"));
             }
         });
         dialog.show();

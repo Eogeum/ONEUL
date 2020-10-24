@@ -1,5 +1,6 @@
 package com.oneul.oneul;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.WriteActivity;
 import com.oneul.extra.BitmapRefactor;
@@ -57,29 +59,33 @@ public class OneulHolder extends RecyclerView.ViewHolder {
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                oNo = Integer.parseInt(t_oNo.getText().toString());
+                if (MainActivity.useEditMemo) {
+                    DialogFragment.checkMemoDialog((Activity) context, 0);
+                } else {
+                    oNo = Integer.parseInt(t_oNo.getText().toString());
 
-                new AlertDialog.Builder(context)
-                        .setItems(new CharSequence[]{"수정", "삭제"}, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                switch (i) {
+                    new AlertDialog.Builder(context)
+                            .setItems(new CharSequence[]{"수정", "삭제"}, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    switch (i) {
 //                            수정
-                                    case 0:
-                                        Intent intent = new Intent(context, WriteActivity.class);
-                                        intent.putExtra("editOneul", dbHelper.getOneul(oNo));
-                                        context.startActivity(intent);
-                                        break;
+                                        case 0:
+                                            Intent intent = new Intent(context, WriteActivity.class);
+                                            intent.putExtra("editOneul", dbHelper.getOneul(oNo));
+                                            context.startActivity(intent);
+                                            break;
 //                            삭제
-                                    case 1:
-                                        dbHelper.deleteOneul(oNo);
-                                        dbHelper.refreshRecyclerView();
-                                        break;
+                                        case 1:
+                                            dbHelper.deleteOneul(oNo);
+                                            dbHelper.refreshRecyclerView();
+                                            break;
+                                    }
                                 }
-                            }
-                        })
-                        .create()
-                        .show();
+                            })
+                            .create()
+                            .show();
+                }
 
                 return true;
             }

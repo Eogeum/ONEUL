@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -93,19 +93,8 @@ public class HomeFragment extends Fragment {
         r_oneul = homeView.findViewById(R.id.r_oneul);
         r_oneul.setLayoutManager(new LinearLayoutManager(getActivity()));
         r_oneul.setAdapter(adapter);
+        r_oneul.setNestedScrollingEnabled(false);
         r_oneul.setHasFixedSize(true);
-        r_oneul.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                if (dy < 0) {
-                    fab_goWrite.show();
-                } else if (dy > 0) {
-                    fab_goWrite.hide();
-                }
-            }
-        });
 
 //        ㄴㄴ 뷰
 //        투데이박스
@@ -150,43 +139,48 @@ public class HomeFragment extends Fragment {
         fab_goWrite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), WriteActivity.class));
+                if (MainActivity.useEditMemo) {
+                    DialogFragment.checkMemoDialog(getActivity(), 0);
+                } else {
+                    startActivity(new Intent(getActivity(), WriteActivity.class));
+                }
             }
         });
+
+        ((NestedScrollView) homeView.findViewById(R.id.ns_scroller))
+                .setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                    @Override
+                    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                        if (scrollY > oldScrollY) {
+                            fab_goWrite.hide();
+                        } else {
+                            fab_goWrite.show();
+                        }
+                    }
+                });
 
 //        투데이박스 입력 완료
         homeView.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (dbHelper.getStartOneul() == null) {
 //                    일과 제목이 없으면
-                    if (TextUtils.isEmpty(et_oTitle.getText().toString().trim())) {
-                        Toast.makeText(getActivity(), "일과 제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(et_oTitle.getText().toString().trim())) {
+                    Toast.makeText(getActivity(), "일과 제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
 
 //                        투데이박스 포커스, 키보드 올리기
-                        et_oTitle.requestFocus();
-                        imm.showSoftInput(et_oTitle, InputMethodManager.SHOW_IMPLICIT);
-                    } else {
+                    et_oTitle.requestFocus();
+                    imm.showSoftInput(et_oTitle, InputMethodManager.SHOW_IMPLICIT);
+                } else {
 //                        기록중인 일과가 없으면 기록 시작
-                        if (dbHelper.getStartOneul() == null) {
-                            dbHelper.startOneul(DateTime.today(), DateTime.nowTime(), null,
-                                    et_oTitle.getText().toString(), null, null, 0);
-                        }
+                    if (dbHelper.getStartOneul() == null) {
+                        dbHelper.startOneul(DateTime.today(), DateTime.nowTime(), null,
+                                et_oTitle.getText().toString(), null, null, 0);
+                    }
 
 //                       새로고침 및 투데이박스 값 초기화
-                        dateChange();
-                        et_oTitle.getText().clear();
-//                       알림 새로고침
-                        Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class)
-                                .notify(101, RealService.createNotification(getActivity()));
-                    }
-                } else {
-//                    새로고침 및 투데이박스 값 초기화
-                    Toast.makeText(getActivity(), "이미 기록중인 일과가 있습니다.", Toast.LENGTH_SHORT).show();
-
                     dateChange();
                     et_oTitle.getText().clear();
-//                   알림 새로고침
+//                       알림 새로고침
                     Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class)
                             .notify(101, RealService.createNotification(getActivity()));
                 }
@@ -248,7 +242,6 @@ public class HomeFragment extends Fragment {
             public void onFocusChange(View v, boolean hasFocus) {
 //                에딧 텍스트 포커싱 시
                 if (hasFocus) {
-                    et_oMemo.setText(dbHelper.getStartOneul().getoMemo());
                     imm.showSoftInput(et_oMemo, InputMethodManager.SHOW_IMPLICIT);
                     ll_picMemo.setVisibility(View.GONE);
                     ll_cancelMemo.setVisibility(View.VISIBLE);
@@ -293,32 +286,23 @@ public class HomeFragment extends Fragment {
         homeView.findViewById(R.id.btn_stop).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (dbHelper.getStartOneul() != null) {
 //                    메모 작성중일 시
-                    if (MainActivity.useEditMemo) {
-                        DialogFragment.checkMemoDialog(getActivity(), 0);
-                    } else {
+                if (MainActivity.useEditMemo) {
+                    DialogFragment.checkMemoDialog(getActivity(), 0);
+                } else {
 //                        쇼데이 변경
-                        MainActivity.showDay = dbHelper.getStartOneul().getoDate();
+                    MainActivity.showDay = dbHelper.getStartOneul().getoDate();
 
 //                        기록 종료 및 새로고침
-                        dbHelper.endOneul(dbHelper.getStartOneul().getoNo(), DateTime.nowTime());
-                        Toast.makeText(getActivity(), MainActivity.showDay + "\n일과를 저장했습니다.",
-                                Toast.LENGTH_LONG).show();
-                        dateChange();
+                    dbHelper.endOneul(dbHelper.getStartOneul().getoNo(), DateTime.nowTime());
+                    Toast.makeText(getActivity(), MainActivity.showDay + "\n일과를 저장했습니다.",
+                            Toast.LENGTH_LONG).show();
+                    dateChange();
 
 //                        메모박스 초기화
-                        i_memoBox.setImageResource(R.drawable.ic_expand);
-                        Animation.collapse(ll_memoBox);
-//                        알림 새로고침
-                        Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class)
-                                .notify(101, RealService.createNotification(getActivity()));
-                    }
-                } else {
                     i_memoBox.setImageResource(R.drawable.ic_expand);
                     Animation.collapse(ll_memoBox);
-                    dateChange();
-//                   알림 새로고침
+//                        알림 새로고침
                     Objects.requireNonNull(getActivity()).getSystemService(NotificationManager.class)
                             .notify(101, RealService.createNotification(getActivity()));
                 }

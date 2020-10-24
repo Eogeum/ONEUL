@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.core.app.RemoteInput;
 
 import com.oneul.MainActivity;
+import com.oneul.RefreshActivity;
 import com.oneul.extra.DBHelper;
 import com.oneul.extra.DateTime;
 import com.oneul.oneul.Oneul;
@@ -64,7 +65,6 @@ public class OneulReceiver extends BroadcastReceiver {
 
 //        알림 새로고침
         context.getSystemService(NotificationManager.class).notify(101, RealService.createNotification(context));
+        context.startActivity(new Intent(context, RefreshActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 }
-
-//fixme 노티 감지해서 새로고침 (인탠트 바로 닫아서 새로고침)

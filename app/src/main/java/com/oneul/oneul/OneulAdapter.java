@@ -30,7 +30,7 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == 1) {
             LinearLayout linearLayout = new LinearLayout(parent.getContext());
-            linearLayout.setLayoutParams(new ViewGroup.LayoutParams(0, 200));
+            linearLayout.setLayoutParams(new ViewGroup.LayoutParams(0, 100));
 
             return new RecyclerView.ViewHolder(linearLayout) {
             };
