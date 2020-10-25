@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -79,9 +80,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 //        서비스가 없으면
-        if (RealService.serviceIntent == null) {
-            RealService.serviceIntent = new Intent(this, RealService.class);
-            startService(RealService.serviceIntent);
+        SharedPreferences preferences = getSharedPreferences("sFile", MODE_PRIVATE);
+        RealService.fixNoti = preferences.getBoolean("fixNoti", true);
+
+        if (RealService.fixNoti) {
+            RealService.startForeground(this);
         }
 
 //        하단메뉴 클릭 시
@@ -113,7 +116,8 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             if (f_stat != null) manager.beginTransaction().hide(f_stat).commit();
-                            if (f_setting != null) manager.beginTransaction().hide(f_setting).commit();
+                            if (f_setting != null)
+                                manager.beginTransaction().hide(f_setting).commit();
 
                             return true;
 
@@ -126,14 +130,15 @@ public class MainActivity extends AppCompatActivity {
 
                             manager.beginTransaction().show(f_stat).commit();
                             if (f_home != null) manager.beginTransaction().hide(f_home).commit();
-                            if (f_setting != null) manager.beginTransaction().hide(f_setting).commit();
+                            if (f_setting != null)
+                                manager.beginTransaction().hide(f_setting).commit();
 
                             return true;
 
                         case R.id.bot_menu_setting:
-//                프            래그먼트 없으면 생성, 있으면 보이기
+//                            프래그먼트 없으면 생성, 있으면 보이기
                             if (f_setting == null) {
-                                f_setting = SettingFragment.newInstance("");
+                                f_setting = SettingFragment.newInstance();
                                 manager.beginTransaction().add(R.id.container, f_setting).commit();
                             }
 

@@ -21,8 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <!--        ㄴㄴ 프로바이더-->
-        <provider
+
+    <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.oneul.fileprovider"
             android:exported="false"
@@ -32,12 +32,10 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!--        ㄴㄴ 서비스-->
         <service
             android:name=".service.RealService"
             android:enabled="true" />
 
-        <!--        ㄴㄴ 리시버-->
         <receiver android:name=".service.OneulReceiver" />
         <receiver
             android:name=".service.RebootReceiver"
@@ -49,7 +47,6 @@
             </intent-filter>
         </receiver>
 
-        <!--        ㄴㄴ 액티비티-->
         <activity
             android:name=".RefreshActivity"
             android:theme="@style/Theme.Transparent" />

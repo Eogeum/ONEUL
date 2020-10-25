@@ -22,6 +22,7 @@ import com.oneul.extra.DBHelper;
 
 public class RealService extends Service {
     public static Intent serviceIntent = null;
+    public static boolean fixNoti;
 
     public RealService() {
     }
@@ -111,12 +112,32 @@ public class RealService extends Service {
         return START_REDELIVER_INTENT;
     }
 
+    public static void startForeground(Context context) {
+        if (serviceIntent == null) {
+            serviceIntent = new Intent(context, RealService.class);
+            context.startService(serviceIntent);
+        }
+    }
+
+    public static void stopForeground(Context context) {
+        if (RealService.serviceIntent != null) {
+            context.stopService(serviceIntent);
+            RealService.serviceIntent = null;
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        serviceIntent = new Intent(this, RealService.class);
-        startService(serviceIntent);
+        if (fixNoti) {
+            serviceIntent = new Intent(this, RealService.class);
+            startService(serviceIntent);
+        } else {
+            stopForeground(true);
+            this.stopSelf();
+            serviceIntent = null;
+        }
     }
 
     @Nullable
