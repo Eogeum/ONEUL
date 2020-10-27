@@ -1,7 +1,6 @@
 package com.oneul.fragment;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,22 +12,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
+import com.oneul.MainActivity;
 import com.oneul.R;
-import com.oneul.stat.Stat;
+import com.oneul.extra.DBHelper;
 import com.oneul.stat.StatAdapter;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 public class StatFragment extends Fragment {
-    PieChart pieChart;
-
     //    ㄴㄴ 리사이클
-    RecyclerView statRecycler;
-    ArrayList<Stat> items;
+    public static PieChart pieChart;
+    public static RecyclerView statRecycler;
+    public static StatAdapter adapter = new StatAdapter();
 
     public StatFragment() {
     }
@@ -44,45 +39,20 @@ public class StatFragment extends Fragment {
         View statView = inflater.inflate(R.layout.fragment_stat, container, false);
 
         //년,월 표시
-//        todo 홈에서 날짜 바꿔도 통계는 그대로
         ((TextView) statView.findViewById(R.id.statDay))
                 .setText(new SimpleDateFormat("yyyy년 MM월").format(System.currentTimeMillis()));
 
-        //파이차트 (그래프형식)
-        ArrayList<PieEntry> pieValue = new ArrayList<>();
-        pieValue.add(new PieEntry(31, "코딩"));
-        pieValue.add(new PieEntry(24, "강의"));
-        pieValue.add(new PieEntry(15, "여가"));
-        pieValue.add(new PieEntry(11, "운동"));
-        pieValue.add(new PieEntry(8, "독서"));
-        PieDataSet dataSet = new PieDataSet(pieValue, "일과 카테고리");
-        dataSet.setSliceSpace(3);
-        dataSet.setSelectionShift(5);
-        dataSet.setColor(Color.parseColor("#E88346"));
-
-        PieData data = new PieData((dataSet));
-        data.setValueTextSize(10);
-
+//        ㄴㄴ 리사이클
         pieChart = statView.findViewById(R.id.pieChart);
         pieChart.setDescription(null);
-        pieChart.setData(data);
 
-        //임시 데이터
-        items = new ArrayList<>();
-        items.clear();
-        items.add(new Stat("코딩", "31시간"));
-        items.add(new Stat("강의", "24시간"));
-        items.add(new Stat("여가", "15시간"));
-        items.add(new Stat("운동", "11시간"));
-        items.add(new Stat("독서", "8시간"));
-
-//        ㄴㄴ 리사이클
         statRecycler = statView.findViewById(R.id.statRecycler);
         statRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        statRecycler.setAdapter(new StatAdapter(statView.getContext(), items));
+        statRecycler.setAdapter(adapter);
         statRecycler.setHasFixedSize(false);
         statRecycler.setNestedScrollingEnabled(false);
 
+        DBHelper.getDB(getContext()).getStat(MainActivity.showDay, pieChart, statRecycler, adapter);
         return statView;
     }
 
@@ -91,3 +61,5 @@ public class StatFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 }
+
+//        fixme 새로고침 방법 추가

@@ -11,10 +11,16 @@ import android.text.TextUtils;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.oneul.MainActivity;
 import com.oneul.fragment.HomeFragment;
 import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
+import com.oneul.stat.Stat;
+import com.oneul.stat.StatAdapter;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import org.threeten.bp.LocalDate;
@@ -39,6 +45,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PNO = "pNo";
     public static final String COLUMN_PPHOTO = "pPhoto";
 
+    //    카테고리 테이블 정보
+    public static final String TABLE_CATEGORY = "Category";
+    public static final String COLUMN_CNO = "cNo";
+    public static final String COLUMN_CCATEGORY = "cCategory";
+
     //    디비 정보
     private static final String DATABASE_ONEUL = "OneulDB";
     private static final int DATABASE_VERSION = 1;
@@ -51,13 +62,19 @@ public class DBHelper extends SQLiteOpenHelper {
             COLUMN_OEND + " TEXT, " +
             COLUMN_OTITLE + " TEXT NOT NULL, " +
             COLUMN_OMEMO + " TEXT, " +
-            COLUMN_ODONE + " INTEGER NOT NULL);";
+            COLUMN_ODONE + " INTEGER NOT NULL, " +
+            COLUMN_CNO + " INTEGER, " +
+            "CONSTRAINT o_c_cNo FOREIGN KEY(" + COLUMN_CNO + ") REFERENCES " + TABLE_CATEGORY + "(" + COLUMN_CNO + "));";
+
     private static final String CREATE_PHOTO = "CREATE TABLE " + TABLE_PHOTO + "(" +
             COLUMN_PNO + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_PPHOTO + " BLOB, " +
             COLUMN_ONO + " INTEGER, " +
-
             "CONSTRAINT p_o_oNo FOREIGN KEY(" + COLUMN_ONO + ") REFERENCES " + TABLE_ONEUL + "(" + COLUMN_ONO + "));";
+
+    private static final String CREATE_CATEGORY = "CREATE TABLE " + TABLE_CATEGORY + "(" +
+            COLUMN_CNO + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_CCATEGORY + " TEXT);";
 
     //    디비
     private static DBHelper dbHelper;
@@ -348,18 +365,65 @@ public class DBHelper extends SQLiteOpenHelper {
         return calendarDays;
     }
 
+    //    ㄴㄴ 통계
+    public void getStat(String oDate, PieChart chart, RecyclerView r_stat, StatAdapter adapter) {
+        adapter.clear();
+
+        ArrayList<PieEntry> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_ONEUL, new String[]{COLUMN_OTITLE},
+                COLUMN_ODATE + " LIKE ? AND " + COLUMN_ODONE + " = 1",
+                new String[]{oDate.substring(0, 7) + "%"}, null, null, null);
+
+        while (cursor.moveToNext()) {
+            String oTitle = cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE));
+            long time = 0;
+
+            Cursor timeCursor = db.query(TABLE_ONEUL, new String[]{COLUMN_OSTART, COLUMN_OEND},
+                    COLUMN_OTITLE + " = ? AND " + COLUMN_ODONE + " = 1",
+                    new String[]{oTitle}, null, null, null);
+
+            while (timeCursor.moveToNext()) {
+                time += DateTime.calculateTime(oDate,
+                        timeCursor.getString(timeCursor.getColumnIndex(COLUMN_OSTART)),
+                        timeCursor.getString(timeCursor.getColumnIndex(COLUMN_OEND)));
+            }
+
+            timeCursor.close();
+
+            list.add(new PieEntry(time, oTitle));
+            adapter.addItem(new Stat(oTitle, time + "시간"));
+        }
+
+        cursor.close();
+
+        PieDataSet dataSet = new PieDataSet(list, "카테고리");
+        dataSet.setSliceSpace(3);
+        dataSet.setSelectionShift(5);
+
+        PieData data = new PieData((dataSet));
+        data.setValueTextSize(10);
+
+        chart.setData(data);
+        r_stat.setAdapter(adapter);
+    }
+
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ONEUL);
         db.execSQL(CREATE_ONEUL);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PHOTO);
         db.execSQL(CREATE_PHOTO);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORY);
+        db.execSQL(CREATE_CATEGORY);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ONEUL);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PHOTO);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORY);
         this.onCreate(db);
     }
 }

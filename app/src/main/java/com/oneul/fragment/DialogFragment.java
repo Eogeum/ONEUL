@@ -244,7 +244,6 @@ public class DialogFragment {
                 MediaScannerConnection.scanFile(context, new String[]{file.getAbsolutePath()},
                         null, null);
 
-//                todo 알림으로 바꾸기
                 Toast.makeText(context, "\"/Download\"에 저장했습니다.", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();

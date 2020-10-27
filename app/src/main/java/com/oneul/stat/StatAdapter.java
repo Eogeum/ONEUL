@@ -1,6 +1,5 @@
 package com.oneul.stat;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,30 +13,31 @@ import com.oneul.R;
 import java.util.ArrayList;
 
 public class StatAdapter extends RecyclerView.Adapter<StatAdapter.ViewHolder> {
-    private final ArrayList<Stat> items;
-    private final LayoutInflater mInflater;
+    private final ArrayList<Stat> stat = new ArrayList<>();
 
-    public StatAdapter(Context context, ArrayList<Stat> items) {
-        this.mInflater = LayoutInflater.from(context);
-        this.items = items;
+    public void addItem(Stat stat) {
+        this.stat.add(stat);
+    }
+
+    public void clear() {
+        stat.clear();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.stat_recycler, parent, false);
-
-        return new ViewHolder(view);
+        return new ViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.stat_recycler, parent, false));
     }
 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.mTitle.setText(items.get(position).title_item);
-        holder.mTime.setText(items.get(position).time_item);
+        holder.mTitle.setText(stat.get(position).title_item);
+        holder.mTime.setText(stat.get(position).time_item);
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return stat.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

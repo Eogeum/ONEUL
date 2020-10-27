@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import com.oneul.R;
 import com.oneul.service.RealService;
 
+import java.util.Objects;
+
 public class SettingFragment extends Fragment {
     SharedPreferences preferences;
 
@@ -31,7 +33,7 @@ public class SettingFragment extends Fragment {
         //        인플레이터 관련
         final View settingView = inflater.inflate(R.layout.fragment_setting, container, false);
 
-        preferences = getContext().getSharedPreferences("sFile", Context.MODE_PRIVATE);
+        preferences = Objects.requireNonNull(getContext()).getSharedPreferences("sFile", Context.MODE_PRIVATE);
 
 //        ㄴㄴ 뷰
         switch_fixNoti = settingView.findViewById(R.id.switch_fixNoti);

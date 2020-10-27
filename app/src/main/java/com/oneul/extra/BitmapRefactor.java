@@ -25,18 +25,14 @@ public class BitmapRefactor {
     }
 
     public static Bitmap uriToBitmap(Context context, Uri uri) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            try {
+        try {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
                 return MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
+            } else {
                 return ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.getContentResolver(), uri));
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return null;
