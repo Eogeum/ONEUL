@@ -44,7 +44,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="상단바 고정 여부"
+                    android:text="상단바 알림 고정"
                     android:textColor="@color/darkGray"
                     android:textSize="16sp" />
 

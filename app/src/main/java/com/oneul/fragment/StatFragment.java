@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.oneul.MainActivity;
@@ -24,6 +25,11 @@ public class StatFragment extends Fragment {
     public static PieChart pieChart;
     public static RecyclerView statRecycler;
     public static StatAdapter adapter = new StatAdapter();
+
+    //    ㄴㄴ 기타
+    DBHelper dbHelper;
+
+    SwipeRefreshLayout sr_swipeRefresh;
 
     public StatFragment() {
     }
@@ -52,7 +58,19 @@ public class StatFragment extends Fragment {
         statRecycler.setHasFixedSize(false);
         statRecycler.setNestedScrollingEnabled(false);
 
-        DBHelper.getDB(getContext()).getStat(MainActivity.showDay, pieChart, statRecycler, adapter);
+        //    ㄴㄴ 기타
+        dbHelper = DBHelper.getDB(getContext());
+        dbHelper.getStat(MainActivity.showDay, pieChart, statRecycler, adapter);
+
+        sr_swipeRefresh = statView.findViewById(R.id.sr_swipeRefresh);
+        sr_swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                dbHelper.getStat(MainActivity.showDay, pieChart, statRecycler, adapter);
+                sr_swipeRefresh.setRefreshing(false);
+            }
+        });
+
         return statView;
     }
 
@@ -61,5 +79,3 @@ public class StatFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 }
-
-//        fixme 새로고침 방법 추가

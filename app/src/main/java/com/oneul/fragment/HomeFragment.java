@@ -26,6 +26,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.oneul.CameraActivity;
@@ -62,6 +63,7 @@ public class HomeFragment extends Fragment {
     EditText et_oMemo;
     //    기타
     TextView t_oDate;
+    SwipeRefreshLayout sr_swipeRefresh;
 
     //    ㄴㄴ 기타
     DBHelper dbHelper;
@@ -144,6 +146,21 @@ public class HomeFragment extends Fragment {
                 } else {
                     startActivity(new Intent(getActivity(), WriteActivity.class));
                 }
+            }
+        });
+
+        sr_swipeRefresh = homeView.findViewById(R.id.sr_swipeRefresh);
+        sr_swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (MainActivity.useEditMemo) {
+                    DialogFragment.checkMemoDialog(getActivity(), 0);
+                } else {
+                    dateChange();
+                    ll_memoBox.setVisibility(View.GONE);
+                }
+
+                sr_swipeRefresh.setRefreshing(false);
             }
         });
 
