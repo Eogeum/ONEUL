@@ -158,6 +158,16 @@ public class MainActivity extends AppCompatActivity {
 //        시작 시 홈화면 불러오기
         f_home = HomeFragment.newInstance();
         manager.beginTransaction().replace(R.id.container, f_home).commit();
+
+//        fixme 카테고리 리스트 테스트
+//        CharSequence[] charSequences = new CharSequence[]{"운동", "공부", "식사", "기타"};
+//
+//        new AlertDialog.Builder(this).setItems(charSequences, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                charSequences[which].toString();
+//            }
+//        }).show();
     }
 
     //    포커스 초기화

@@ -22,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -164,7 +163,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ((NestedScrollView) homeView.findViewById(R.id.ns_scroller))
+        homeView.findViewById(R.id.ns_scroller)
                 .setOnScrollChangeListener(new View.OnScrollChangeListener() {
                     @Override
                     public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -190,8 +189,8 @@ public class HomeFragment extends Fragment {
                 } else {
 //                        기록중인 일과가 없으면 기록 시작
                     if (dbHelper.getStartOneul() == null) {
-                        dbHelper.startOneul(DateTime.today(), DateTime.nowTime(), null,
-                                et_oTitle.getText().toString(), null, null, 0);
+                        dbHelper.startOneul(DateTime.now(), null, et_oTitle.getText().toString(),
+                                null, null, 0);
                     }
 
 //                       새로고침 및 투데이박스 값 초기화
@@ -308,10 +307,10 @@ public class HomeFragment extends Fragment {
                     DialogFragment.checkMemoDialog(getActivity(), 0);
                 } else {
 //                        쇼데이 변경
-                    MainActivity.showDay = dbHelper.getStartOneul().getoDate();
+                    MainActivity.showDay = DateTime.stringToDay(dbHelper.getStartOneul().getoStart());
 
 //                        기록 종료 및 새로고침
-                    dbHelper.endOneul(dbHelper.getStartOneul().getoNo(), DateTime.nowTime());
+                    dbHelper.endOneul(dbHelper.getStartOneul().getoNo(), DateTime.now());
                     Toast.makeText(getActivity(), MainActivity.showDay + "\n일과를 저장했습니다.",
                             Toast.LENGTH_LONG).show();
                     dateChange();
@@ -341,7 +340,7 @@ public class HomeFragment extends Fragment {
 
 //                디비에서 기록중인 일과 불러오기
                 Oneul startOneul = dbHelper.getStartOneul();
-                t_oTime.setText(startOneul.getoStart());
+                t_oTime.setText(DateTime.stringToTime(startOneul.getoStart()));
                 t_oTitle.setText(startOneul.getoTitle());
                 et_oMemo.setText(startOneul.getoMemo());
 

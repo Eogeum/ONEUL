@@ -28,7 +28,7 @@ public class OneulReceiver extends BroadcastReceiver {
                 bundle = RemoteInput.getResultsFromIntent(intent);
 
                 if (bundle != null) {
-                    dbHelper.startOneul(DateTime.today(), DateTime.nowTime(), null,
+                    dbHelper.startOneul(DateTime.now(), null,
                             Objects.requireNonNull(bundle.getCharSequence("KEY_OTITLE")).toString(),
                             null, null, 0);
                 }
@@ -58,7 +58,7 @@ public class OneulReceiver extends BroadcastReceiver {
                 Oneul oneul = dbHelper.getStartOneul();
                 int oNo = oneul.getoNo();
 
-                dbHelper.endOneul(oNo, DateTime.nowTime());
+                dbHelper.endOneul(oNo, DateTime.now());
                 Toast.makeText(context, MainActivity.showDay + "\n일과를 저장했습니다.", Toast.LENGTH_LONG).show();
                 break;
         }

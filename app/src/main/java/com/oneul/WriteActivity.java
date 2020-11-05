@@ -92,6 +92,7 @@ public class WriteActivity extends AppCompatActivity {
             }
         });
 
+//        fixme 날짜도 같이 선택하게 변경
 //        시작 시간 입력
         timeStart = findViewById(R.id.timeStart);
         timeStart.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +131,7 @@ public class WriteActivity extends AppCompatActivity {
             }
         });
 
+//        fixme 작성화면 인텐트 엑스트라 불러오기
         //        불러온 일과 있으면
         if (getIntent().getExtras() != null) {
             isEditMode = true;
@@ -164,8 +166,7 @@ public class WriteActivity extends AppCompatActivity {
                 } else {
 //                    불러온 일과가 있으면
                     if (isEditMode) {
-                        dbHelper.editOneul(oNo, t_oDate.getText().toString(),
-                                timeStart.getText().toString(), timeEnd.getText().toString(),
+                        dbHelper.editOneul(oNo, timeStart.getText().toString(), timeEnd.getText().toString(),
                                 editTitle.getText().toString(), editMemo.getText().toString());
                         dbHelper.editPhoto(oNo, bitmaps);
 
@@ -174,7 +175,7 @@ public class WriteActivity extends AppCompatActivity {
 
 //                    불러온 일과가 없으면
                     } else {
-                        dbHelper.startOneul(t_oDate.getText().toString(), timeStart.getText().toString(),
+                        dbHelper.startOneul(timeStart.getText().toString(),
                                 timeEnd.getText().toString(), editTitle.getText().toString(),
                                 editMemo.getText().toString(), bitmaps, 1);
 

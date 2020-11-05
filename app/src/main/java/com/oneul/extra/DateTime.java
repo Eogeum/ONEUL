@@ -8,9 +8,13 @@ import java.util.Objects;
 
 @SuppressLint("SimpleDateFormat")
 public class DateTime {
-    //    오늘 날짜 불러오기
+    //    현재 날짜 불러오기
     public static String today() {
         return new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis());
+    }
+
+    public static String now() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(System.currentTimeMillis());
     }
 
     //    현재 시간 불러오기
@@ -18,26 +22,31 @@ public class DateTime {
         return new SimpleDateFormat("HH:mm").format(System.currentTimeMillis());
     }
 
-    public static long calculateTime(String day, String startTime, String endTime) {
+    public static long calculateTime(String oStart, String oEnd) {
         try {
-            long startDate = Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd HH:mm")
-                    .parse(day + " " + startTime))
-                    .getTime();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-            long endDate = Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd HH:mm")
-                    .parse(day + " " + endTime))
-                    .getTime();
-
-            if (Integer.parseInt(startTime.replace(":", ""))
-                    > Integer.parseInt(endTime.replace(":", ""))) {
-                endDate += 86400000;
-            }
-
-            return ((endDate - startDate) / 3600000 < 0) ? 0 : (endDate - startDate) / 3600000;
+            return (Objects.requireNonNull(format.parse(oEnd)).getTime()
+                    - Objects.requireNonNull(format.parse(oStart)).getTime()) / 60000;
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         return 0;
+    }
+
+    //    날짜로 자르기
+    public static String stringToDay(String string) {
+        return string.substring(0, 10);
+    }
+
+    //    월별로 자르기
+    public static String stringToMonth(String string) {
+        return string.substring(5, 10);
+    }
+
+    //    시간으로 자르기
+    public static String stringToTime(String string) {
+        return string.substring(11, 16);
     }
 }
