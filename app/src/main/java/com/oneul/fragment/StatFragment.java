@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.oneul.MainActivity;
 import com.oneul.R;
@@ -51,6 +52,7 @@ public class StatFragment extends Fragment {
 //        ㄴㄴ 리사이클
         pieChart = statView.findViewById(R.id.pieChart);
         pieChart.setDescription(null);
+        pieChart.animateY(1000, Easing.EasingOption.EaseInOutQuad);
 
         statRecycler = statView.findViewById(R.id.statRecycler);
         statRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -67,6 +69,7 @@ public class StatFragment extends Fragment {
             @Override
             public void onRefresh() {
                 dbHelper.getStat(MainActivity.showDay, pieChart, statRecycler, adapter);
+                pieChart.animateY(1000, Easing.EasingOption.EaseInOutQuad);
                 sr_swipeRefresh.setRefreshing(false);
             }
         });

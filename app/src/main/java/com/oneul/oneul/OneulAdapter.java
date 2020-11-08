@@ -49,7 +49,7 @@ public class OneulAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 @Override
                 public void run() {
                     Layout layout = oneulHolder.t_oMemo.getLayout();
-//                    fixme Attempt to invoke virtual method 'int android.text.Layout.getLineCount()' on a null object reference
+//                    check Attempt to invoke virtual method 'int android.text.Layout.getLineCount()' on a null object reference
                     int lines = layout.getLineCount();
 
                     if (lines > 0) {

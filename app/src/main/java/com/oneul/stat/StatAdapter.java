@@ -3,12 +3,14 @@ package com.oneul.stat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oneul.R;
+import com.oneul.extra.Animation;
 
 import java.util.ArrayList;
 
@@ -33,6 +35,7 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.mTitle.setText(stat.get(position).title_item);
         holder.mTime.setText(stat.get(position).time_item);
+        holder.image.setColorFilter(Animation.COLORS[position]);
     }
 
     @Override
@@ -41,14 +44,15 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTitle;
-        public TextView mTime;
+        TextView mTitle, mTime;
+        ImageView image;
 
         public ViewHolder(View view) {
             super(view);
 
             mTitle = view.findViewById(R.id.stat_title);
             mTime = view.findViewById(R.id.stat_time);
+            image = view.findViewById(R.id.image);
         }
     }
 }

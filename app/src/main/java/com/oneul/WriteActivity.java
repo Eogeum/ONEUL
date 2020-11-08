@@ -22,7 +22,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -51,15 +50,13 @@ public class WriteActivity extends AppCompatActivity {
     List<Bitmap> bitmaps = new ArrayList<>();
 
     //    ㄴㄴ 뷰
-    Button btnOk, timeStart, timeEnd;
+    Button timeStart, timeEnd;
     EditText editTitle, editMemo;
-    TextView t_oDate;
     LinearLayout ll_pictureMemo;
 
     //    ㄴㄴ 기타
     DBHelper dbHelper;
     InputMethodManager imm;
-    AlertDialog calendarDialog;
 
     //    ㄴㄴ 이미지뷰어
     LinearLayout ll_imagePreview;
@@ -74,23 +71,12 @@ public class WriteActivity extends AppCompatActivity {
 //        ㄴㄴ 뷰
         editTitle = findViewById(R.id.editTitle);
         editMemo = findViewById(R.id.editMemo);
-        btnOk = findViewById(R.id.btnOk);
         ll_pictureMemo = findViewById(R.id.ll_pictureMemo);
         ll_imagePreview = findViewById(R.id.ll_imagePreview);
 
 //        ㄴㄴ 기타
         dbHelper = DBHelper.getDB(this);
         imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        t_oDate = findViewById(R.id.t_oDate);
-        t_oDate.setText(MainActivity.showDay);
-        calendarDialog = DialogFragment.calendarDialog(this, t_oDate);
-        findViewById(R.id.ll_goCalendar).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calendarDialog.show();
-            }
-        });
 
 //        fixme 날짜도 같이 선택하게 변경
 //        시작 시간 입력
@@ -157,7 +143,14 @@ public class WriteActivity extends AppCompatActivity {
             isEditMode = false;
         }
 
-        btnOk.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.i_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                    일과 제목 공백 체크
@@ -170,8 +163,8 @@ public class WriteActivity extends AppCompatActivity {
                                 editTitle.getText().toString(), editMemo.getText().toString());
                         dbHelper.editPhoto(oNo, bitmaps);
 
-                        Toast.makeText(WriteActivity.this, t_oDate.getText() + "\n일과를 수정했습니다.",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(WriteActivity.this, t_oDate.getText() + "\n일과를 수정했습니다.",
+//                                Toast.LENGTH_SHORT).show();
 
 //                    불러온 일과가 없으면
                     } else {
@@ -179,8 +172,8 @@ public class WriteActivity extends AppCompatActivity {
                                 timeEnd.getText().toString(), editTitle.getText().toString(),
                                 editMemo.getText().toString(), bitmaps, 1);
 
-                        Toast.makeText(WriteActivity.this, t_oDate.getText() + "\n일과를 저장했습니다.",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(WriteActivity.this, t_oDate.getText() + "\n일과를 저장했습니다.",
+//                                Toast.LENGTH_SHORT).show();
                     }
 
                     finish();

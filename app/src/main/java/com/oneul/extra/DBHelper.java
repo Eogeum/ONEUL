@@ -17,7 +17,6 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.oneul.MainActivity;
 import com.oneul.fragment.HomeFragment;
@@ -48,11 +47,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PNO = "pNo";
     public static final String COLUMN_PPHOTO = "pPhoto";
 
-    //    카테고리 테이블 정보
-    public static final String TABLE_CATEGORY = "Category";
-    public static final String COLUMN_CNO = "cNo";
-    public static final String COLUMN_CCATEGORY = "cCategory";
-
     //    디비 정보
     private static final String DATABASE_ONEUL = "OneulDB";
     private static final int DATABASE_VERSION = 1;
@@ -64,19 +58,13 @@ public class DBHelper extends SQLiteOpenHelper {
             COLUMN_OEND + " TEXT, " +
             COLUMN_OTITLE + " TEXT NOT NULL, " +
             COLUMN_OMEMO + " TEXT, " +
-            COLUMN_ODONE + " INTEGER NOT NULL, " +
-            COLUMN_CNO + " INTEGER, " +
-            "CONSTRAINT o_c_cNo FOREIGN KEY(" + COLUMN_CNO + ") REFERENCES " + TABLE_CATEGORY + "(" + COLUMN_CNO + "));";
+            COLUMN_ODONE + " INTEGER NOT NULL);";
 
     private static final String CREATE_PHOTO = "CREATE TABLE " + TABLE_PHOTO + "(" +
             COLUMN_PNO + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_PPHOTO + " BLOB, " +
             COLUMN_ONO + " INTEGER, " +
             "CONSTRAINT p_o_oNo FOREIGN KEY(" + COLUMN_ONO + ") REFERENCES " + TABLE_ONEUL + "(" + COLUMN_ONO + "));";
-
-    private static final String CREATE_CATEGORY = "CREATE TABLE " + TABLE_CATEGORY + "(" +
-            COLUMN_CNO + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_CCATEGORY + " TEXT);";
 
     //    디비
     private static DBHelper dbHelper;
@@ -93,36 +81,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         return dbHelper;
-    }
-
-    //    ㄴㄴ 카테고리
-//    카테고리 추가
-    public void addCategory(String cCategory) {
-        ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_CCATEGORY, cCategory);
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_CATEGORY, null, values);
-    }
-
-    //    카테고리 불러오기
-    public void getCategory() {
-
-    }
-
-    //    카테고리 삭제
-    public void deleteCategory(int cNo) {
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_CNO, (Integer) null);
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.update(TABLE_ONEUL, values, COLUMN_CNO + " = " + cNo, null);
-        db.delete(TABLE_CATEGORY, COLUMN_CNO + " = " + cNo, null);
-    }
-
-    //    카테고리 수정
-    public void editCategory() {
-
     }
 
     //    ㄴㄴ 일과
@@ -169,8 +127,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     null,
                     cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE)),
                     cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO)),
-                    null,
-                    -1);
+                    null);
         }
 
         cursor.close();
@@ -215,8 +172,7 @@ public class DBHelper extends SQLiteOpenHelper {
                             oEnd,
                             cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE)),
                             cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO)),
-                            pPhoto,
-                            -1));
+                            pPhoto));
         }
 
         cursor.close();
@@ -237,8 +193,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndex(COLUMN_OSTART)),
                     cursor.getString(cursor.getColumnIndex(COLUMN_OEND)),
                     cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE)),
-                    cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO)),
-                    cursor.getString(cursor.getColumnIndex(COLUMN_CNO))};
+                    cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO))};
         }
 
         cursor.close();
@@ -431,25 +386,25 @@ public class DBHelper extends SQLiteOpenHelper {
 
             timeCursor.close();
 
+            if (time <= 0) {
+                continue;
+            }
+
             list.add(new PieEntry(time, oTitle));
-            adapter.addItem(new Stat(oTitle,
-                    time >= 60 ? (((int) time / 60) + "시간 " + ((int) time % 60) + "분") : time + "분"));
+            adapter.addItem(new Stat(oTitle, DateTime.minuteToTime(time)));
         }
 
         cursor.close();
 
         PieDataSet dataSet = new PieDataSet(list, "");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        dataSet.setColors(Animation.COLORS);
         dataSet.setSliceSpace(3);
         dataSet.setSelectionShift(5);
+        dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         dataSet.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                if (value >= 60) {
-                    return ((int) value / 60) + "시간 " + ((int) value % 60) + "분";
-                } else {
-                    return value + "분";
-                }
+                return DateTime.minuteToTime((long) value);
             }
         });
 
@@ -467,15 +422,12 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_ONEUL);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PHOTO);
         db.execSQL(CREATE_PHOTO);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORY);
-        db.execSQL(CREATE_CATEGORY);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ONEUL);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PHOTO);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORY);
         this.onCreate(db);
     }
 }

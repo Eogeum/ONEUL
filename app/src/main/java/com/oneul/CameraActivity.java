@@ -123,5 +123,3 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 }
-
-//todo 사진 추가하는 동안 로딩화면 추가

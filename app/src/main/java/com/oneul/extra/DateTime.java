@@ -35,6 +35,23 @@ public class DateTime {
         return 0;
     }
 
+    //    밀리세컨 시간으로 변환
+    public static String minuteToTime(long minute) {
+        String time;
+
+        if (minute >= 60) {
+            time = ((int) minute / 60) + "시간";
+
+            if (minute % 60 > 0) {
+                time += " " + minute % 60 + "분";
+            }
+        } else {
+            time = minute + "분";
+        }
+
+        return time;
+    }
+
     //    날짜로 자르기
     public static String stringToDay(String string) {
         return string.substring(0, 10);
