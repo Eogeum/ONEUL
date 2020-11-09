@@ -11,6 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/write_sh">
 
         <TextView
@@ -32,17 +33,18 @@
             android:id="@+id/i_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/ic_close"
-            android:paddingHorizontal="12dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="4dp" />
+            android:layout_marginEnd="4dp"
+            android:paddingHorizontal="12dp"
+            android:src="@drawable/ic_close" />
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
@@ -52,200 +54,179 @@
             android:background="@color/white"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:text="TIME"
-                android:textColor="@color/mainColor"
-                android:textSize="20sp" />
-
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:text="START"
-                        android:textSize="15sp" />
-
-                    <Button
-                        android:id="@+id/timeStart"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="10dp"
-                        android:background="@drawable/write_et"
-                        android:text="00:00"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:text="END"
-                        android:textSize="15sp" />
-
-                    <Button
-                        android:id="@+id/timeEnd"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="10dp"
-                        android:background="@drawable/write_et"
-                        android:text="00:00"
-                        android:textSize="15sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
+                android:layout_marginBottom="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="TITLE"
+                    android:text="시작"
                     android:textColor="@color/mainColor"
-                    android:textSize="20sp" />
+                    android:textSize="22sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <EditText
-                    android:id="@+id/editTitle"
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/dayStart"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
                     android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="16dp"
                     android:background="@drawable/write_et"
-                    android:hint="일과 제목을 입력하세요."
-                    android:imeOptions="actionDone"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:maxLength="20"
-                    android:maxLines="1"
-                    android:padding="10dp"
-                    android:textSize="14sp" />
-            </LinearLayout>
+                    android:paddingHorizontal="22dp"
+                    android:text="2020-08-31"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/timeStart"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
+                <Button
+                    android:id="@+id/timeStart"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/write_et"
+                    android:text="00:00"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
+                android:layout_marginBottom="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="MEMO"
+                    android:text="종료"
                     android:textColor="@color/mainColor"
-                    android:textSize="20sp" />
+                    android:textSize="22sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <EditText
-                    android:id="@+id/editMemo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <Button
+                    android:id="@+id/dayEnd"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="16dp"
                     android:background="@drawable/write_et"
-                    android:gravity="top"
-                    android:hint="여기에 메모를 작성하세요. (선택) "
-                    android:importantForAutofill="no"
-                    android:inputType="textMultiLine|textNoSuggestions"
-                    android:minHeight="97dp"
-                    android:padding="10dp"
-                    android:textSize="14sp" />
-            </LinearLayout>
+                    android:paddingHorizontal="22dp"
+                    android:text="2020-08-31"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/timeEnd"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
 
-            <LinearLayout
+                <Button
+                    android:id="@+id/timeEnd"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/write_et"
+                    android:text="00:00"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <EditText
+                android:id="@+id/editTitle"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/write_et"
+                android:hint="제목"
+                android:imeOptions="actionDone"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textColorHint="@color/mainColor"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/editMemo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="120dp"
-                android:orientation="vertical">
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/write_et"
+                android:gravity="top"
+                android:hint="메모"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textNoSuggestions"
+                android:minHeight="97dp"
+                android:padding="10dp"
+                android:textColorHint="@color/mainColor"
+                android:textSize="14sp" />
 
-                <TextView
+            <HorizontalScrollView
+                android:id="@+id/hs_imagePreview"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginTop="4dp"
+                android:scrollbars="none">
+
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="IMAGE"
-                    android:textColor="@color/mainColor"
-                    android:textSize="20sp" />
-
-                <HorizontalScrollView
-                    android:id="@+id/hs_imagePreview"
-                    android:layout_width="match_parent"
-                    android:layout_height="110dp"
-                    android:layout_marginTop="4dp"
-                    android:scrollbars="none">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                     <LinearLayout
+                        android:id="@+id/ll_pictureMemo"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/home_list_ll"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="6dp">
 
-                        <LinearLayout
-                            android:id="@+id/ll_pictureMemo"
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@drawable/ic_add_photo" />
+
+                        <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginEnd="8dp"
-                            android:background="@drawable/home_todaybox_et"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:padding="6dp">
-
-                            <ImageView
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:layout_marginBottom="10dp"
-                                android:background="@drawable/ic_add_photo" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="8dp"
-                                android:text="사진 추가"
-                                android:textColor="@color/darkGray"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/ll_imagePreview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal" />
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="8dp"
+                            android:text="사진 추가"
+                            android:textColor="@color/darkGray"
+                            android:textSize="14sp" />
                     </LinearLayout>
-                </HorizontalScrollView>
 
-                <!--                fixme 확인 버튼 수정-->
-                <Button
-                    android:id="@+id/btnOk"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:background="@color/white"
-                    android:fontFamily="@font/nanum_barun_gothic_bold"
-                    android:text="OK"
-                    android:textColor="@color/mainColor"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_imagePreview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+            </HorizontalScrollView>
         </LinearLayout>
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/i_ok"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/mainColor"
+        android:scaleType="center"
+        android:src="@drawable/ic_done" />
 </LinearLayout>

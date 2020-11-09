@@ -35,6 +35,7 @@ public class StatAdapter extends RecyclerView.Adapter<StatAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.mTitle.setText(stat.get(position).title_item);
         holder.mTime.setText(stat.get(position).time_item);
+//        fixme 24개이상 표현 못함
         holder.image.setColorFilter(Animation.COLORS[position]);
     }
 

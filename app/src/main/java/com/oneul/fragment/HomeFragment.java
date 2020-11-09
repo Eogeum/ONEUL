@@ -329,6 +329,7 @@ public class HomeFragment extends Fragment {
     }
 
     //    날짜 확인 및 헤더 변경
+    @SuppressLint("UseCompatLoadingForDrawables")
     public void dateChange() {
 //        오늘이면
         if (TextUtils.equals(MainActivity.showDay, DateTime.today())) {
@@ -356,7 +357,6 @@ public class HomeFragment extends Fragment {
                         final ImageView imageView = new ImageView(getActivity());
                         imageView.setImageBitmap(dbHelper.getPhotos(oNo).get(i));
                         imageView.setAdjustViewBounds(true);
-                        imageView.setPadding(0, 0, 16, 0);
                         imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -405,10 +405,22 @@ public class HomeFragment extends Fragment {
                             }
                         });
 
+                        LinearLayout.LayoutParams params = new LinearLayout
+                                .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(0, 0, 16, 0);
+                        imageView.setLayoutParams(params);
+                        imageView.setBackground(getActivity().getDrawable(R.drawable.home_list_ll));
+                        imageView.setClipToOutline(true);
+
                         ll_imagePreview.addView(imageView);
                     }
 
-                    ll_imagePreview.getChildAt(ll_imagePreview.getChildCount() - 1).setPadding(0, 0, 0, 0);
+                    LinearLayout.LayoutParams params = new LinearLayout
+                            .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0, 0, 0, 0);
+                    ll_imagePreview.getChildAt(ll_imagePreview.getChildCount() - 1).setLayoutParams(params);
                 } else {
                     hs_imagePreview.setVisibility(View.GONE);
                 }

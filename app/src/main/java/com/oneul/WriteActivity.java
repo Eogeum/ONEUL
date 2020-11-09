@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ import androidx.exifinterface.media.ExifInterface;
 
 import com.oneul.extra.BitmapRefactor;
 import com.oneul.extra.DBHelper;
+import com.oneul.extra.DateTime;
 import com.oneul.fragment.DialogFragment;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.loader.ImageLoader;
@@ -40,23 +42,24 @@ import com.stfalcon.imageviewer.loader.ImageLoader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class WriteActivity extends AppCompatActivity {
     //    ㄴㄴ 데이터
     boolean isEditMode;
+    String startTime, endTime;
     int startHour, startMinute, endHour, endMinute;
     int oNo, photoCount;
     List<Bitmap> bitmaps = new ArrayList<>();
 
     //    ㄴㄴ 뷰
-    Button timeStart, timeEnd;
+    Button dayStart, timeStart, dayEnd, timeEnd;
     EditText editTitle, editMemo;
     LinearLayout ll_pictureMemo;
 
     //    ㄴㄴ 기타
     DBHelper dbHelper;
     InputMethodManager imm;
+    AlertDialog startDialog, endDialog;
 
     //    ㄴㄴ 이미지뷰어
     LinearLayout ll_imagePreview;
@@ -78,7 +81,25 @@ public class WriteActivity extends AppCompatActivity {
         dbHelper = DBHelper.getDB(this);
         imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
 
-//        fixme 날짜도 같이 선택하게 변경
+        dayStart = findViewById(R.id.dayStart);
+        dayStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startDialog.show();
+            }
+        });
+
+        dayEnd = findViewById(R.id.dayEnd);
+        dayEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                endDialog.show();
+            }
+        });
+
+        startDialog = DialogFragment.calendarDialog(WriteActivity.this, (TextView) dayStart);
+        endDialog = DialogFragment.calendarDialog(WriteActivity.this, (TextView) dayEnd);
+
 //        시작 시간 입력
         timeStart = findViewById(R.id.timeStart);
         timeStart.setOnClickListener(new View.OnClickListener() {
@@ -117,21 +138,25 @@ public class WriteActivity extends AppCompatActivity {
             }
         });
 
-//        fixme 작성화면 인텐트 엑스트라 불러오기
         //        불러온 일과 있으면
         if (getIntent().getExtras() != null) {
             isEditMode = true;
 
             final String[] strings = getIntent().getExtras().getStringArray("editOneul");
-            timeStart.setText(Objects.requireNonNull(strings)[2]);
-            timeEnd.setText(strings[3]);
-            editTitle.setText(strings[4]);
-            editMemo.setText(strings[5]);
+            startTime = DateTime.stringToTime(strings[1]);
+            endTime = DateTime.stringToTime(strings[2]);
 
-            startHour = Integer.parseInt(strings[2].substring(0, 2));
-            startMinute = Integer.parseInt(strings[2].substring(3, 5));
-            endHour = Integer.parseInt(strings[3].substring(0, 2));
-            endMinute = Integer.parseInt(strings[3].substring(3, 5));
+            dayStart.setText(DateTime.stringToDay(strings[1]));
+            timeStart.setText(startTime);
+            dayEnd.setText(DateTime.stringToDay(strings[2]));
+            timeEnd.setText(endTime);
+            editTitle.setText(strings[3]);
+            editMemo.setText(strings[4]);
+
+            startHour = Integer.parseInt(startTime.substring(0, 2));
+            startMinute = Integer.parseInt(startTime.substring(3, 5));
+            endHour = Integer.parseInt(endTime.substring(0, 2));
+            endMinute = Integer.parseInt(endTime.substring(3, 5));
 
             oNo = Integer.parseInt(strings[0]);
             photoCount = dbHelper.getPhotoCount(oNo) + 1;
@@ -150,7 +175,7 @@ public class WriteActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.i_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                    일과 제목 공백 체크
@@ -159,21 +184,23 @@ public class WriteActivity extends AppCompatActivity {
                 } else {
 //                    불러온 일과가 있으면
                     if (isEditMode) {
-                        dbHelper.editOneul(oNo, timeStart.getText().toString(), timeEnd.getText().toString(),
+                        dbHelper.editOneul(oNo, dayStart.getText() + " " + timeStart.getText(),
+                                dayEnd.getText() + " " + timeEnd.getText(),
                                 editTitle.getText().toString(), editMemo.getText().toString());
                         dbHelper.editPhoto(oNo, bitmaps);
 
-//                        Toast.makeText(WriteActivity.this, t_oDate.getText() + "\n일과를 수정했습니다.",
-//                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(WriteActivity.this, dayStart.getText() + "\n일과를 수정했습니다.",
+                                Toast.LENGTH_SHORT).show();
 
 //                    불러온 일과가 없으면
                     } else {
-                        dbHelper.startOneul(timeStart.getText().toString(),
-                                timeEnd.getText().toString(), editTitle.getText().toString(),
-                                editMemo.getText().toString(), bitmaps, 1);
+                        dbHelper.startOneul(dayStart.getText() + " " + timeStart.getText(),
+                                dayEnd.getText() + " " + timeEnd.getText(),
+                                editTitle.getText().toString(), editMemo.getText().toString(), bitmaps, 1);
+                        dbHelper.editPhoto(oNo, bitmaps);
 
-//                        Toast.makeText(WriteActivity.this, t_oDate.getText() + "\n일과를 저장했습니다.",
-//                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(WriteActivity.this, dayStart.getText() + "\n일과를 저장했습니다.",
+                                Toast.LENGTH_SHORT).show();
                     }
 
                     finish();
@@ -193,6 +220,7 @@ public class WriteActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void refreshImageViewer() {
         if (photoCount > 0) {
             ll_imagePreview.removeAllViews();
@@ -201,7 +229,6 @@ public class WriteActivity extends AppCompatActivity {
                 final ImageView imageView = new ImageView(WriteActivity.this);
                 imageView.setImageBitmap(bitmaps.get(i));
                 imageView.setAdjustViewBounds(true);
-                imageView.setPadding(0, 0, 16, 0);
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -240,10 +267,22 @@ public class WriteActivity extends AppCompatActivity {
                     }
                 });
 
+                LinearLayout.LayoutParams params = new LinearLayout
+                        .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.setMargins(0, 0, 16, 0);
+                imageView.setLayoutParams(params);
+                imageView.setBackground(getDrawable(R.drawable.home_list_ll));
+                imageView.setClipToOutline(true);
+
                 ll_imagePreview.addView(imageView);
             }
 
-            ll_imagePreview.getChildAt(ll_imagePreview.getChildCount() - 1).setPadding(0, 0, 0, 0);
+            LinearLayout.LayoutParams params = new LinearLayout
+                    .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, 0, 0);
+            ll_imagePreview.getChildAt(ll_imagePreview.getChildCount() - 1).setLayoutParams(params);
         }
     }
 
