@@ -1,6 +1,5 @@
 package com.oneul;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.oneul.extra.BitmapRefactor;
@@ -37,7 +35,9 @@ public class CameraActivity extends AppCompatActivity {
         photoCount = dbHelper.getPhotoCount(oNo) + 1;
 
         if (photoCount < 5) {
-            DialogFragment.permissionCheck(this);
+            if (DialogFragment.permissionCheck(this, true)) {
+                DialogFragment.addPhotoDialog(this);
+            }
         } else {
             Toast.makeText(this, "최대 5장까지만 추가가능합니다.", Toast.LENGTH_SHORT).show();
             finish();
@@ -113,10 +113,7 @@ public class CameraActivity extends AppCompatActivity {
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-//        check 퍼미션 체크 최적화
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == 0 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
+        if (DialogFragment.permissionCheck(this, false)) {
             DialogFragment.addPhotoDialog(this);
         } else {
             finish();

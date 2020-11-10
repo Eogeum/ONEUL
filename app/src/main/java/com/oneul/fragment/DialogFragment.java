@@ -270,18 +270,20 @@ public class DialogFragment {
         return new File(fileDir, fileName);
     }
 
-    public static void permissionCheck(Context context) {
+    public static boolean permissionCheck(Context context, boolean request) {
         //        check 퍼미션 체크 최적화
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == 0 &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
-            addPhotoDialog(((Activity) context));
-        } else {
-            ActivityCompat.requestPermissions(((Activity) context), new String[]{
+            return true;
+        } else if (request) {
+            ActivityCompat.requestPermissions((Activity) context, new String[]{
                     Manifest.permission.CAMERA,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             }, 1);
         }
+
+        return false;
     }
 }

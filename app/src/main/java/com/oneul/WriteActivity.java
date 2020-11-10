@@ -1,6 +1,5 @@
 package com.oneul;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,14 +21,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.oneul.extra.BitmapRefactor;
@@ -45,8 +42,7 @@ import java.util.List;
 
 public class WriteActivity extends AppCompatActivity {
     //    ㄴㄴ 데이터
-    boolean isEditMode;
-    String startTime, endTime;
+    boolean isEditMode, isEdited;
     int startHour, startMinute, endHour, endMinute;
     int oNo, photoCount;
     List<Bitmap> bitmaps = new ArrayList<>();
@@ -54,12 +50,11 @@ public class WriteActivity extends AppCompatActivity {
     //    ㄴㄴ 뷰
     Button dayStart, timeStart, dayEnd, timeEnd;
     EditText editTitle, editMemo;
-    LinearLayout ll_pictureMemo;
 
     //    ㄴㄴ 기타
     DBHelper dbHelper;
     InputMethodManager imm;
-    AlertDialog startDialog, endDialog;
+    AlertDialog startDialog, endDialog, closeDialog;
 
     //    ㄴㄴ 이미지뷰어
     LinearLayout ll_imagePreview;
@@ -72,9 +67,6 @@ public class WriteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_write);
 
 //        ㄴㄴ 뷰
-        editTitle = findViewById(R.id.editTitle);
-        editMemo = findViewById(R.id.editMemo);
-        ll_pictureMemo = findViewById(R.id.ll_pictureMemo);
         ll_imagePreview = findViewById(R.id.ll_imagePreview);
 
 //        ㄴㄴ 기타
@@ -85,6 +77,7 @@ public class WriteActivity extends AppCompatActivity {
         dayStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isEdited = true;
                 startDialog.show();
             }
         });
@@ -93,18 +86,21 @@ public class WriteActivity extends AppCompatActivity {
         dayEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isEdited = true;
                 endDialog.show();
             }
         });
 
-        startDialog = DialogFragment.calendarDialog(WriteActivity.this, (TextView) dayStart);
-        endDialog = DialogFragment.calendarDialog(WriteActivity.this, (TextView) dayEnd);
+        startDialog = DialogFragment.calendarDialog(WriteActivity.this, dayStart);
+        endDialog = DialogFragment.calendarDialog(WriteActivity.this, dayEnd);
 
 //        시작 시간 입력
         timeStart = findViewById(R.id.timeStart);
         timeStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isEdited = true;
+
                 TimePickerDialog timePickerDialog = new TimePickerDialog(WriteActivity.this,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
@@ -124,6 +120,8 @@ public class WriteActivity extends AppCompatActivity {
         timeEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isEdited = true;
+
                 TimePickerDialog timePickerDialog = new TimePickerDialog(WriteActivity.this,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
@@ -138,13 +136,28 @@ public class WriteActivity extends AppCompatActivity {
             }
         });
 
+        editTitle = findViewById(R.id.editTitle);
+        editTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isEdited = true;
+            }
+        });
+        editMemo = findViewById(R.id.editMemo);
+        editMemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isEdited = true;
+            }
+        });
+
         //        불러온 일과 있으면
         if (getIntent().getExtras() != null) {
             isEditMode = true;
 
-            final String[] strings = getIntent().getExtras().getStringArray("editOneul");
-            startTime = DateTime.stringToTime(strings[1]);
-            endTime = DateTime.stringToTime(strings[2]);
+            String[] strings = getIntent().getExtras().getStringArray("editOneul");
+            String startTime = DateTime.stringToTime(strings[1]);
+            String endTime = DateTime.stringToTime(strings[2]);
 
             dayStart.setText(DateTime.stringToDay(strings[1]));
             timeStart.setText(startTime);
@@ -171,53 +184,66 @@ public class WriteActivity extends AppCompatActivity {
         findViewById(R.id.i_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-            }
-        });
-
-        findViewById(R.id.i_ok).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                    일과 제목 공백 체크
-                if (TextUtils.isEmpty(editTitle.getText().toString())) {
-                    checkBlankTitle();
+                if (isEdited) {
+                    createCloseDialog();
+                    closeDialog.show();
                 } else {
-//                    불러온 일과가 있으면
-                    if (isEditMode) {
-                        dbHelper.editOneul(oNo, dayStart.getText() + " " + timeStart.getText(),
-                                dayEnd.getText() + " " + timeEnd.getText(),
-                                editTitle.getText().toString(), editMemo.getText().toString());
-                        dbHelper.editPhoto(oNo, bitmaps);
-
-                        Toast.makeText(WriteActivity.this, dayStart.getText() + "\n일과를 수정했습니다.",
-                                Toast.LENGTH_SHORT).show();
-
-//                    불러온 일과가 없으면
-                    } else {
-                        dbHelper.startOneul(dayStart.getText() + " " + timeStart.getText(),
-                                dayEnd.getText() + " " + timeEnd.getText(),
-                                editTitle.getText().toString(), editMemo.getText().toString(), bitmaps, 1);
-                        dbHelper.editPhoto(oNo, bitmaps);
-
-                        Toast.makeText(WriteActivity.this, dayStart.getText() + "\n일과를 저장했습니다.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-
                     finish();
                 }
             }
         });
 
-        ll_pictureMemo.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.i_ok).
+
+                setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                    일과 제목 공백 체크
+                        if (TextUtils.isEmpty(editTitle.getText().toString())) {
+                            checkBlankTitle();
+                        } else {
+//                    불러온 일과가 있으면
+                            if (isEditMode) {
+                                dbHelper.editOneul(oNo, dayStart.getText() + " " + timeStart.getText(),
+                                        dayEnd.getText() + " " + timeEnd.getText(),
+                                        editTitle.getText().toString(), editMemo.getText().toString());
+                                dbHelper.editPhoto(oNo, bitmaps);
+
+                                Toast.makeText(WriteActivity.this, dayStart.getText() + "\n일과를 수정했습니다.",
+                                        Toast.LENGTH_SHORT).show();
+
+//                    불러온 일과가 없으면
+                            } else {
+                                dbHelper.startOneul(dayStart.getText() + " " + timeStart.getText(),
+                                        dayEnd.getText() + " " + timeEnd.getText(),
+                                        editTitle.getText().toString(), editMemo.getText().toString(), bitmaps, 1);
+                                dbHelper.editPhoto(oNo, bitmaps);
+
+                                Toast.makeText(WriteActivity.this, dayStart.getText() + "\n일과를 저장했습니다.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+                            finish();
+                        }
+                    }
+                });
+
+        findViewById(R.id.ll_pictureMemo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isEdited = true;
+
                 if (photoCount < 5) {
-                    DialogFragment.permissionCheck(WriteActivity.this);
+                    if (DialogFragment.permissionCheck(WriteActivity.this, true)) {
+                        DialogFragment.addPhotoDialog(WriteActivity.this);
+                    }
                 } else {
                     Toast.makeText(WriteActivity.this, "최대 5장까지만 추가가능합니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        isEdited = false;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -286,6 +312,38 @@ public class WriteActivity extends AppCompatActivity {
         }
     }
 
+    private void createCloseDialog() {
+        if (closeDialog == null) {
+            closeDialog = new AlertDialog.Builder(WriteActivity.this)
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    }).create();
+
+            closeDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    closeDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#E88346"));
+                    closeDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#5E5E5E"));
+                }
+            });
+
+//                    불러온 일과 있으면
+            if (isEditMode) {
+                closeDialog.setMessage("일과 수정을 취소합니다.\n변경된 내용은 저장되지 않습니다.");
+
+//                    불러온 일과 없으면
+            } else {
+                closeDialog.setMessage("일과 작성을 취소합니다.\n작성한 내용은 저장되지 않습니다.");
+            }
+        }
+    }
+
     //    일과 제목 공백 체크
     private void checkBlankTitle() {
         Toast.makeText(WriteActivity.this, "일과 제목을 입력하세요.", Toast.LENGTH_SHORT).show();
@@ -306,35 +364,12 @@ public class WriteActivity extends AppCompatActivity {
     //    뒤로가기 시
     @Override
     public void onBackPressed() {
-        final AlertDialog dialog = new AlertDialog.Builder(this)
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        finish();
-                    }
-                })
-                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                }).create();
-
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#E88346"));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#5E5E5E"));
-            }
-        });
-
-//        불러온 일과 있으면
-        if (isEditMode) {
-            dialog.setMessage("일과 수정을 취소합니다.\n변경된 내용은 저장되지 않습니다.");
-
-//        불러온 일과 없으면
+        if (isEdited) {
+            createCloseDialog();
+            closeDialog.show();
         } else {
-            dialog.setMessage("일과 작성을 취소합니다.\n작성한 내용은 저장되지 않습니다.");
+            finish();
         }
-
-        dialog.show();
     }
 
     @Override
@@ -405,10 +440,7 @@ public class WriteActivity extends AppCompatActivity {
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-//        check 퍼미션 체크 최적화
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == 0 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == 0 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == 0) {
+        if (DialogFragment.permissionCheck(this, false)) {
             DialogFragment.addPhotoDialog(this);
         } else {
             finish();
