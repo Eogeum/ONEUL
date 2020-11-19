@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -20,10 +19,10 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.oneul.MainActivity;
 import com.oneul.fragment.HomeFragment;
+import com.oneul.fragment.StatFragment;
 import com.oneul.oneul.Oneul;
 import com.oneul.oneul.OneulAdapter;
 import com.oneul.stat.Stat;
-import com.oneul.stat.StatAdapter;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import org.threeten.bp.LocalDate;
@@ -160,15 +159,15 @@ public class DBHelper extends SQLiteOpenHelper {
             String oStart = cursor.getString(cursor.getColumnIndex(COLUMN_OSTART));
             String oEnd = cursor.getString(cursor.getColumnIndex(COLUMN_OEND));
 
-            if (DateTime.stringToMonth(oStart).equals(DateTime.stringToMonth(oEnd))) {
-                oEnd = DateTime.stringToTime(oEnd);
+            if (DateTime.subToMonth(oStart).equals(DateTime.subToMonth(oEnd))) {
+                oEnd = DateTime.subToTime(oEnd);
             } else {
-                oEnd = DateTime.stringToTime(oEnd) + " (" + DateTime.stringToMonth(oEnd) + ")";
+                oEnd = DateTime.subToTime(oEnd) + " (" + DateTime.subToMonth(oEnd) + ")";
             }
 
             adapter.addItem(
                     new Oneul(oNo,
-                            DateTime.stringToTime(oStart),
+                            DateTime.subToTime(oStart),
                             oEnd,
                             cursor.getString(cursor.getColumnIndex(COLUMN_OTITLE)),
                             cursor.getString(cursor.getColumnIndex(COLUMN_OMEMO)),
@@ -350,7 +349,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 null, null, null, null, null);
 
         while (cursor.moveToNext()) {
-            calendarDays.add(CalendarDay.from(LocalDate.parse(DateTime.stringToDay(
+            calendarDays.add(CalendarDay.from(LocalDate.parse(DateTime.subToDay(
                     cursor.getString(cursor.getColumnIndex(COLUMN_OSTART))))));
         }
 
@@ -361,8 +360,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //    ㄴㄴ 통걔
     //    통계 가져오기
-    public void getStat(String day, PieChart chart, RecyclerView r_stat, StatAdapter adapter) {
-        adapter.clear();
+    public void getStat(String day) {
+        StatFragment.adapter.clear();
 
         ArrayList<PieEntry> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -391,7 +390,7 @@ public class DBHelper extends SQLiteOpenHelper {
             }
 
             list.add(new PieEntry(time, oTitle));
-            adapter.addItem(new Stat(oTitle, DateTime.minuteToTime(time)));
+            StatFragment.adapter.addItem(new Stat(oTitle, DateTime.minuteToTime(time)));
         }
 
         cursor.close();
@@ -411,9 +410,9 @@ public class DBHelper extends SQLiteOpenHelper {
         PieData data = new PieData(dataSet);
         data.setValueTextSize(10);
 
-        chart.setData(data);
-        chart.invalidate();
-        r_stat.setAdapter(adapter);
+        StatFragment.pieChart.setData(data);
+        StatFragment.pieChart.invalidate();
+        StatFragment.statRecycler.setAdapter(StatFragment.adapter);
     }
 
     @Override

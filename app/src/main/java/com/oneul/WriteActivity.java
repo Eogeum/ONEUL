@@ -39,6 +39,7 @@ import com.stfalcon.imageviewer.loader.ImageLoader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class WriteActivity extends AppCompatActivity {
     //    ㄴㄴ 데이터
@@ -65,6 +66,9 @@ public class WriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write);
+
+//        ㄴㄴ 데이터
+        isEdited = false;
 
 //        ㄴㄴ 뷰
         ll_imagePreview = findViewById(R.id.ll_imagePreview);
@@ -137,16 +141,16 @@ public class WriteActivity extends AppCompatActivity {
         });
 
         editTitle = findViewById(R.id.editTitle);
-        editTitle.setOnClickListener(new View.OnClickListener() {
+        editTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onFocusChange(View v, boolean hasFocus) {
                 isEdited = true;
             }
         });
         editMemo = findViewById(R.id.editMemo);
-        editMemo.setOnClickListener(new View.OnClickListener() {
+        editMemo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onFocusChange(View v, boolean hasFocus) {
                 isEdited = true;
             }
         });
@@ -156,12 +160,12 @@ public class WriteActivity extends AppCompatActivity {
             isEditMode = true;
 
             String[] strings = getIntent().getExtras().getStringArray("editOneul");
-            String startTime = DateTime.stringToTime(strings[1]);
-            String endTime = DateTime.stringToTime(strings[2]);
+            String startTime = DateTime.subToTime(Objects.requireNonNull(strings)[1]);
+            String endTime = DateTime.subToTime(strings[2]);
 
-            dayStart.setText(DateTime.stringToDay(strings[1]));
+            dayStart.setText(DateTime.subToDay(strings[1]));
             timeStart.setText(startTime);
-            dayEnd.setText(DateTime.stringToDay(strings[2]));
+            dayEnd.setText(DateTime.subToDay(strings[2]));
             timeEnd.setText(endTime);
             editTitle.setText(strings[3]);
             editMemo.setText(strings[4]);
@@ -242,8 +246,6 @@ public class WriteActivity extends AppCompatActivity {
                 }
             }
         });
-
-        isEdited = false;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

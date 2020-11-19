@@ -14,23 +14,37 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
-import com.oneul.MainActivity;
 import com.oneul.R;
 import com.oneul.extra.DBHelper;
+import com.oneul.extra.DateTime;
 import com.oneul.stat.StatAdapter;
 
-import java.text.SimpleDateFormat;
+import org.threeten.bp.LocalDate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Objects;
+
+@SuppressLint("SimpleDateFormat")
 public class StatFragment extends Fragment {
+    //    ㄴㄴ 데이터
+    String showDay = DateTime.today();
+    SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat format2 = new SimpleDateFormat("yyyy년 MM월");
+
     //    ㄴㄴ 리사이클
     public static PieChart pieChart;
     public static RecyclerView statRecycler;
     public static StatAdapter adapter = new StatAdapter();
 
+    //    ㄴㄴ 뷰
+    TextView statDay;
+    SwipeRefreshLayout sr_swipeRefresh;
+
     //    ㄴㄴ 기타
     DBHelper dbHelper;
 
-    SwipeRefreshLayout sr_swipeRefresh;
+    SwipeRefreshLayout.OnRefreshListener listener;
 
     public StatFragment() {
     }
@@ -39,15 +53,10 @@ public class StatFragment extends Fragment {
         return new StatFragment();
     }
 
-    @SuppressLint("SimpleDateFormat")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //인플레이터
+        //ㄴㄴ 인플레이터
         View statView = inflater.inflate(R.layout.fragment_stat, container, false);
-
-        //년,월 표시
-        ((TextView) statView.findViewById(R.id.statDay))
-                .setText(new SimpleDateFormat("yyyy년 MM월").format(System.currentTimeMillis()));
 
 //        ㄴㄴ 리사이클
         pieChart = statView.findViewById(R.id.pieChart);
@@ -60,17 +69,45 @@ public class StatFragment extends Fragment {
         statRecycler.setHasFixedSize(false);
         statRecycler.setNestedScrollingEnabled(false);
 
+        // ㄴㄴ 뷰
+        statDay = statView.findViewById(R.id.statDay);
+
         //    ㄴㄴ 기타
         dbHelper = DBHelper.getDB(getContext());
-        dbHelper.getStat(MainActivity.showDay, pieChart, statRecycler, adapter);
 
-        sr_swipeRefresh = statView.findViewById(R.id.sr_swipeRefresh);
-        sr_swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+        listener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                dbHelper.getStat(MainActivity.showDay, pieChart, statRecycler, adapter);
+                try {
+                    statDay.setText(format2.format(Objects.requireNonNull(format1.parse(showDay))));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                dbHelper.getStat(showDay);
                 pieChart.animateY(1000, Easing.EasingOption.EaseInOutQuad);
                 sr_swipeRefresh.setRefreshing(false);
+            }
+        };
+        sr_swipeRefresh = statView.findViewById(R.id.sr_swipeRefresh);
+        sr_swipeRefresh.setColorSchemeResources(R.color.mainColor);
+        sr_swipeRefresh.setOnRefreshListener(listener);
+        listener.onRefresh();
+
+        statView.findViewById(R.id.i_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDay = LocalDate.parse(showDay).minusMonths(1).toString();
+                listener.onRefresh();
+            }
+        });
+
+        statView.findViewById(R.id.i_forward).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDay = LocalDate.parse(showDay).plusMonths(1).toString();
+                listener.onRefresh();
             }
         });
 

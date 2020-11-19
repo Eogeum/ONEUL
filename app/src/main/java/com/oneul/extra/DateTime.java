@@ -52,18 +52,18 @@ public class DateTime {
         return time;
     }
 
-    //    날짜로 자르기
-    public static String stringToDay(String string) {
+    //    yyyy-MM-dd로 자르기
+    public static String subToDay(String string) {
         return string.substring(0, 10);
     }
 
-    //    월별로 자르기
-    public static String stringToMonth(String string) {
+    //    MM-dd로 자르기
+    public static String subToMonth(String string) {
         return string.substring(5, 10);
     }
 
-    //    시간으로 자르기
-    public static String stringToTime(String string) {
+    //    HH:mm로 자르기
+    public static String subToTime(String string) {
         return string.substring(11, 16);
     }
 }

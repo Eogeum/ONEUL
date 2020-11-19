@@ -149,6 +149,7 @@ public class HomeFragment extends Fragment {
         });
 
         sr_swipeRefresh = homeView.findViewById(R.id.sr_swipeRefresh);
+        sr_swipeRefresh.setColorSchemeResources(R.color.mainColor);
         sr_swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -307,7 +308,7 @@ public class HomeFragment extends Fragment {
                     DialogFragment.checkMemoDialog(getActivity(), 0);
                 } else {
 //                        쇼데이 변경
-                    MainActivity.showDay = DateTime.stringToDay(dbHelper.getStartOneul().getoStart());
+                    MainActivity.showDay = DateTime.subToDay(dbHelper.getStartOneul().getoStart());
 
 //                        기록 종료 및 새로고침
                     dbHelper.endOneul(dbHelper.getStartOneul().getoNo(), DateTime.now());
@@ -341,7 +342,7 @@ public class HomeFragment extends Fragment {
 
 //                디비에서 기록중인 일과 불러오기
                 Oneul startOneul = dbHelper.getStartOneul();
-                t_oTime.setText(DateTime.stringToTime(startOneul.getoStart()));
+                t_oTime.setText(DateTime.subToTime(startOneul.getoStart()));
                 t_oTitle.setText(startOneul.getoTitle());
                 et_oMemo.setText(startOneul.getoMemo());
 
@@ -410,8 +411,9 @@ public class HomeFragment extends Fragment {
                                 LinearLayout.LayoutParams.WRAP_CONTENT);
                         params.setMargins(0, 0, 16, 0);
                         imageView.setLayoutParams(params);
-                        imageView.setBackground(getActivity().getDrawable(R.drawable.home_list_ll));
                         imageView.setClipToOutline(true);
+                        imageView.setBackground(Objects.requireNonNull(getActivity())
+                                .getDrawable(R.drawable.home_list_ll));
 
                         ll_imagePreview.addView(imageView);
                     }
