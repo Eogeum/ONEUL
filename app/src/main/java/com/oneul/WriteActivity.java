@@ -183,6 +183,9 @@ public class WriteActivity extends AppCompatActivity {
 //            불러온 일과 없으면
         } else {
             isEditMode = false;
+
+            dayStart.setText(MainActivity.showDay);
+            dayEnd.setText(MainActivity.showDay);
         }
 
         findViewById(R.id.i_close).setOnClickListener(new View.OnClickListener() {

@@ -75,7 +75,6 @@ public class StatFragment extends Fragment {
         //    ㄴㄴ 기타
         dbHelper = DBHelper.getDB(getContext());
 
-
         listener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
